@@ -16,7 +16,11 @@ namespace DBMM0
 
         public string Pwd { get; set; }
         public string Token { get; set; }
-        public string Mail { get; set; }
+        public string Email { get; set; }
+        public bool IsConfirmed { get; set; }
+        public DateTime InsTS { get; set; }
+        public DateTime? UpdTS { get; set; }
+
         public string Tel { get; set; }
         public DateTime UyeBasTrh { get; set; }
         public string UyePry { get; set; }  // Uyelik Periyodu. Aylik, Yillik
@@ -94,9 +98,56 @@ namespace DBMM0
         public string HHId => HH?.GetObjectNo().ToString();
         public string HHAd => HH?.Ad;
 
+        public string TrhZ => $"{Trh:O}";
         public string TrhX => $"{Trh:dd.MM.yy}";
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
         public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
+
+        public static void ViewZZ(HH hh)
+        {
+            List<HH> list = new List<HH>();
+            Leafs(hh, list);
+            var aaa = list.Count;
+            DateTime bbb;
+            foreach (var h in list)
+            {
+                foreach(var f in Db.SQL<FF>("select r from FF r where r.HH = ?", h))
+                {
+                    bbb = f.Trh;
+                }
+            }
+        }
+        public static IEnumerable<FF> View(HH hh)
+        {
+            List<HH> hhList = new List<HH>();
+
+            if (hh.Skl == 9)    // Zaten leaf
+                hhList.Add(hh);
+            else
+                Leafs(hh, hhList);
+
+            List<FF> ffList = new List<FF>();
+            foreach (var h in hhList)
+            {
+                foreach (var f in Db.SQL<FF>("select r from FF r where r.HH = ?", h))
+                    ffList.Add(f);
+            }
+
+            foreach (var f in ffList)
+                yield return f;
+
+        }
+        public static void Leafs(HH prn, List<HH> list)
+        {
+            var aaa = prn.Ad;
+            var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ?", prn);
+            foreach (var hh in HHs)
+            {
+                if (hh.Skl == 9)
+                    list.Add(hh);
+                Leafs(hh, list);
+            }
+        }
 
         public static void PostFF(HH hh)    // FF ins/upd Sonrasi yapilacaklar
         {
@@ -156,9 +207,8 @@ namespace DBMM0
         public string ThmGlrX => $"{ThmGlr:#,#.##;-#,#.##;#}";
         public string ThmGdrX => $"{ThmGdr:#,#.##;-#,#.##;#}";
 
-        public static IEnumerable<HH> View(string PPId)
+        public static IEnumerable<HH> View(PP pp)
         {
-            var pp = Db.FromId<PP>(3);  // OguzProje1
             var hh = pp.HHroot;
             List<HH> list = new List<HH>();
             ViewTree(hh, 1, list);
@@ -174,8 +224,6 @@ namespace DBMM0
             var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ? order by r.No", prn);
             foreach (var hh in HHs)
             {
-                string Ad2 = $"{new string(' ', lvl * 2)}{hh.Ad}";
-                Console.WriteLine($"{hh.GetObjectNo():D8} {lvl} {Ad2,-20} {hh.GrcGlr} {hh.GrcGdr}");
                 hh.Lvl = lvl;
                 list.Add(hh);
                 ViewTree(hh, lvl + 1, list);

@@ -1,8 +1,13 @@
 ﻿<template>
     <dom-bind id="PPsPage">
         <template is="dom-bind">
+
             <div class="gridTbl">
-                <div>
+                <div class="gridTbl_header">
+                    <div>Projeler</div>
+                    <button value="{{model.DD.NewTrgr$::click}}" onmousedown="++this.value" hidden$="[[!model.canMdfy]]">New</button>
+                </div>
+                <div class="gridTbl_main">
                     <table id="PPsPageTbl" class="fixTbl">
                         <colgroup>
                             <col style="width:12rem" />
@@ -27,10 +32,10 @@
                                 <th rowspan="2">Id</th>
                             </tr>
                             <tr>
-                                <th>Gelir</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
                                 <th>Gider</th>
+                                <th>Gelir</th>
                                 <th>Başlangıç</th>
                                 <th>Bitiş</th>
                             </tr>
@@ -38,24 +43,24 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.PPs}}">
                                 <tr>
-                                    <td>[[item.Ad]]</td>
-                                    <td class="txtRight">[[item.GrcGlrX]]</td>
+                                    <td><a href="/mm0/HHs/[[item.Id]]">[[item.Ad]]</a></td>
                                     <td class="txtRight">[[item.GrcGdrX]]</td>
-                                    <td class="txtRight">[[item.ThmGlrX]]</td>
+                                    <td class="txtRight">[[item.GrcGlrX]]</td>
                                     <td class="txtRight">[[item.ThmGdrX]]</td>
+                                    <td class="txtRight">[[item.ThmGlrX]]</td>
                                     <td class="txtCenter">[[item.BasTrhX]]</td>
                                     <td class="txtCenter">[[item.BitTrhX]]</td>
-                                    <td class="txtCenter">[[item.Id]]</td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr/[[item.Id]]">[[item.Id]]</a></td>
                                 </tr>
                             </template>
                         </tbody>
                         <tfoot>
                             <tr>
                                 <td class="txtRight">TOPLAM</td>
-                                <td class="txtRight">[[model.GrcGlrTopX]]</td>
                                 <td class="txtRight">[[model.GrcGdrTopX]]</td>
-                                <td class="txtRight">[[model.ThmGlrTopX]]</td>
+                                <td class="txtRight">[[model.GrcGlrTopX]]</td>
                                 <td class="txtRight">[[model.ThmGdrTopX]]</td>
+                                <td class="txtRight">[[model.ThmGlrTopX]]</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

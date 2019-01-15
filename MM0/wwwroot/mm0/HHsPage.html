@@ -2,7 +2,11 @@
     <dom-bind id="HHsPage">
         <template is="dom-bind">
             <div class="gridTbl">
-                <div>
+                <div class="gridTbl_header">
+                    <div>[[model.Hdr]]</div>
+                    <button value="{{model.DD.NewTrgr$::click}}" onmousedown="++this.value" hidden$="[[!model.canMdfy]]">New</button>
+                </div>
+                <div class="gridTbl_main">
                     <table id="HHsPageTbl" class="fixTbl">
                         <colgroup>
                             <col style="width:14rem" />
@@ -24,22 +28,21 @@
                                 <th rowspan="2">Id</th>
                             </tr>
                             <tr>
-                                <th class="txtRight">Gelir</th>
                                 <th class="txtRight">Gider</th>
                                 <th class="txtRight">Gelir</th>
                                 <th class="txtRight">Gider</th>
+                                <th class="txtRight">Gelir</th>
                             </tr>
                         </thead>
                         <tbody>
                             <template is="dom-repeat" items="{{model.HHs}}">
                                 <tr>
-                                    <td data-lvl$="[[item.Lvl]]">[[item.Ad]]</td>
-                                    <td class="txtRight">[[item.GrcGlrX]]</td>
+                                    <td data-lvl$="[[item.Lvl]]"><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.Id]]">[[item.Ad]]</a></td>
                                     <td class="txtRight">[[item.GrcGdrX]]</td>
-                                    <td class="txtRight">[[item.ThmGlrX]]</td>
+                                    <td class="txtRight">[[item.GrcGlrX]]</td>
                                     <td class="txtRight">[[item.ThmGdrX]]</td>
+                                    <td class="txtRight">[[item.ThmGlrX]]</td>
                                     <td class="txtCenter">[[item.Id]]</td>
-                                    <td>[[item.Lvl]]</td>
                                 </tr>
                             </template>
                         </tbody>

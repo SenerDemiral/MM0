@@ -12,7 +12,7 @@ namespace MM0.Api
     {
         public void Register()
         {
-            Handle.GET("/bodved/partials/aboutpage", () =>
+            Handle.GET("/MM0/partials/aboutpage", () =>
             {
                 var page = new AboutPage();
                 return page;
@@ -66,18 +66,6 @@ namespace MM0.Api
             });
 
 
-            Handle.GET("/bodved/partials/PPs", () =>
-            {
-                var page = new PPsPage();
-                //page.PPs.Data = Db.SQL<PP>("SELECT r FROM PP r order by r.RnkIdx");
-
-                //var top = Db.SQL<long>("select COUNT(r) from PP r").FirstOrDefault();
-                //var aktif = Db.SQL<long>("select count(r) from PP r where r.IsRun = ?", true).FirstOrDefault();
-                //page.PPs.Data = Db.SQL<PP>("SELECT r FROM PP r order by r.Ad");
-
-                page.Data = null;
-                return page;
-            });
         }
     }
 }

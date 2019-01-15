@@ -1,5 +1,6 @@
-using DBMM0;
+﻿using DBMM0;
 using Starcounter;
+using System;
 
 namespace MM0.ViewModels
 {
@@ -9,7 +10,12 @@ namespace MM0.ViewModels
         {
             base.OnData();
 
-            HHs.Data = DBMM0.HH.View("1234");  //Db.SQL<HH>("select r from HH r");
+            ulong ppId = Convert.ToUInt64(PPId);
+            if (Db.FromId(ppId) is PP pp)
+            {
+                Hdr = $"{pp.Ad} ► Hesapları";
+                HHs.Data = DBMM0.HH.View(pp);  //Db.SQL<HH>("select r from HH r");
+            }
         }
     }
 }

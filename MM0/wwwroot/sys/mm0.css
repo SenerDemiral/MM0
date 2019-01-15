@@ -1,3 +1,14 @@
+:root {
+    --g-Grd: 5px;
+    --h-GrdHdr: 40px;
+    --h-GrdMain: calc(100vh - calc(var(--h-GrdHdr) + var(--g-Grd) + 5px));
+    --h-GrdTblHdr: 40px;
+    --h-GrdTblMain: calc(var(--h-GrdMain) - var(--h-GrdTblHdr) - 10px);
+    --h-GrdTbl2Hdr: 40px;
+    --h-GrdTbl2Ftr: 40px;
+    --h-GrdTbl2Main: calc(var(--h-GrdMain) - var(--h-GrdTblHdr) - var(--h-GrdTblFtr) - var(--g-Grd) - 5px);
+}
+
 [data-Lvl="0"] {
     font-weight:bold;
 }
@@ -72,22 +83,92 @@
     background-color: #347737;
     color: white;
 }
-#FFsRprTbl th {
-    background-color: maroon;
-    color: white;
-}
-#FFsRprTbl tfoot td {
+#FFsRprTbl th, #FFsRprTbl tfoot td {
     background-color: maroon;
     color: white;
 }
 
-#PPsPageTbl th {
-    background-color: #006868;
+#PPsPageTbl th, #PPsPageTbl tfoot td {
+    background-color: chocolate;
     color: white;
 }
 
-#PPsPageTbl tfoot td {
-    background-color: #006868;
+body {
+    /*margin: 10px;*/
+    height: auto;
+    font-size: .9rem;
+    /*font-family: Arial, Helvetica, sans-serif;*/
+}
+
+.grid {
+    display: grid;
+    grid-template-areas: "header" "main";
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--h-GrdHdr) var(--h-GrdMain); /*75px calc(100vh - 80px);*/
+    /*grid-gap: var(--g-Grd);*/
+}
+
+.grid_header {
+    display: grid;
+    align-items: center;
+    grid-gap: 1rem;
+    overflow-x: auto;
+    background-color: beige;
+    grid-area: header;
+    /*padding-left: 5px;*/
+    /*grid-template-columns: 3rem 3rem 3rem 3rem 1fr max-content;*/
+    grid-auto-flow: column;
+    justify-items: center;
+}
+
+.grid_main {
+    /*background-color: #C2EAE9;*/
+    grid-area: main;
+    overflow: auto;
+}
+
+.grid_left {
+    background-color: #FACFD7;
+    grid-area: nav;
+}
+
+.grid_right {
+    background-color: #6CD1EA;
+    grid-area: right;
+}
+
+.grid_footer {
+    background-color: #F8EFB6;
+    grid-area: footer;
+}
+
+.gridTbl {
+    display: grid;
+    grid-template-areas: "headerTbl" "mainTbl";
+    grid-template-columns: 1fr;
+    grid-template-rows: var(--h-GrdTblHdr) var(--h-GrdTblMain); /*75px calc(100vh - 80px);*/
+    grid-gap: var(--g-Grd);
+}
+
+.gridTbl_header {
+    background-color: teal; /*#C2EAE9;*/
     color: white;
+    grid-area: headerTbl;
+    display: grid;
+    justify-items: left;
+    align-items: center;
+    grid-auto-flow: column;
+    grid-template-columns: 1fr;
+    grid-gap: 1rem;
+    /*margin: 0 5px;*/
+    padding: 0 5px;
+    /*font-weight: bold;*/
+    font-size: medium;
+}
+
+.gridTbl_main {
+    /*background-color: #C2EAE9;*/
+    grid-area: mainTbl;
+    overflow: auto;
 }
             

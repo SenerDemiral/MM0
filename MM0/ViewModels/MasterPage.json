@@ -1,5 +1,18 @@
 {
   "Html": "/MM0/MasterPage.html",
   "Token": "",
+
+  "Sgn": {
+    "Email$": "",
+    "Pwd$": "",
+    "Token$": "",
+    "Mesaj": "",
+
+    "IsOpened$": false,
+    "OpenT$": 0,
+    "SignT$": 0,
+    "CancelT$": 0
+  },
+
   "CurrentPage": {}
 }

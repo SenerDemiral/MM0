@@ -1,10 +1,332 @@
 ﻿<link rel="stylesheet" href="/sys/mm0.css">
+<link href="/sys/paper-dialog/paper-dialog.html" rel="import" />
+<link rel="import" href="/sys/vaadin-icons/vaadin-icons.html">
 
 <template>
-    <dom-bind>
+    <dom-bind id="MasterPage">
         <template is="dom-bind">
-            <div>MasterPage</div>
-            <starcounter-include view-model="{{model.CurrentPage}}"></starcounter-include>
+            <paper-dialog opened="[[model.Sgn.IsOpened$]]" modal="true">
+                <div class="mdfRecWrap">
+                    <input id="dlgSgnEml" placeholder="eMail" type="text" value="{{model.Sgn.Email$::change}}" autofocus />
+                    <input id="dlgSgnPwd" placeholder="Password" type="password" value="{{model.Sgn.Pwd$::change}}" required />
+                    <input id="dlgSgnMsj" class="colInfo" type="text" value="[[model.Sgn.Mesaj]]" readonly />
+                    <div class="mdfRecAction">
+                        <button value="{{model.Sgn.SignT$::click}}" onmousedown="++this.value">OK</button>
+                        <button value="{{model.Sgn.CancelT$::click}}" onmousedown="++this.value">Cancel</button>
+                    </div>
+                </div>
+            </paper-dialog>
+
+
+            <div class="grid">
+                <header class="grid_header">
+                    <a href="/mm0"><iron-icon icon="vaadin:home"></iron-icon></a>
+                    <a href="/mm0/PPs/1"><iron-icon icon="vaadin:bell-o"></iron-icon></a>
+                    <a href="/mm0/PPs"><iron-icon icon="vaadin:users"></iron-icon></a>
+                    <a href="/mm0/AboutPage"><iron-icon icon="vaadin:info-circle"></iron-icon></a>
+
+                    <button id="dlgSgnOpn" value="{{model.Sgn.SignT$::click}}" onmousedown="++this.value">OturumAç/ÜyeGirişi</button>
+
+                    <div id="trackModelTokenChange" class="token" data-token="[[model.Token]]">[[model.Token]]</div>
+
+                    <div style="justify-self:end;font-weight:bold">[[model.EntCntFrmtd]]</div>
+                    <div style="font-size:x-large;justify-self:end;color:teal;">miniMHSB v0.1</div>
+                </header>
+                <main class="grid_main">
+                    <starcounter-include view-model="{{model.CurrentPage}}"></starcounter-include>
+                </main>
+            </div>
         </template>
     </dom-bind>
+
+    <script>
+        //var decleration = document.styleSheets[0].cssRules[0].style;
+        //decleration.setProperty('--w-TF', '20rem');
+        //console.log('getProp', decleration.getProperty('--w-TF'));
+
+        // Bunu kullan
+        //document.documentElement.style.setProperty('--w-TF', '30rem');
+        //console.log('getPropertyValue', getComputedStyle(document.documentElement).getPropertyValue('--w-TF'));
+
+        console.log("MasterPage");
+        var tmpltM = (document._currentScript || document.currentScript).previousElementSibling;  // Global
+
+        tmpltM.addEventListener('model-changed', function (e) {
+            // model iceriginin degisen her birinde calisiyor
+            // mutationObserver yerine kullanabilirsin.
+            if (e.detail.path == "model.Token")
+                console.log("yey! model-changed works! Master", e.detail);
+        });
+
+        // Kendisinde calismiyor, diger browser tab
+        window.addEventListener('storage', (e) => {
+            console.log('Woohoo, someone changed my localstorage va another tab/window!');
+            if (e.key == 'mm0') {
+                console.log("storage Changed", "Old", e.oldValue, "New", e.newValue);
+                tmpltM.model.Sgn.Token$ = e.newValue;
+                tmpltM.model.Sgn.SignT$ = -1;   // AutoSign In/Out
+            }
+        });
+
+        console.log("tmpltM.model.Token", tmpltM.model);
+
+        var masterReady = function () {
+            // If the body element and the #main element exist
+            if (document.body && document.querySelector('#MasterPage')) {
+                console.log('------MasterPage ready------', MasterPage);
+                // Run your code here...
+
+                // Return so that we don't call requestAnimationFrame() again
+                return;
+            }
+            // If the body element isn't found, run ready() again at the next pain
+            window.requestAnimationFrame(masterReady);
+        };
+        // Initialize our ready() function
+        window.requestAnimationFrame(masterReady);
+
+        tmpltM.masterPageDomChangeHandler = function (e) {
+            // Master'a ilk gelisinde calisir DOM ready
+            //console.log('dom-ready1', tmpltM);
+            //console.log('dom-ready2', MasterPage);  // yukaridakiyle ayni <dom-bind id="masterTmplt">
+
+            //var MO = MutationObserver || WebKitMutationObserver || MozMutationObserver;
+            var observer = new MutationObserver(function (mutations) {
+                //console.log("mutations", mutations);
+                //console.log("mutations[0].target", mutations[0].target);
+
+                // model.Token degisti
+                var token = mutations[0].target.data;
+                console.log("model.Token Changed", token);
+                localStorage.setItem('mm0', token);
+
+                var b = document.querySelector('#dlgSgnOpn');
+                if (token != "")
+                    b.innerText = "Oturum Kapat";
+                else
+                    b.innerText = "Oturum Aç";
+
+                history.pushState({ foo: "bar" }, "page 2", location.pathname);
+                history.back();
+            });
+
+            // model.Token'in degistigini anlamak icin
+            var target = document.querySelector('#trackModelTokenChange');
+            observer.observe(target, { childList: true, attributes: true, characterData: true, subtree: true });
+            target.addEventListener('change', function (e) {
+                console.log("trackModelTokenChange", e);
+
+            });
+
+            tmpltM.model.Sgn.Token$ = localStorage.getItem('mm0');
+            tmpltM.model.Sgn.SignT$ = -1;   // Triger to AutoSignIn
+
+            // tmpltM.removeEventListener('dom-change', tmpltM.masterPageDomChangeHandler);
+        }
+        tmpltM.addEventListener('dom-change', tmpltM.masterPageDomChangeHandler);
+
+        /*
+        tmpltM.AutoSignIn = function () {
+            console.log('tmpltM.AutoSignIn', tmpltM.model);
+            var mm0 = localStorage.getItem('mm0') || "";
+            //if (mm0 != "")
+            {
+                tmpltM.model.Sgn.Token$ = mm0;
+                tmpltM.model.Sgn.SignT$++;   // Triger to AutoSignIn
+            }
+                console.log("location.pathname", location.pathname);
+                history.pushState({ foo: "bar" }, "page 2", location.pathname);
+                history.back();
+
+
+            var b = document.querySelector('#dlgSgnOpn');
+            if (mm0 != "")
+                b.innerText = "Oturum Kapat";
+            else
+                b.innerText = "Oturum Aç";
+        }
+
+        // KULLANILMIYOR
+        tmpltM.dlgSgnOpen = function (e) {
+            console.log('event', e, tmpltM);
+            var mm0 = localStorage.getItem('mm0') || "";
+            if (mm0 == "")
+                document.querySelector('paper-dialog').opened = true;
+            else {
+                localStorage.setItem('mm0', "");
+                document.querySelector('#dlgSgnOpn').innerText = "Oturum Aç";
+                tmpltM.model.Token$ = "";
+            }
+            //document.querySelector('paper-dialog').setAttribute('opened', true);  // Calismaz Attribute degil property
+        }
+
+        // KULLANILMIYOR
+        tmpltM.dlgSgnCancel = function (e) {
+            console.log('event', e);
+            var b = document.querySelector('#dlgSgnOpn');
+            console.log('button', b);
+
+            document.querySelector('paper-dialog').opened = false;
+            //document.querySelector('paper-dialog').setAttribute('opened', false);  // Calismaz Attribute degil property
+        }
+
+        // KULLANILMIYOR
+        tmpltM.dlgSgnOk = function (e) {
+            console.log('event', e);
+
+            var em = document.querySelector('#dlgSgnEml');
+            var pw = document.querySelector('#dlgSgnPwd');
+            signUser(em.value, pw.value);
+
+
+            //console.log("em.value", em.value, pw.value);
+
+            //document.querySelector('paper-dialog').opened = false;
+        }
+        */
+        async function updateLookups() {
+            /*
+            Dexie.delete('LookupDatabase').then(() => {
+            console.log("Database successfully deleted");
+            }).catch((err) => {
+                console.error("Could not delete database");
+            }).finally(() => {
+                // Do what should be done next...
+            });
+            */
+            db = new Dexie("LookupDatabase");
+
+            db.version(1).stores({
+                LastReads: "Id",
+                PPs: "PPoNo",
+            });
+
+            var ccc = await db.LastReads.get('PP');
+            var ticks = 0;
+            if (ccc) {
+                ticks = ccc.Ticks;
+            }
+            //console.log("ticks", ticks);
+
+            try {
+                var response = await fetch(`/mm0/PPjson/${ticks}`);
+                var json = await response.json();
+                //console.log("json", json);
+
+                db.LastReads.put(json.Read).catch(err => {
+                    alert("Ouch... " + err);
+                });
+
+                db.PPs.bulkPut(json.PPs).catch(err => {
+                    alert("Ouch... " + err);
+                });
+
+            } catch (e) {
+                console.log("err", e);
+            }
+            console.log("in updateLookups()");
+
+            /*
+            CORS Uyarisi geliyor
+            fetch('http://ip-api.com/json').then(function (response) {
+                    console.log('response2', response);
+                    return response.json();
+            }).then(function (myJson) {
+                    console.log('myJson', myJson);
+            }).catch(error => console.error(error));
+            */
+
+            /*
+            fetch('/mm0/PUTjson/demiral', { method: 'POST' }).then(function (response) {
+                console.log('response2', response);
+                return response.text();
+            }).then(function (myJson) {
+                console.log('myJson2', myJson);
+            }).catch(error => console.error(error));
+            */
+
+            /*
+            try {
+                var uri = "sener.demiral@gmail.com+CanDilSen#@";
+                var res = encodeURI(uri);
+                var data = { email: "sener.demiral@gmail.com", pwd: "Password" };
+                var response = await fetch(`/mm0/Sign`, ///${res}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    });
+                var jsn = await response.json();
+                console.log("returned json", jsn);
+            } catch (e) {
+                console.log("errPost", e);
+            }*/
+        }
+
+        //simdilik yapma
+        //console.log("before updateLookups()");
+        //updateLookups();
+        //console.log("after updateLookups()");
+
+        // KULLANILMIYOR
+        async function signUser(em, pw) {
+            try {
+                //var res = encodeURI(uri);
+                //var data = { email: "sener.demiral@gmail.com", pwd: "Password" };
+
+                var tkn = localStorage.getItem('mm0');
+
+                var data = { email: em, pwd: pw, token: tkn };
+                console.log("data", data);
+
+                var response = await fetch(`/mm0/Sign`, ///${res}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    });
+                var jsn = await response.json();
+                console.log("returned json", jsn);
+                //document.querySelector('#dlgSgnEml').value = jsn.email;
+                localStorage.setItem('mm0', jsn.token);
+                //location.reload(true);
+
+                console.log("Token$ 1", tmplt.model.Token$);
+                tmplt.model.Token$ = jsn.token;
+                console.log("Token$ 2", tmplt.model.Token$);
+
+                if (jsn.mesaj == "LoggedIn") {
+                    document.querySelector('paper-dialog').opened = false;
+                    document.querySelector('#dlgSgnOpn').innerText = "Oturum Kapat";
+                }
+                else
+                    document.querySelector('#dlgSgnMsj').value = jsn.mesaj;
+
+
+            } catch (e) {
+                console.log("errPost", e);
+            }
+        }
+        //console.log('signUser', signUser());
+
+
+        async function getPP() {
+            db = new Dexie("LookupDatabase");
+            db.version(1).stores({
+                LastReads: "Id",
+                PPs: "PPoNo",
+            });
+
+            //let firstFriend = await db.friends.get(1);
+            await db.PPs.each(pp => localpp.push(pp));
+        }
+        //localpp = [];
+        //getPP();
+
+    </script>
+
 </template>

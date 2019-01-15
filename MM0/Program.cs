@@ -25,37 +25,55 @@ namespace MM0
             }
 
 
-            HH.Populate();
-            HH.Display();
+            //HH.Populate();
+            //HH.Display();
 
             //HHspage hp = new HHspage();
             //hp.HHs.Data = HH.sener(2);
             //hp.HHs.Data = Db.SQL<HH>("select r from HH r");
-            
+
+            /*
+            Random gen = new Random();
+            //DateTime randomDate = DateTime.Today.AddDays(gen.Next(range));
+            ulong hhGlrId = 0;
+            ulong hhGdrId = 0;
+            HH hhGlr, hhGdr;
             Db.Transact(() =>
             {
-                new FF
+                for (int i = 0; i < 1000; i++)
                 {
-                    PP = Db.FromId(4) is PP pp ? pp : null,  // Proje1
-                    Ad = "Apple 1 Gdrrrrrrrrr",
-                    HH = Db.FromId(9) is HH hh ? hh : null,  // Apple
-                    Trh = DateTime.Now,
-                    Gdr = 456.78M
-                };
-                FF.PostFF(9);
-
-                new FF
+                    hhGdrId = (ulong)gen.Next(8, 14);
+                    if (hhGdrId == 10 || hhGdrId == 12)
+                        hhGdrId++;
+                    hhGdr = Db.FromId(hhGdrId) is HH hh ? hh : null;
+                    new FF
+                    {   
+                        PP = Db.FromId(3) is PP pp ? pp : null,  // Proje1
+                        Ad = "Apple 1 Gdrrrrrrrrr",
+                        HH = hhGdr,  // Apple
+                        Trh = DateTime.Today.AddDays(gen.Next(365)),
+                        Gdr = gen.Next(1, 100) * 100
+                    };
+                    FF.PostFF(hhGdr);
+                }
+                for (int i = 0; i < 10; i++)
                 {
-                    PP = Db.FromId(4) is PP pp2 ? pp2 : null,  // Proje1
-                    Ad = "Apple 4 Glr",
-                    HH = Db.FromId(12) is HH hh2 ? hh2 : null,  // Meat
-                    Trh = DateTime.Now,
-                    Glr = 200.67M
-                };
-                FF.PostFF(9);
+                    hhGlrId = (ulong)gen.Next(8, 14);
+                    if (hhGlrId == 10 || hhGlrId == 12)
+                        hhGlrId++;
+                    hhGlr = Db.FromId(hhGlrId) is HH hh2 ? hh2 : null;
+                    new FF
+                    {
+                        PP = Db.FromId(3) is PP pp2 ? pp2 : null,  // Proje1
+                        Ad = "Apple 4 Glr",
+                        HH = hhGlr,  // Meat
+                        Trh = DateTime.Today.AddDays(gen.Next(365)),
+                        Glr = gen.Next(1, 100) * 10000
+                    };
+                    FF.PostFF(hhGlr);
+                }
             });
-            
-
+            */
 
         }
     }

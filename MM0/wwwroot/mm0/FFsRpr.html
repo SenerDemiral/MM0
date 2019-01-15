@@ -2,7 +2,12 @@
     <dom-bind id="FFsRpr">
         <template is="dom-bind">
             <div class="gridTbl">
-                <div>
+                <div class="gridTbl_header">
+                    <div>[[model.Hdr]]</div>
+                    <input type="button" data-link="/mm0/FFsRprXlsx/[[model.PPId]]" on-tap="MyDownload" value="Download Excel" />
+                    <button value="{{model.DD.NewTrgr$::click}}" onmousedown="++this.value" hidden$="[[!model.canMdfy]]">New</button>
+                </div>
+                <div class="gridTbl_main">
                     <table id="FFsRprTbl" class="fixTbl">
                         <colgroup>
                             <col style="width:6rem" />
@@ -20,8 +25,8 @@
                             <tr>
                                 <th>Tarih</th>
                                 <th>Hesap</th>
-                                <th>Gelir</th>
                                 <th>Gider</th>
+                                <th>Gelir</th>
                                 <th>Açıklama</th>
                                 <th>Id</th>
                             </tr>
@@ -29,10 +34,10 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter">[[item.TrhX]]</td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRprTrh/[[model.PPId]]/[[item.TrhZ]]">[[item.TrhX]]</a></td>
                                     <td>[[item.HHAd]]</td>
-                                    <td class="txtRight">[[item.GlrX]]</td>
                                     <td class="txtRight">[[item.GdrX]]</td>
+                                    <td class="txtRight">[[item.GlrX]]</td>
                                     <td>[[item.Ad]]</td>
                                     <td class="txtCenter">[[item.Id]]</td>
                                 </tr>
@@ -41,9 +46,9 @@
                         <tfoot>
                             <tr>
                                 <td></td>
-                                <td class="txtRight">TOPLAM</td>
-                                <td class="txtRight">[[model.GlrTopX]]</td>
+                                <td class="txtRight">[[model.NORX]]</td>
                                 <td class="txtRight">[[model.GdrTopX]]</td>
+                                <td class="txtRight">[[model.GlrTopX]]</td>
                                 <td></td>
                                 <td></td>
                             </tr>
@@ -53,6 +58,16 @@
             </div>
 
         </template>
-    </dom-bind>
+    </dom-bind >
+    <script>
+        console.log("MasterPage");
+        var tmplt = (document._currentScript || document.currentScript).previousElementSibling;  // Global
+
+        tmplt.MyDownload = function (e) {
+            e.stopImmediatePropagation(); //stopPropagation();
+            window.open(e.target.dataLink, '_self');
+        }
+
+    </script>
 </template>
 

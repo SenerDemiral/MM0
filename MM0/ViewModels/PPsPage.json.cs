@@ -19,7 +19,7 @@ namespace MM0.ViewModels
                 ThmGlrTopX = hh.ThmGlrX;
                 ThmGdrTopX = hh.ThmGdrX;
 
-                var recs = Db.SQL<PP>("select r from PP r");
+                var recs = Db.SQL<PP>("select r from PP r where r.CC = ?", cc);
                 PPs.Data = recs;
 
             }
