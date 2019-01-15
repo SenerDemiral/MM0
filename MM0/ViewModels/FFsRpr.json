@@ -1,0 +1,26 @@
+{
+  // ReadOnly FisRapor
+  // Search PPId + Hsp/Trh(Belirtilmemis ise Projenin Tum Fisleri)
+  "Html": "/MM0/FFsRpr.html",
+  "PPId": "",
+  "HHId": "",
+  "Trh": "",
+
+  "GlrTopX": "",
+  "GdrTopX": "",
+
+  "FFs": [
+    {
+      "Id": 0,
+      "HHId": "",
+
+      "TrhX": "",
+      "HHAd": "",
+      "GlrX": "",
+      "GdrX": "",
+      "Ad": ""
+
+    }
+  ]
+
+}

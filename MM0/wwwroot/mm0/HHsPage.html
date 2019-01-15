@@ -1,0 +1,53 @@
+﻿<template>
+    <dom-bind id="HHsPage">
+        <template is="dom-bind">
+            <div class="gridTbl">
+                <div>
+                    <table id="HHsPageTbl" class="fixTbl">
+                        <colgroup>
+                            <col style="width:14rem" />
+
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+
+                            <col style="width:4rem" />
+
+                            <col style="width:2rem" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Hesap</th>
+                                <th colspan="2">Gerçek</th>
+                                <th colspan="2">Tahmin</th>
+                                <th rowspan="2">Id</th>
+                            </tr>
+                            <tr>
+                                <th class="txtRight">Gelir</th>
+                                <th class="txtRight">Gider</th>
+                                <th class="txtRight">Gelir</th>
+                                <th class="txtRight">Gider</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template is="dom-repeat" items="{{model.HHs}}">
+                                <tr>
+                                    <td data-lvl$="[[item.Lvl]]">[[item.Ad]]</td>
+                                    <td class="txtRight">[[item.GrcGlrX]]</td>
+                                    <td class="txtRight">[[item.GrcGdrX]]</td>
+                                    <td class="txtRight">[[item.ThmGlrX]]</td>
+                                    <td class="txtRight">[[item.ThmGdrX]]</td>
+                                    <td class="txtCenter">[[item.Id]]</td>
+                                    <td>[[item.Lvl]]</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </template>
+    </dom-bind>
+</template>
+

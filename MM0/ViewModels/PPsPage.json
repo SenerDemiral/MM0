@@ -1,0 +1,39 @@
+{
+  "Html": "/MM0/PPsPage.html",
+  "CCId": "",
+
+  "GrcGlrTopX": "",
+  "GrcGdrTopX": "",
+  "ThmGlrTopX": "",
+  "ThmGdrTopX": "",
+
+  "PP": {
+    "Id": "",
+    "Ad$": "",
+    "BasTrh$": "",
+    "BitTrh$": "",
+
+    "Opened": false,
+    "IsNew": false,
+    "NewTrgr$": 0,
+    "InsTrgr$": 0,
+    "UpdTrgr$": 0,
+    "DelTrgr$": 0,
+    "RejTrgr$": 0
+  },
+
+  "PPs": [
+    {
+      "Id": 0,
+
+      "Ad": "",
+      "BasTrhX": "",
+      "BitTrhX": "",
+
+      "GrcGlrX": "",
+      "GrcGdrX": "",
+      "ThmGlrX": "",
+      "ThmGdrX": ""
+    }
+  ]
+}

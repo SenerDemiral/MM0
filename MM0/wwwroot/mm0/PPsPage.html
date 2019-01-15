@@ -1,0 +1,71 @@
+﻿<template>
+    <dom-bind id="PPsPage">
+        <template is="dom-bind">
+            <div class="gridTbl">
+                <div>
+                    <table id="PPsPageTbl" class="fixTbl">
+                        <colgroup>
+                            <col style="width:12rem" />
+
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+
+                            <col style="width:6rem" />
+                            <col style="width:6rem" />
+
+                            <col style="width:4rem" />
+
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Ad</th>
+                                <th colspan="2">Gerçek</th>
+                                <th colspan="2">Tahmin</th>
+                                <th colspan="2">Tarih</th>
+                                <th rowspan="2">Id</th>
+                            </tr>
+                            <tr>
+                                <th>Gelir</th>
+                                <th>Gider</th>
+                                <th>Gelir</th>
+                                <th>Gider</th>
+                                <th>Başlangıç</th>
+                                <th>Bitiş</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template is="dom-repeat" items="{{model.PPs}}">
+                                <tr>
+                                    <td>[[item.Ad]]</td>
+                                    <td class="txtRight">[[item.GrcGlrX]]</td>
+                                    <td class="txtRight">[[item.GrcGdrX]]</td>
+                                    <td class="txtRight">[[item.ThmGlrX]]</td>
+                                    <td class="txtRight">[[item.ThmGdrX]]</td>
+                                    <td class="txtCenter">[[item.BasTrhX]]</td>
+                                    <td class="txtCenter">[[item.BitTrhX]]</td>
+                                    <td class="txtCenter">[[item.Id]]</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="txtRight">TOPLAM</td>
+                                <td class="txtRight">[[model.GrcGlrTopX]]</td>
+                                <td class="txtRight">[[model.GrcGdrTopX]]</td>
+                                <td class="txtRight">[[model.ThmGlrTopX]]</td>
+                                <td class="txtRight">[[model.ThmGdrTopX]]</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+        </template>
+    </dom-bind>
+</template>
+

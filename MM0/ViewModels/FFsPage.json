@@ -1,0 +1,49 @@
+{
+  "Html": "/MM0/FFsPage.html",
+  "PPId": "",
+  "HHId": "",
+  "Trh": "",
+
+  "FF": {
+    "Id": "",
+    "Ad$": "",
+    "Glr$": 0.0,
+    "Gdr$": 0.0,
+    "HHId$": "",
+
+    "Opened": false,
+    "IsNew": false,
+    "NewTrgr$": 0,
+    "InsTrgr$": 0,
+    "UpdTrgr$": 0,
+    "DelTrgr$": 0,
+    "RejTrgr$": 0
+  },
+
+  "FFs": [
+    {
+      "Id": 0,
+
+      "Trh": "",
+      "Ad": "",
+      "Glr": 0.0,
+      "Gdr": 0.0,
+
+      "HHId": "",
+      "HHAd": ""
+    }
+  ],
+
+  "HHs": [ // Lookup, Sadece PP's HH->Leafs
+    {
+      "Id": "",
+      "Ad": ""
+    }
+  ],
+
+  "FFsRpr": {} // HHId / Trh e ait FFsRpr
+  // Link   FFsRpr/Hsp/HHId
+  // Link   FFsRpr/Trh/Tarih
+
+
+}

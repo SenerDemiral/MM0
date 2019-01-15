@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MM0", "MM0\MM0.csproj", "{0873806C-D73B-4706-8BB4-64D1E2E7E72D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBMM0", "DBMM0\DBMM0.csproj", "{5566F5A4-BA5A-433A-9921-E8ED6FE3801F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +17,10 @@ Global
 		{0873806C-D73B-4706-8BB4-64D1E2E7E72D}.Debug|x64.Build.0 = Debug|x64
 		{0873806C-D73B-4706-8BB4-64D1E2E7E72D}.Release|x64.ActiveCfg = Release|x64
 		{0873806C-D73B-4706-8BB4-64D1E2E7E72D}.Release|x64.Build.0 = Release|x64
+		{5566F5A4-BA5A-433A-9921-E8ED6FE3801F}.Debug|x64.ActiveCfg = Debug|x64
+		{5566F5A4-BA5A-433A-9921-E8ED6FE3801F}.Debug|x64.Build.0 = Debug|x64
+		{5566F5A4-BA5A-433A-9921-E8ED6FE3801F}.Release|x64.ActiveCfg = Release|x64
+		{5566F5A4-BA5A-433A-9921-E8ED6FE3801F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

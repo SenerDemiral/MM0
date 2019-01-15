@@ -1,0 +1,58 @@
+﻿<template>
+    <dom-bind id="FFsRpr">
+        <template is="dom-bind">
+            <div class="gridTbl">
+                <div>
+                    <table id="FFsRprTbl" class="fixTbl">
+                        <colgroup>
+                            <col style="width:6rem" />
+                            <col style="width:12rem" />
+
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+
+                            <col style="width:12rem" />
+
+                            <col style="width:4rem" />
+
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Tarih</th>
+                                <th>Hesap</th>
+                                <th>Gelir</th>
+                                <th>Gider</th>
+                                <th>Açıklama</th>
+                                <th>Id</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template is="dom-repeat" items="{{model.FFs}}">
+                                <tr>
+                                    <td class="txtCenter">[[item.TrhX]]</td>
+                                    <td>[[item.HHAd]]</td>
+                                    <td class="txtRight">[[item.GlrX]]</td>
+                                    <td class="txtRight">[[item.GdrX]]</td>
+                                    <td>[[item.Ad]]</td>
+                                    <td class="txtCenter">[[item.Id]]</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td class="txtRight">TOPLAM</td>
+                                <td class="txtRight">[[model.GlrTopX]]</td>
+                                <td class="txtRight">[[model.GdrTopX]]</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+
+        </template>
+    </dom-bind>
+</template>
+

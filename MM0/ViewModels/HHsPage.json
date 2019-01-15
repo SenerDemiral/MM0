@@ -1,0 +1,32 @@
+{
+  "Html": "/MM0/HHsPage.html",
+  "PPId": "",
+
+  "HH": {
+    "Id": "",
+    "Ad$": "",
+    "ThmGlr$": 0.0,
+    "ThmGdr$": 0.0,
+
+    "Opened": false,
+    "IsNew": false,
+    "NewTrgr$": 0,
+    "InsTrgr$": 0,
+    "UpdTrgr$": 0,
+    "DelTrgr$": 0,
+    "RejTrgr$": 0
+  },
+
+  "HHs": [
+    {
+      "Id": 0,
+
+      "Ad": "",
+      "ThmGlrX": "",
+      "ThmGdrX": "",
+      "GrcGlrX": "",
+      "GrcGdrX": "",
+      "Lvl": 0
+    }
+  ]
+}
