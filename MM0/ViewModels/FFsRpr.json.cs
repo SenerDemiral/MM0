@@ -23,8 +23,8 @@ namespace MM0.ViewModels
                 {
                     if (Db.FromId(Convert.ToUInt64(HHId)) is HH hh)
                     {
-                        Hdr = $"{pp.Ad} ► {hh.Ad} ► İşlemleri";
-                        if (hh.Skl == 9)    // Leaf ise sadece kendi gecenleri
+                        Hdr = $"{HH.FullParentAd(hh)} ► İşlemleri";
+                        if (hh.Skl == 99)    // Leaf ise sadece kendi gecenleri
                             ffs = Db.SQL<FF>("select r from FF r where r.HH = ?", hh);
                         else // Altindaki Leaf leri
                             ffs = FF.View(hh); //Db.SQL<FF>("select r from FF r where r.PP = ? and r.HH = ? order by r.Trh DESC", pp, hh);

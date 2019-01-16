@@ -4,6 +4,7 @@
             <div class="gridTbl">
                 <div class="gridTbl_header">
                     <div>[[model.Hdr]]</div>
+                    <input type="button" data-link="/mm0/HHsXlsx/[[model.PPId]]" on-tap="MyDownload" value="Download Excel" />
                     <button value="{{model.DD.NewTrgr$::click}}" onmousedown="++this.value" hidden$="[[!model.canMdfy]]">New</button>
                 </div>
                 <div class="gridTbl_main">
@@ -52,5 +53,15 @@
 
         </template>
     </dom-bind>
+    <script>
+        console.log("MasterPage");
+        var tmplt = (document._currentScript || document.currentScript).previousElementSibling;  // Global
+
+        tmplt.MyDownload = function (e) {
+            e.stopImmediatePropagation(); //stopPropagation();
+            window.open(e.target.dataLink, '_self');
+        }
+
+    </script>
 </template>
 

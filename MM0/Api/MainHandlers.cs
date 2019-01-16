@@ -36,7 +36,7 @@ namespace MM0.Api
             //    return master;
             //}
 
-            if (curSession != null)     // Ilk girisinde URL ne olursa olsun MainPage'e gonder
+            //if (curSession != null)     // Ilk girisinde URL ne olursa olsun MainPage'e gonder
             {
                 master.CurrentPage = Self.GET(partialPath);
 
@@ -85,6 +85,20 @@ namespace MM0.Api
             });
 
             // Client Login yapmis olmali.
+            Handle.GET("/MM0/PPs", () =>
+            {
+                MasterPage master = GetMasterPageFromSession();
+                if (master.Token != "")
+                {
+                    var cc = Db.SQL<CC>("select r from CC r where r.Token = ?", master.Token).FirstOrDefault();
+                    if (cc != null)
+                        return WrapPage<PPsPage>($"/MM0/partials/PPs/{cc.Id}");
+                }
+                return master;
+            });
+
+
+            // Client Login yapmis olmali.
             Handle.GET("/MM0/PPs/{?}", (string CCId) =>
             {
                 MasterPage master = GetMasterPageFromSession();
@@ -116,19 +130,99 @@ namespace MM0.Api
                         cc.IsConfirmed = true;
                     });
                     master.Token = cc.Token;
-                    //return master; // Self.GET("/bodved/DDs");
+                    //return Self.GET($"/MM0/PPs/{cc.Id.ToString()}");
+                    master.MorphUrl = $"/MM0/PPs/{cc.Id.ToString()}";
                 }
                 return master;
             });
 
-            Handle.GET("/MM0/FFsRprXlsx/{?}", (string PPId) =>
+            Handle.GET("/MM0/HHsXlsx/{?}", (string PPId) =>
             {
-                return FFsRprXlsx(PPId);
+                return HHsXlsx(PPId);
+            });
+
+            Handle.GET("/MM0/FFsXlsx/{?}", (string PPId) =>
+            {
+                return FFsXlsx(PPId);
             });
 
         }
 
-        public static Response FFsRprXlsx(string PPId)
+        public static Response HHsXlsx(string PPId)
+        {
+            using (ExcelPackage pck = new ExcelPackage())
+            {
+                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("HHsRpr");
+
+                // Header (first row)
+                ws.Cells[1, 1].Value = "Hesap";
+                ws.Cells["A1:A2"].Merge = true;
+
+                ws.Cells[1, 2].Value = "Gercek";
+                ws.Cells["B1:C1"].Merge = true;
+
+                ws.Cells[1, 4].Value = "Tahmini";
+                ws.Cells["D1:E1"].Merge = true;
+
+                ws.Cells[2, 2].Value = "Gider";
+                ws.Cells[2, 3].Value = "Gelir";
+                ws.Cells[2, 4].Value = "Gider";
+                ws.Cells[2, 5].Value = "Gelir";
+
+                ws.Row(1).Style.Font.Bold = true;
+                ws.Row(2).Style.Font.Bold = true;
+
+                ws.Column(2).Style.Numberformat.Format = "#,###";
+                ws.Column(3).Style.Numberformat.Format = "#,###";
+                ws.Column(4).Style.Numberformat.Format = "#,###";
+                ws.Column(5).Style.Numberformat.Format = "#,###";
+
+                if (Db.FromId(Convert.ToUInt64(PPId)) is PP pp)
+                {
+                    //var hhs = Db.SQL<HH>("select r from HH r where r.PP = ?", pp);
+                    int cr = 3;
+                    foreach (var hh in HH.View(pp))
+                    {
+                        ws.Cells[cr, 1].Value = hh.Ad;
+                        ws.Cells[cr, 1].Style.Indent = hh.Lvl - 1;
+
+                        ws.Cells[cr, 2].Value = hh.GrcGdr;
+                        ws.Cells[cr, 3].Value = hh.GrcGlr;
+                        ws.Cells[cr, 4].Value = hh.ThmGdr;
+                        ws.Cells[cr, 5].Value = hh.ThmGlr;
+
+                        cr++;
+                    }
+
+                    //ws.Row(1).Height = 20;
+                    ws.Row(1).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    ws.Row(2).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Row(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    ws.Column(1).AutoFit();
+                    ws.Column(2).AutoFit();
+                    ws.Column(3).AutoFit();
+                    ws.Column(4).AutoFit();
+                    ws.Column(5).AutoFit();
+                }
+
+
+                Response r = new Response();
+                //r.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                r.ContentType = "application/octet-stream";
+                r.Headers["Content-Disposition"] = "attachment; filename=\"HHsRpr.xlsx\"";
+
+                var oms = new MemoryStream();
+                pck.SaveAs(oms);
+                oms.Seek(0, SeekOrigin.Begin);
+
+                r.StreamedBody = oms;
+                return r;
+            }
+        }
+
+        public static Response FFsXlsx(string PPId)
         {
             using (ExcelPackage pck = new ExcelPackage())
             {

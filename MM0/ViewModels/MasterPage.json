@@ -1,17 +1,20 @@
 {
   "Html": "/MM0/MasterPage.html",
   "Token": "",
+  "MorphUrl$": "",
 
   "Sgn": {
     "Email$": "",
     "Pwd$": "",
     "Token$": "",
     "Mesaj": "",
-
+    "OpnDlgTxt": "Open",
+    "OpnDlgT$": 0,
     "IsOpened$": false,
-    "OpenT$": 0,
-    "SignT$": 0,
-    "CancelT$": 0
+    "SignInT$": 0,
+    "SignUpT$": 0,
+    "CancelT$": 0,
+    "AutoSignT$": 0
   },
 
   "CurrentPage": {}

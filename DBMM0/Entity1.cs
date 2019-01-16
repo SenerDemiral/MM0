@@ -119,9 +119,13 @@ namespace DBMM0
         }
         public static IEnumerable<FF> View(HH hh)
         {
+            // Herhangi bir node'un (Leaf olmasi gerekmiyor) altindaki Leaf lerin hareketleri FF
+            // 1. FFs of PP
+            // 2. FFs of PP + HH(s)
+            // 3.        PP + Trh
             List<HH> hhList = new List<HH>();
 
-            if (hh.Skl == 9)    // Zaten leaf
+            if (hh.Skl == 99)    // Zaten leaf
                 hhList.Add(hh);
             else
                 Leafs(hh, hhList);
@@ -139,11 +143,10 @@ namespace DBMM0
         }
         public static void Leafs(HH prn, List<HH> list)
         {
-            var aaa = prn.Ad;
             var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ?", prn);
             foreach (var hh in HHs)
             {
-                if (hh.Skl == 9)
+                if (hh.Skl == 99)
                     list.Add(hh);
                 Leafs(hh, list);
             }
@@ -187,17 +190,16 @@ namespace DBMM0
 
         public int No { get; set; }
         public string Ad { get; set; }
-        public int Skl { get; set; }    // 0:Client, 1:Proje, 2..8:AraHesap, 9:CalisanHesap/Leaf
+        public int Lvl { get; set; }
+        public int Skl { get; set; }    // 0:Client, 1:Proje, 2..8:AraHesap, 99:CalisanHesap/Leaf
 
         public decimal GrcGlr { get; set; }
         public decimal GrcGdr { get; set; }
         public decimal ThmGlr { get; set; }
         public decimal ThmGdr { get; set; }
 
-        [Transient]
-        public int Lvl;
 
-        public bool IsLeaf => Db.SQL<HH>("select r from DBMM0.HH r where r.Prn = ?", this).FirstOrDefault() == null ? true : false;
+        //public bool IsLeaf => Db.SQL<HH>("select r from DBMM0.HH r where r.Prn = ?", this).FirstOrDefault() == null ? true : false;
         // FFde kaydi varsa Altina hesap acilamaz
         public bool HasHrk => Db.SQL<FF>("select r from DBMM0.FF r where r.HH = ?", this).FirstOrDefault() == null ? false : true;
 
@@ -207,11 +209,50 @@ namespace DBMM0
         public string ThmGlrX => $"{ThmGlr:#,#.##;-#,#.##;#}";
         public string ThmGdrX => $"{ThmGdr:#,#.##;-#,#.##;#}";
 
+        public static void PostIns(HH hh)
+        {
+            // Insert sonrasi Lvl hesapla
+            int lvl = 0;
+            HH pHH = hh.Prn;
+
+            while(pHH != null)
+            {
+                lvl++;
+                pHH = pHH.Prn;
+            }
+
+            Db.Transact(() =>
+            {
+                hh.Lvl = lvl;
+                hh.Skl = lvl;
+                if (lvl > 1)    // 0:Client, 1:Proje, 2..8: AraHesaplar, 99:LeafNode
+                {
+                    hh.Skl = 99; // Leaf
+                    hh.Prn.Skl = hh.Prn.Lvl;     // Parent'i AraHesap yap
+                }
+
+            });
+        }
+
+        public static string FullParentAd(HH hh)
+        {
+            string fullAd = $"{hh.Ad}";
+
+            HH pHH = hh.Prn;
+
+            while (pHH != null && pHH.Lvl > 0)
+            {
+                fullAd = $"{pHH.Ad} ► {fullAd}";
+                pHH = pHH.Prn;
+            }
+            return fullAd;
+        }
+
         public static IEnumerable<HH> View(PP pp)
         {
             var hh = pp.HHroot;
             List<HH> list = new List<HH>();
-            ViewTree(hh, 1, list);
+            ChildreenOfNode(hh, 1, list);
 
             yield return hh;
             foreach (var h in list)
@@ -219,16 +260,29 @@ namespace DBMM0
                 yield return h;
             }
         }
-        public static void ViewTree(HH prn, int lvl, List<HH> list)
+        public static void ChildreenOfNode(HH node, int lvl, List<HH> list)
         {
-            var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ? order by r.No", prn);
+            var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ? order by r.Ad", node);
             foreach (var hh in HHs)
             {
-                hh.Lvl = lvl;
                 list.Add(hh);
-                ViewTree(hh, lvl + 1, list);
+
+                ChildreenOfNode(hh, lvl + 1, list);
             }
         }
+
+        public static void LeafsOfNode(HH node, List<HH> hhList)
+        {
+            var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ?", node);
+            foreach (var hh in HHs)
+            {
+                if (hh.Skl == 99)
+                    hhList.Add(hh);
+
+                LeafsOfNode(hh, hhList);
+            }
+        }
+
 
         public static void Display()
         {
@@ -262,7 +316,7 @@ namespace DBMM0
             Console.WriteLine("Leafs---------");
             var prjRoot = Db.FromId<HH>(4);
             List<HH> leafList = new List<HH>();
-            Leafs(prjRoot, leafList);
+            LeafsDeneme(prjRoot, leafList);
 
             foreach(var itm in sener(2))
                 Console.WriteLine($"-------{itm.GetObjectNo()} {itm.Ad}");
@@ -290,7 +344,7 @@ namespace DBMM0
             }
         }
 
-        public static void Leafs(HH prn, List<HH> hhList)
+        public static void LeafsDeneme(HH prn, List<HH> hhList)
         {
             // Buna gerek kalmadi, HH.PP alani var artik
             // var leafs = Db.SQL<HH>("select r from HH where r.PP = ? and Skl = ?, PP, 9); // Skl=9 Working nodes
@@ -298,12 +352,12 @@ namespace DBMM0
             var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ?", prn);
             foreach (var hh in HHs)
             {
-                if (hh.Skl == 9)
+                if (hh.Skl == 99)
                 { 
                     Console.WriteLine($"{hh.Ad}");
                     hhList.Add(hh);
                 }
-                Leafs(hh, hhList);
+                LeafsDeneme(hh, hhList);
             }
         }
 
@@ -314,7 +368,7 @@ namespace DBMM0
             {
                 List<HH> leafList = new List<HH>();
 
-                Leafs(hh, leafList);
+                LeafsDeneme(hh, leafList);
 
                 foreach (var h in leafList)
                 {
@@ -354,143 +408,170 @@ namespace DBMM0
 
         public static void Populate()
         {
-            Db.Transact(() => {
-                var oguzC = new CC
+            CC oguzC = null;
+            PP oguzP1 = null;
+            HH oguzH = null, oguzP1H = null, food = null, fruit = null, red = null, yellow = null, meat = null;
+
+            Db.Transact(() =>
+            {
+                oguzC = new CC
                 {
-                    Ad = "Oguz",
+                    Ad = "Test",
+                    Email = "test",
+                    Pwd = "test",
+                    Token = "test",
+                    IsConfirmed = true
                 };
-                var oguzH = new HH
+            });
+            Db.Transact(() =>
+            {
+                oguzH = new HH
                 {
                     No = 0,
-                    Skl = 0,
                     Prn = null,
                 };
                 oguzC.HHroot = oguzH;
                 oguzH.Ad = oguzC.Ad;
-
-                var oguzP1 = new PP
+            });
+            Db.Transact(() =>
+            {
+                oguzP1 = new PP
                 {
                     CC = oguzC,
-                    Ad = "OguzProje1",
+                    Ad = "TestProje1",
                     BasTrh = DateTime.Today.AddDays(-100),
                     BitTrh = DateTime.Today.AddDays(100),
                 };
-                var oguzP1H = new HH
+                oguzP1H = new HH
                 {
                     No = 1,
-                    Skl = 1,
                     Prn = oguzH,
                     ThmGlr = 1000000,
                     ThmGdr = 900000
                 };
                 oguzP1.HHroot = oguzP1H;
                 oguzP1H.Ad = oguzP1.Ad;
-
-
-                var food = new HH
+            });
+            Db.Transact(() =>
+            {
+                food = new HH
                 {
                     PP = oguzP1,
                     No = 1,
-                    Ad = "Food",
-                    Skl = 2,
+                    Ad = "Besin",
                     Prn = oguzP1H
                 };
+            });
+            Db.Transact(() =>
+            {
+                fruit = new HH
+                {
+                    PP = oguzP1,
+                    No = 1,
+                    Ad = "Meyve",
+                    Prn = food
+                };
+            });
+            Db.Transact(() =>
+            {
+                red = new HH
+                {
+                    PP = oguzP1,
+                    No = 1,
+                    Ad = "Kırmızı Renkli",
+                    Prn = fruit
+                };
+            });
 
-                    var fruit = new HH
-                    {
-                        PP = oguzP1,
-                        No = 1,
-                        Ad = "Fruit",
-                        Skl = 2,
-                        Prn = food
-                    };
-                        var red = new HH
-                        {
-                            PP = oguzP1,
-                            No = 1,
-                            Ad = "Red",
-                            Skl = 2,
-                            Prn = fruit
-                        };
-                            var cherry = new HH
-                            {
-                                PP = oguzP1,
-                                No = 1,
-                                Ad = "Cherry",
-                                Skl = 9,
-                                Prn = red,
-                                GrcGlr = 10,
-                                GrcGdr = 20
-                            };
-                            var apple = new HH
-                            {
-                                PP = oguzP1,
-                                No = 2,
-                                Ad = "Apple",
-                                Skl = 9,
-                                Prn = red,
-                                GrcGlr = 30,
-                                GrcGdr = 40
-                            };
-                        var yellow = new HH
-                        {
-                            PP = oguzP1,
-                            No = 2,
-                            Ad = "Yellow",
-                            Skl = 2,
-                            Prn = fruit
-                        };
-                            var banana = new HH
-                            {
-                                PP = oguzP1,
-                                No = 1,
-                                Ad = "Banana",
-                                Skl = 9,
-                                Prn = yellow,
-                                GrcGlr = 50,
-                                GrcGdr = 60
-                            };
+            Db.Transact(() =>
+            {
+                var cherry = new HH
+                {
+                    PP = oguzP1,
+                    No = 1,
+                    Ad = "Çilek",
+                    Prn = red,
+                    GrcGlr = 10,
+                    GrcGdr = 20
+                };
+                var apple = new HH
+                {
+                    PP = oguzP1,
+                    No = 2,
+                    Ad = "Elma",
+                    Prn = red,
+                    GrcGlr = 30,
+                    GrcGdr = 40
+                };
+            });
+            Db.Transact(() =>
+            {
+                yellow = new HH
+                {
+                    PP = oguzP1,
+                    No = 2,
+                    Ad = "Sarı Renkli",
+                    Prn = fruit
+                };
+            });
+            Db.Transact(() =>
+            {
+                var banana = new HH
+                {
+                    PP = oguzP1,
+                    No = 1,
+                    Ad = "Muz",
+                    Prn = yellow,
+                    GrcGlr = 50,
+                    GrcGdr = 60
+                };
 
-                    var meat = new HH
-                    {
-                        PP = oguzP1,
-                        No = 2,
-                        Ad = "Meat",
-                        Skl = 2,
-                        Prn = food
-                    };
-                        var beef = new HH
-                        {
-                            PP = oguzP1,
-                            No = 1,
-                            Ad = "Beef",
-                            Skl = 9,
-                            Prn = meat,
-                            GrcGlr = 70,
-                            GrcGdr = 80,
-                            ThmGlr = 285000,
-                            ThmGdr = 200000
-                        };
-                        var pork = new HH
-                        {
-                            PP = oguzP1,
-                            No = 2,
-                            Ad = "Pork",
-                            Skl = 9,
-                            Prn = meat,
-                            GrcGlr = 90,
-                            GrcGdr = 95,
-                            ThmGlr = 150000,
-                            ThmGdr = 125000
-                        };
+            });
+            Db.Transact(() =>
+            {
+                meat = new HH
+                {
+                    PP = oguzP1,
+                    No = 2,
+                    Ad = "Et",
+                    Prn = food
+                };
+            });
+            Db.Transact(() =>
+            {
+                var beef = new HH
+                {
+                    PP = oguzP1,
+                    No = 1,
+                    Ad = "Büftek",
+                    Prn = meat,
+                    GrcGlr = 70,
+                    GrcGdr = 80,
+                    ThmGlr = 285000,
+                    ThmGdr = 200000
+                };
+                var pork = new HH
+                {
+                    PP = oguzP1,
+                    No = 2,
+                    Ad = "Tavuk",
+                    Prn = meat,
+                    GrcGlr = 90,
+                    GrcGdr = 95,
+                    ThmGlr = 150000,
+                    ThmGdr = 125000
+                };
+            });
 
+            /*
+            Db.TransactAsync(() => {
                 UpdateParentsGrcToplam(apple);
                 UpdateParentsGrcToplam(cherry);
                 UpdateParentsGrcToplam(banana);
                 UpdateParentsGrcToplam(beef);
                 UpdateParentsGrcToplam(pork);
 
-            });
+            });*/
         }
 
     }

@@ -1,5 +1,6 @@
 ﻿<link rel="stylesheet" href="/sys/mm0.css">
-<link href="/sys/paper-dialog/paper-dialog.html" rel="import" />
+<link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html">
+<link rel="import" href="/sys/paper-dialog/paper-dialog.html"/>
 <link rel="import" href="/sys/vaadin-icons/vaadin-icons.html">
 
 <template>
@@ -7,25 +8,29 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.Sgn.IsOpened$]]" modal="true">
                 <div class="mdfRecWrap">
+                    <label>eMail</label>
                     <input id="dlgSgnEml" placeholder="eMail" type="text" value="{{model.Sgn.Email$::change}}" autofocus />
+                    <label>Password</label>
                     <input id="dlgSgnPwd" placeholder="Password" type="password" value="{{model.Sgn.Pwd$::change}}" required />
+                    <label>Mesaj</label>
                     <input id="dlgSgnMsj" class="colInfo" type="text" value="[[model.Sgn.Mesaj]]" readonly />
-                    <div class="mdfRecAction">
-                        <button value="{{model.Sgn.SignT$::click}}" onmousedown="++this.value">OK</button>
-                        <button value="{{model.Sgn.CancelT$::click}}" onmousedown="++this.value">Cancel</button>
-                    </div>
+                </div>
+                <div class="mdfRecAction">
+                    <button value="{{model.Sgn.SignInT$::click}}" onmousedown="++this.value">SignIn</button>
+                    <button value="{{model.Sgn.CancelT$::click}}" onmousedown="++this.value">Cancel</button>
+                    <button value="{{model.Sgn.SignUpT$::click}}" onmousedown="++this.value">SignUp</button>
                 </div>
             </paper-dialog>
 
+            <palindrom-redirect is="palindrom-redirect" history url="{{model.MorphUrl$}}"></palindrom-redirect>
 
             <div class="grid">
                 <header class="grid_header">
-                    <a href="/mm0"><iron-icon icon="vaadin:home"></iron-icon></a>
+                    <a href="/mm0/PPs"><iron-icon icon="vaadin:home"></iron-icon></a>
                     <a href="/mm0/PPs/1"><iron-icon icon="vaadin:bell-o"></iron-icon></a>
-                    <a href="/mm0/PPs"><iron-icon icon="vaadin:users"></iron-icon></a>
                     <a href="/mm0/AboutPage"><iron-icon icon="vaadin:info-circle"></iron-icon></a>
 
-                    <button id="dlgSgnOpn" value="{{model.Sgn.SignT$::click}}" onmousedown="++this.value">OturumAç/ÜyeGirişi</button>
+                    <button id="dlgSgnOpn2" value="{{model.Sgn.OpnDlgT$::click}}" onmousedown="++this.value">[[model.Sgn.OpnDlgTxt]]</button>
 
                     <div id="trackModelTokenChange" class="token" data-token="[[model.Token]]">[[model.Token]]</div>
 
@@ -40,91 +45,71 @@
     </dom-bind>
 
     <script>
-        //var decleration = document.styleSheets[0].cssRules[0].style;
-        //decleration.setProperty('--w-TF', '20rem');
-        //console.log('getProp', decleration.getProperty('--w-TF'));
-
-        // Bunu kullan
-        //document.documentElement.style.setProperty('--w-TF', '30rem');
-        //console.log('getPropertyValue', getComputedStyle(document.documentElement).getPropertyValue('--w-TF'));
-
         console.log("MasterPage");
         var tmpltM = (document._currentScript || document.currentScript).previousElementSibling;  // Global
 
-        tmpltM.addEventListener('model-changed', function (e) {
-            // model iceriginin degisen her birinde calisiyor
-            // mutationObserver yerine kullanabilirsin.
-            if (e.detail.path == "model.Token")
-                console.log("yey! model-changed works! Master", e.detail);
-        });
+        //tmpltM.model.Sgn.Token$ = localStorage.getItem('mm0');
+        //tmpltM.model.Sgn.AutoSignT$++; //SignT$ = -1;   // Triger to AutoSignIn
 
         // Kendisinde calismiyor, diger browser tab
         window.addEventListener('storage', (e) => {
-            console.log('Woohoo, someone changed my localstorage va another tab/window!');
+            //console.log('Woohoo, someone changed my localstorage va another tab/window!');
             if (e.key == 'mm0') {
-                console.log("storage Changed", "Old", e.oldValue, "New", e.newValue);
+                //console.log("storage Changed", "Old", e.oldValue, "New", e.newValue);
                 tmpltM.model.Sgn.Token$ = e.newValue;
-                tmpltM.model.Sgn.SignT$ = -1;   // AutoSign In/Out
+                tmpltM.model.Sgn.AutoSignT$++; // = -1;   // AutoSign In/Out
             }
         });
 
-        console.log("tmpltM.model.Token", tmpltM.model);
+        //console.log("tmpltM.model.Token", tmpltM.model);
 
+        /*
         var masterReady = function () {
-            // If the body element and the #main element exist
             if (document.body && document.querySelector('#MasterPage')) {
                 console.log('------MasterPage ready------', MasterPage);
                 // Run your code here...
 
-                // Return so that we don't call requestAnimationFrame() again
-                return;
+                return;  // Return so that we don't call requestAnimationFrame() again
             }
-            // If the body element isn't found, run ready() again at the next pain
-            window.requestAnimationFrame(masterReady);
+            window.requestAnimationFrame(masterReady); // If the body element isn't found, run ready() again at the next pain
         };
-        // Initialize our ready() function
-        window.requestAnimationFrame(masterReady);
+        window.requestAnimationFrame(masterReady);   // Initialize our ready() function
+        */
 
+
+        /*
+        // modelin degistigini anliyor, ama sadece bu tab de. Token icin ise yaramiyor. Baska borsey icin kullanabilirsin.
+        tmpltM.addEventListener('model-changed', function (e) {
+            // model iceriginin degisen her birinde calisiyor
+            // mutationObserver yerine kullanabilirsin.
+            if (e.detail.path == "model.Token") {
+                //localStorage.setItem('mm0', model.Token);
+                console.log("yey! model-changed works! Master", e.detail);
+            }
+        });
+        */
+
+        
         tmpltM.masterPageDomChangeHandler = function (e) {
             // Master'a ilk gelisinde calisir DOM ready
-            //console.log('dom-ready1', tmpltM);
-            //console.log('dom-ready2', MasterPage);  // yukaridakiyle ayni <dom-bind id="masterTmplt">
-
-            //var MO = MutationObserver || WebKitMutationObserver || MozMutationObserver;
             var observer = new MutationObserver(function (mutations) {
-                //console.log("mutations", mutations);
-                //console.log("mutations[0].target", mutations[0].target);
-
                 // model.Token degisti
                 var token = mutations[0].target.data;
                 console.log("model.Token Changed", token);
                 localStorage.setItem('mm0', token);
-
-                var b = document.querySelector('#dlgSgnOpn');
-                if (token != "")
-                    b.innerText = "Oturum Kapat";
-                else
-                    b.innerText = "Oturum Aç";
-
-                history.pushState({ foo: "bar" }, "page 2", location.pathname);
-                history.back();
             });
 
             // model.Token'in degistigini anlamak icin
             var target = document.querySelector('#trackModelTokenChange');
             observer.observe(target, { childList: true, attributes: true, characterData: true, subtree: true });
-            target.addEventListener('change', function (e) {
-                console.log("trackModelTokenChange", e);
-
-            });
 
             tmpltM.model.Sgn.Token$ = localStorage.getItem('mm0');
-            tmpltM.model.Sgn.SignT$ = -1;   // Triger to AutoSignIn
+            tmpltM.model.Sgn.AutoSignT$++; //SignT$ = -1;   // Triger to AutoSignIn
 
             // tmpltM.removeEventListener('dom-change', tmpltM.masterPageDomChangeHandler);
         }
         tmpltM.addEventListener('dom-change', tmpltM.masterPageDomChangeHandler);
-
+        
         /*
         tmpltM.AutoSignIn = function () {
             console.log('tmpltM.AutoSignIn', tmpltM.model);

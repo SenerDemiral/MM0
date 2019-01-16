@@ -8,27 +8,34 @@
     --h-GrdTbl2Ftr: 40px;
     --h-GrdTbl2Main: calc(var(--h-GrdMain) - var(--h-GrdTblHdr) - var(--h-GrdTblFtr) - var(--g-Grd) - 5px);
 }
-
-[data-Lvl="0"] {
+/*
+body {
+    background-image: url(/sys/mm.jpg);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: contain;
+}
+*/
+[data-Lvl="1"] {
     font-weight:bold;
 }
-[data-Lvl="1"] {
+[data-Lvl="2"] {
     padding-left: 1rem !important;
     font-size: 0.95rem;
 }
-[data-Lvl="2"] {
+[data-Lvl="3"] {
     padding-left: 2rem !important;
     font-size: 0.90rem;
 }
-[data-Lvl="3"] {
+[data-Lvl="4"] {
     padding-left: 3rem !important;
     font-size: 0.85rem;
 }
-[data-Lvl="4"] {
+[data-Lvl="5"] {
     padding-left: 4rem !important;
     font-size: 0.80rem;
 }
-[data-Lvl="5"] {
+[data-Lvl="6"] {
     padding-left: 5rem !important;
     font-size: 0.75rem;
 }
@@ -171,4 +178,18 @@ body {
     grid-area: mainTbl;
     overflow: auto;
 }
-            
+
+.mdfRecWrap {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    justify-content: start;
+    align-items: center;
+    grid-gap: 3px 10px;
+    /*margin-top: 10px;*/
+}
+
+.mdfRecAction {
+    display: grid;
+    grid-auto-flow: column;
+    /*justify-content: space-between;*/
+}
