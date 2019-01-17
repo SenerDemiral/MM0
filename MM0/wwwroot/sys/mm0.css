@@ -75,7 +75,10 @@ body {
     }
 
     .fixTbl tfoot td {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
         border-color: transparent;
+        background-color: #eaeace;
     }
 
 .fixTbl tr:nth-child(even) {
@@ -85,7 +88,7 @@ body {
 .fixTbl tr:hover {
     background-color: #ddd;
 }
-
+/*
 #HHsPageTbl th {
     background-color: #347737;
     color: white;
@@ -99,7 +102,7 @@ body {
     background-color: chocolate;
     color: white;
 }
-
+*/
 body {
     /*margin: 10px;*/
     height: auto;
@@ -165,12 +168,12 @@ body {
     justify-items: left;
     align-items: center;
     grid-auto-flow: column;
-    grid-template-columns: 1fr;
+    grid-template-columns: 2rem 1fr auto;
     grid-gap: 1rem;
     /*margin: 0 5px;*/
     padding: 0 5px;
     /*font-weight: bold;*/
-    font-size: medium;
+    /*font-size: medium;*/
 }
 
 .gridTbl_main {
@@ -192,4 +195,30 @@ body {
     display: grid;
     grid-auto-flow: column;
     /*justify-content: space-between;*/
+}
+
+button.edit {
+    padding: 1px 4px;
+    /*border-radius: 5px;*/
+    /*border: 1px solid #73AD21;*/
+    box-shadow: none;
+    background-color: inherit;
+    min-width: 2.6rem;
+    /*margin: 0;*/
+}
+
+button.download {
+    background-color: gold;
+    min-width: 3rem;
+}
+
+button.insert {
+    background-color: yellow;
+    min-width: 3rem;
+}
+
+input[type="date"]{
+    height: 30px;
+    padding-left: 5px;
+    padding-right: 5px;
 }

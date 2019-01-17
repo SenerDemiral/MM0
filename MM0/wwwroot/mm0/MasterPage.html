@@ -27,15 +27,13 @@
             <div class="grid">
                 <header class="grid_header">
                     <a href="/mm0/PPs"><iron-icon icon="vaadin:home"></iron-icon></a>
-                    <a href="/mm0/PPs/1"><iron-icon icon="vaadin:bell-o"></iron-icon></a>
                     <a href="/mm0/AboutPage"><iron-icon icon="vaadin:info-circle"></iron-icon></a>
 
                     <button id="dlgSgnOpn2" value="{{model.Sgn.OpnDlgT$::click}}" onmousedown="++this.value">[[model.Sgn.OpnDlgTxt]]</button>
-
                     <div id="trackModelTokenChange" class="token" data-token="[[model.Token]]">[[model.Token]]</div>
 
                     <div style="justify-self:end;font-weight:bold">[[model.EntCntFrmtd]]</div>
-                    <div style="font-size:x-large;justify-self:end;color:teal;">miniMHSB v0.1</div>
+                    <div style="font-size:x-large;justify-self:end;color:teal;">μM v0.1</div>
                 </header>
                 <main class="grid_main">
                     <starcounter-include view-model="{{model.CurrentPage}}"></starcounter-include>

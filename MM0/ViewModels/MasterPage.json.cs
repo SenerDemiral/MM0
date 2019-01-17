@@ -83,26 +83,8 @@ namespace MM0.ViewModels
                     else   // SignUp
                     {
                         var newToken = Hlp.EncodeQueryString(Email); // CreateToken
-                        CC ccNew = null;
-                        Db.Transact(() =>
-                        {
-                            ccNew = new CC
-                            {
-                                Email = Email,
-                                Pwd = Pwd,
-                                Token = newToken,
-                                InsTS = DateTime.Now,
-                                IsConfirmed = false,
-                            };
-                        });
-                        Db.Transact(() =>
-                        {
-                            HH hh = new HH
-                            {
-                                Ad = ccNew.Ad,
-                            };
-                            ccNew.HHroot = hh;
-                        });
+
+                        CC.InsertRec(Email, Pwd, newToken);
 
                         var email = Hlp.EncodeQueryString(Email);
                         Hlp.SendMail(email);

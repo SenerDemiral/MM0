@@ -1,18 +1,17 @@
 {
   "Html": "/MM0/HHsPage.html",
   "Hdr": "",
-  "PPId": "",
+  "PPId": 0,
 
   "HH": {
-    "Id": "",
+    "Id": 0,
+
     "Ad$": "",
     "ThmGlr$": 0.0,
     "ThmGdr$": 0.0,
 
     "Opened": false,
-    "IsNew": false,
-    "NewTrgr$": 0,
-    "InsTrgr$": 0,
+    "ApdTrgr$": 0,
     "UpdTrgr$": 0,
     "DelTrgr$": 0,
     "RejTrgr$": 0
@@ -21,13 +20,18 @@
   "HHs": [
     {
       "Id": 0,
+      "Lvl": 0,
 
       "Ad": "",
-      "ThmGlrX": "",
-      "ThmGdrX": "",
-      "GrcGlrX": "",
       "GrcGdrX": "",
-      "Lvl": 0
+      "GrcGlrX": "",
+      "ThmGdrX": "",
+      "ThmGlrX": "",
+
+      "ThmGdr": 0.0,
+      "ThmGlr": 0.0,
+
+      "EdtTrgr$": 0
     }
   ]
 }

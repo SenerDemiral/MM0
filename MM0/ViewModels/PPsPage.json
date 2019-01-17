@@ -1,6 +1,7 @@
 {
   "Html": "/MM0/PPsPage.html",
-  "CCId": "",
+  "Hdr": "",
+  "CCId": 0,
 
   "GrcGlrTopX": "",
   "GrcGdrTopX": "",
@@ -8,7 +9,7 @@
   "ThmGdrTopX": "",
 
   "PP": {
-    "Id": "",
+    "Id": 0,
     "Ad$": "",
     "BasTrh$": "",
     "BitTrh$": "",
@@ -33,7 +34,9 @@
       "GrcGlrX": "",
       "GrcGdrX": "",
       "ThmGlrX": "",
-      "ThmGdrX": ""
+      "ThmGdrX": "",
+
+      "EdtTrgr$": 0,
     }
   ]
 }

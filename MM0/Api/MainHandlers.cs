@@ -108,12 +108,14 @@ namespace MM0.Api
                 return WrapPage<PPsPage>($"/MM0/partials/PPs/{CCId}");
             });
 
-            Handle.GET("/MM0/HHs/{?}", (string PPId) => WrapPage<HHsPage>($"/MM0/partials/HHs/{PPId}"));
+            Handle.GET("/MM0/HHs/{?}", (long PPId) => WrapPage<HHsPage>($"/MM0/partials/HHs/{PPId}"));
+
+            Handle.GET("/MM0/FFsPage/{?}", (long PPId) => WrapPage<FFsPage>($"/MM0/partials/FFsPage/{PPId}"));
 
 
-            Handle.GET("/MM0/FFsRpr/{?}", (string PPId) => WrapPage<FFsRpr>($"/MM0/partials/FFsRpr/{PPId}"));
-            Handle.GET("/MM0/FFsRprHsp/{?}/{?}", (string PPId, string HHId) => WrapPage<FFsRpr>($"/MM0/partials/FFsRprHsp/{PPId}/{HHId}"));
-            Handle.GET("/MM0/FFsRprTrh/{?}/{?}", (string PPId, string Trh) => WrapPage<FFsRpr>($"/MM0/partials/FFsRprTrh/{PPId}/{Trh}"));
+            Handle.GET("/MM0/FFsRpr/{?}", (long PPId) => WrapPage<FFsRpr>($"/MM0/partials/FFsRpr/{PPId}"));
+            Handle.GET("/MM0/FFsRprHsp/{?}/{?}", (long PPId, long HHId) => WrapPage<FFsRpr>($"/MM0/partials/FFsRprHsp/{PPId}/{HHId}"));
+            Handle.GET("/MM0/FFsRprTrh/{?}/{?}", (long PPId, string Trh) => WrapPage<FFsRpr>($"/MM0/partials/FFsRprTrh/{PPId}/{Trh}"));
 
             Handle.GET("/MM0/confirmemail/{?}", (string deMail) =>
             {

@@ -26,10 +26,20 @@ namespace MM0
 
             Hook<HH>.AfterCommitInsert += (sender, id) =>
             {
-                // Executes after you commit a new HH
                 var hh = Db.FromId<HH>(id);
                 var aaa = hh.Ad;
                 HH.PostIns(hh);
+            };
+
+            Hook<FF>.AfterCommitInsert += (sender, id) =>
+            {
+                var ff = Db.FromId<FF>(id);
+                FF.PostMdf(ff.HH);
+            };
+            Hook<FF>.AfterCommitUpdate += (sender, id) =>
+            {
+                var ff = Db.FromId<FF>(id);
+                FF.PostMdf(ff.HH);
             };
 
             //HH.Populate();
@@ -82,7 +92,7 @@ namespace MM0
                 }
             });
             */
-    
+
         }
     }
 }

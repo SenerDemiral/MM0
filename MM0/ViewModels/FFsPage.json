@@ -1,15 +1,21 @@
 {
   "Html": "/MM0/FFsPage.html",
-  "PPId": "",
-  "HHId": "",
-  "Trh": "",
+  "Hdr": "",
+  "PPId": 0,
+  "QryTrhX$": "2019-01-01",
+
+  "NORX": "",
+  "GlrTopX": "",
+  "GdrTopX": "",
 
   "FF": {
-    "Id": "",
+    "Id": 0,
+
+    "TrhX$": "",
     "Ad$": "",
     "Glr$": 0.0,
     "Gdr$": 0.0,
-    "HHId$": "",
+    "HHId$": 0,
 
     "Opened": false,
     "IsNew": false,
@@ -24,26 +30,26 @@
     {
       "Id": 0,
 
-      "Trh": "",
+      "TrhX": "",
+      "TrhZ": "",
       "Ad": "",
       "Glr": 0.0,
       "Gdr": 0.0,
+      "GlrX": "",
+      "GdrX": "",
 
-      "HHId": "",
-      "HHAd": ""
+      "HHId": 0,
+      "HHAd": "",
+
+      "EdtTrgr$": 0
     }
   ],
 
   "HHs": [ // Lookup, Sadece PP's HH->Leafs
     {
-      "Id": "",
+      "Id": 0,
       "Ad": ""
     }
-  ],
-
-  "FFsRpr": {} // HHId / Trh e ait FFsRpr
-  // Link   FFsRpr/Hsp/HHId
-  // Link   FFsRpr/Trh/Tarih
-
+  ]
 
 }

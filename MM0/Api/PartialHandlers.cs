@@ -18,7 +18,7 @@ namespace MM0.Api
                 return page;
             });
 
-            Handle.GET("/MM0/partials/PPs/{?}", (string CCId) =>
+            Handle.GET("/MM0/partials/PPs/{?}", (long CCId) =>
             {
                 var page = new PPsPage
                 {
@@ -27,7 +27,7 @@ namespace MM0.Api
                 return page;
             });
 
-            Handle.GET("/MM0/partials/HHs/{?}", (string PPId) =>
+            Handle.GET("/MM0/partials/HHs/{?}", (long PPId) =>
             {
                 var page = new HHsPage
                 {
@@ -36,7 +36,17 @@ namespace MM0.Api
                 return page;
             });
 
-            Handle.GET("/MM0/partials/FFsRpr/{?}", (string PPId) =>
+            Handle.GET("/MM0/partials/FFsPage/{?}", (long PPId) =>
+            {
+                var page = new FFsPage
+                {
+                    PPId = PPId,
+                    QryTrhX = DateTime.Today.ToString("yyyy-MM-dd")
+                };
+                return page;
+            });
+
+            Handle.GET("/MM0/partials/FFsRpr/{?}", (long PPId) =>
             {
                 var page = new FFsRpr
                 {
@@ -45,7 +55,7 @@ namespace MM0.Api
                 return page;
             });
 
-            Handle.GET("/MM0/partials/FFsRprHsp/{?}/{?}", (string PPId, string HHId) =>
+            Handle.GET("/MM0/partials/FFsRprHsp/{?}/{?}", (long PPId, long HHId) =>
             {
                 var page = new FFsRpr
                 {
@@ -55,7 +65,7 @@ namespace MM0.Api
                 return page;
             });
 
-            Handle.GET("/MM0/partials/FFsRprTrh/{?}/{?}", (string PPId, string Trh) =>
+            Handle.GET("/MM0/partials/FFsRprTrh/{?}/{?}", (long PPId, string Trh) =>
             {
                 var page = new FFsRpr
                 {

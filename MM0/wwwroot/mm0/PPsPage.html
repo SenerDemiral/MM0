@@ -1,16 +1,45 @@
 ﻿<template>
     <dom-bind id="PPsPage">
         <template is="dom-bind">
+            <paper-dialog opened="[[model.PP.Opened]]" modal="true">
+                <div class="mdfRecWrap">
+                    <label>Rec#</label>
+                    <input placeholder="Id" type="text" value="[[model.PP.Id]]" readonly style="text-align:center" />
+                    <label>Ad</label>
+                    <input placeholder="Ad" type="text" value="{{model.PP.Ad$::change}}" size="40" maxlength="80" />
+                    <label>Başlangıç</label>
+                    <input placeholder="Başlangıç" type="date" value="{{model.PP.BasTrh$::change}}" />
+                    <label>Bitiş</label>
+                    <input placeholder="Bitiş" type="date" value="{{model.PP.BitTrh$::change}}" />
+                </div>
+                <div class="mdfRecAction">
+                    <template is="dom-if" if="[[model.PP.IsNew]]">
+                        <button value="{{model.PP.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
+                    </template>
+                    <template is="dom-if" if="[[!model.PP.IsNew]]">
+                        <button value="{{model.PP.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
+                        <button value="{{model.PP.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
+                        <button value="{{model.PP.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
+                    </template>
+                </div>
+                <div class="mdfRecAction">
+                    <button dialog-dismiss value="{{model.PP.RejTrgr$::click}}" onmousedown="++this.value" style="width:100%">Vazgeç</button>
+                </div>
+            </paper-dialog>
+
 
             <div class="gridTbl">
                 <div class="gridTbl_header">
-                    <div>Projeler</div>
-                    <button value="{{model.DD.NewTrgr$::click}}" onmousedown="++this.value" hidden$="[[!model.canMdfy]]">New</button>
+                    <iron-icon icon="vaadin:factory"></iron-icon>
+                    <div>[[model.Hdr]]</div>
+                    <button class="insert" value="{{model.PP.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
                     <table id="PPsPageTbl" class="fixTbl">
                         <colgroup>
+                            <col style="width:2.8rem" />
                             <col style="width:12rem" />
+                            <col style="width:2.8rem" />
 
                             <col style="width:7rem" />
                             <col style="width:7rem" />
@@ -20,16 +49,20 @@
                             <col style="width:6rem" />
                             <col style="width:6rem" />
 
-                            <col style="width:4rem" />
+                            <col style="width:2.8rem" />
+                            <col style="width:2.8rem" />
 
                         </colgroup>
                         <thead>
                             <tr>
+                                <th rowspan="2"></th>
                                 <th rowspan="2">Ad</th>
+                                <th rowspan="2"></th>
                                 <th colspan="2">Gerçek</th>
                                 <th colspan="2">Tahmin</th>
                                 <th colspan="2">Tarih</th>
-                                <th rowspan="2">Id</th>
+                                <th rowspan="2"></th>
+                                <th rowspan="2"></th>
                             </tr>
                             <tr>
                                 <th>Gider</th>
@@ -43,24 +76,30 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.PPs}}">
                                 <tr>
-                                    <td><a href="/mm0/HHs/[[item.Id]]">[[item.Ad]]</a></td>
+                                    <td><a href="/mm0/FFsPage/[[item.Id]]"><iron-icon icon="vaadin:money-exchange"></iron-icon></a></td>
+                                    <td><a href="/mm0/FFsRpr/[[item.Id]]">[[item.Ad]]</a></td>
+                                    <td><a href="/mm0/HHs/[[item.Id]]"><iron-icon icon="vaadin:file-tree"></iron-icon></a></td>
                                     <td class="txtRight">[[item.GrcGdrX]]</td>
                                     <td class="txtRight">[[item.GrcGlrX]]</td>
                                     <td class="txtRight">[[item.ThmGdrX]]</td>
                                     <td class="txtRight">[[item.ThmGlrX]]</td>
                                     <td class="txtCenter">[[item.BasTrhX]]</td>
                                     <td class="txtCenter">[[item.BitTrhX]]</td>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr/[[item.Id]]">[[item.Id]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr/[[item.Id]]"><iron-icon icon="vaadin:records"></iron-icon></a></td>
+                                    <td><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td class="txtRight">TOPLAM</td>
+                                <td></td>
+                                <td colspan="2" class="txtRight">TOPLAM</td>
                                 <td class="txtRight">[[model.GrcGdrTopX]]</td>
                                 <td class="txtRight">[[model.GrcGlrTopX]]</td>
                                 <td class="txtRight">[[model.ThmGdrTopX]]</td>
                                 <td class="txtRight">[[model.ThmGlrTopX]]</td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

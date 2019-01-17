@@ -3,9 +3,9 @@
         <template is="dom-bind">
             <div class="gridTbl">
                 <div class="gridTbl_header">
+                    <iron-icon icon="vaadin:records"></iron-icon>
                     <div>[[model.Hdr]]</div>
-                    <input type="button" data-link="/mm0/FFsXlsx/[[model.PPId]]" on-tap="MyDownload" value="Download Excel" />
-                    <button value="{{model.DD.NewTrgr$::click}}" onmousedown="++this.value" hidden$="[[!model.canMdfy]]">New</button>
+                    <button class="download" data-link="/mm0/FFsXlsx/[[model.PPId]]" on-tap="MyDownload"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
                     <table id="FFsRprTbl" class="fixTbl">
@@ -17,9 +17,6 @@
                             <col style="width:7rem" />
 
                             <col style="width:12rem" />
-
-                            <col style="width:4rem" />
-
                         </colgroup>
                         <thead>
                             <tr>
@@ -28,7 +25,6 @@
                                 <th>Gider</th>
                                 <th>Gelir</th>
                                 <th>Açıklama</th>
-                                <th>Id</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -39,7 +35,6 @@
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
                                     <td>[[item.Ad]]</td>
-                                    <td class="txtCenter">[[item.Id]]</td>
                                 </tr>
                             </template>
                         </tbody>

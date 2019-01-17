@@ -27,6 +27,31 @@ namespace DBMM0
 
         public DateTime TstBasTrh { get; set; } // DenemeSuresi baslangici
         public DateTime TstBitTrh { get; set; }
+
+        public static void InsertRec(string Email, string Pwd, string newToken)
+        {
+            CC ccNew = null;
+            Db.Transact(() =>
+            {
+                ccNew = new CC
+                {
+                    Email = Email,
+                    Pwd = Pwd,
+                    Token = newToken,
+                    InsTS = DateTime.Now,
+                    IsConfirmed = false,
+                };
+            });
+            Db.Transact(() =>
+            {
+                HH hh = new HH
+                {
+                    Ad = ccNew.Ad,
+                };
+                ccNew.HHroot = hh;
+            });
+
+        }
     }
 
     [Database]
@@ -38,8 +63,8 @@ namespace DBMM0
         public string Ad { get; set; }
         public HH HHroot { get; set; }     // Starting Node @HH
 
-        public DateTime BasTrh { get; set; }
-        public DateTime BitTrh { get; set; }
+        public DateTime? BasTrh { get; set; }
+        public DateTime? BitTrh { get; set; }
 
         public string CCAd => CC?.Ad;
         public string BasTrhX => $"{BasTrh:dd.MM.yy}";
@@ -78,6 +103,60 @@ namespace DBMM0
             }
         }
 
+        public static void UpdateRec(long ppId, string Ad, string BasTrh, string BitTrh)
+        {
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)ppId) is PP pp)
+                {
+                    pp.Ad = Ad;
+                    if (string.IsNullOrEmpty(BasTrh))
+                        pp.BasTrh = null;
+                    else
+                        pp.BasTrh = Convert.ToDateTime(BasTrh);
+                    if (string.IsNullOrEmpty(BitTrh))
+                        pp.BitTrh = null;
+                    else
+                        pp.BitTrh = Convert.ToDateTime(BitTrh);
+
+                    pp.HHroot.Ad = Ad;
+                }
+            });
+        }
+
+        public static void InsertRec(long ccId, string Ad, string BasTrh, string BitTrh)
+        {
+            CC cc = Db.FromId<CC>((ulong)ccId);
+            PP ppNew = null;
+            HH hhNew = null;
+            Db.Transact(() =>
+            {
+                ppNew = new PP()
+                {
+                    Ad = Ad,
+                    BasTrh = Convert.ToDateTime(BasTrh),
+                    BitTrh = Convert.ToDateTime(BitTrh),
+                    CC = cc
+                };
+            });
+            Db.Transact(() =>
+            {
+                hhNew = new HH()
+                {
+                    PP = ppNew,
+                    Prn = cc.HHroot,
+                    Ad = ppNew.Ad,
+                };
+            });
+            Db.Transact(() =>
+            {
+                ppNew.HHroot = hhNew;
+            });
+
+        }
+
+
+
     }
 
     // HH dolaylı yoldan Hesabın kime ait oldugunu biliyor.
@@ -95,13 +174,48 @@ namespace DBMM0
         public decimal Gdr { get; set; }
 
         public string PPAd => PP?.Ad;
-        public string HHId => HH?.GetObjectNo().ToString();
+        public ulong HHId => HH.GetObjectNo();
         public string HHAd => HH?.Ad;
 
         public string TrhZ => $"{Trh:O}";
         public string TrhX => $"{Trh:dd.MM.yy}";
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
         public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
+
+        public static void InsertRec(long ppId, long hhId, string Trh, string Ad, decimal Gdr, decimal Glr)
+        {
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)ppId) is PP pp)
+                {
+                    new FF()
+                    {
+                        PP = pp,
+                        HH = Db.FromId((ulong)hhId) is HH hh ? hh : null,
+                        Ad = Ad,
+                        Trh = Convert.ToDateTime(Trh),
+                        Gdr = Gdr,
+                        Glr = Glr
+                    };
+                }
+            });
+
+        }
+        public static void UpdateRec(long Id, long hhId, string Trh, string Ad, decimal Gdr, decimal Glr)
+        {
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)Id) is FF ff)
+                {
+                    ff.HH = Db.FromId((ulong)hhId) is HH hh ? hh : null;
+                    ff.Ad = Ad;
+                    ff.Trh = Convert.ToDateTime(Trh);
+                    ff.Gdr = Gdr;
+                    ff.Glr = Glr;
+                }
+            });
+
+        }
 
         public static void ViewZZ(HH hh)
         {
@@ -152,7 +266,7 @@ namespace DBMM0
             }
         }
 
-        public static void PostFF(HH hh)    // FF ins/upd Sonrasi yapilacaklar
+        public static void PostMdf(HH hh)    // FF ins/upd Sonrasi yapilacaklar
         {
             // Fisler toplamini bul. Fis insert/edit yapildiginda bunu yap
             // Fislerde sadece Leaf hesaplar calistigi icin 
@@ -173,7 +287,7 @@ namespace DBMM0
         public static void PostFF(long hhONo)
         {
             if (Db.FromId((ulong)hhONo) is HH hh)
-                PostFF(hh);
+                PostMdf(hh);
         }
     }
 
@@ -208,6 +322,41 @@ namespace DBMM0
         public string GrcGdrX => $"{GrcGdr:#,#.##;-#,#.##;#}";
         public string ThmGlrX => $"{ThmGlr:#,#.##;-#,#.##;#}";
         public string ThmGdrX => $"{ThmGdr:#,#.##;-#,#.##;#}";
+
+
+        public static void InsertRec(long ppId, long prnId, string Ad, decimal ThmGdr, decimal ThmGlr)
+        {
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)prnId) is HH phh)
+                {
+                    new HH
+                    {
+                        Prn = phh,
+                        PP = Db.FromId<PP>((ulong)ppId),
+                        Ad = Ad,
+                        ThmGdr = ThmGdr,
+                        ThmGlr = ThmGlr
+                    };
+                }
+
+            });
+
+        }
+
+        public static void UpdateRec(long Id, string Ad, decimal ThmGdr, decimal ThmGlr)
+        {
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)Id) is HH hh)
+                {
+                    hh.Ad = Ad;
+                    hh.ThmGdr = ThmGdr;
+                    hh.ThmGlr = ThmGlr;
+                }
+            });
+
+        }
 
         public static void PostIns(HH hh)
         {
@@ -416,7 +565,7 @@ namespace DBMM0
             {
                 oguzC = new CC
                 {
-                    Ad = "Test",
+                    Ad = "TEST",
                     Email = "test",
                     Pwd = "test",
                     Token = "test",
@@ -543,7 +692,7 @@ namespace DBMM0
                 {
                     PP = oguzP1,
                     No = 1,
-                    Ad = "Büftek",
+                    Ad = "Biftek",
                     Prn = meat,
                     GrcGlr = 70,
                     GrcGdr = 80,

@@ -4,8 +4,8 @@
   "Html": "/MM0/FFsRpr.html",
   "Hdr": "",
 
-  "PPId": "",
-  "HHId": "",
+  "PPId": 0,
+  "HHId": 0,
   "Trh": "",
   
   "NORX": "",
@@ -15,7 +15,7 @@
   "FFs": [
     {
       "Id": 0,
-      "HHId": "",
+      "HHId": 0,
       "TrhZ": "",
 
       "TrhX": "",
