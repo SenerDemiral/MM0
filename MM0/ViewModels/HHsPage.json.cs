@@ -12,7 +12,7 @@ namespace MM0.ViewModels
 
             if (Db.FromId((ulong)PPId) is PP pp)
             {
-                Hdr = $"{pp.CC.Ad} ► {pp.Ad}";
+                Hdr = $"{pp.CC.Ad}►{pp.Ad}";
                 HHs.Data = DBMM0.HH.View(pp);  //Db.SQL<HH>("select r from HH r");
             }
         }
@@ -27,7 +27,12 @@ namespace MM0.ViewModels
 
             if (!string.IsNullOrWhiteSpace(Ad))
             {
-                HH.InsertRec(p.PPId, Id, Ad, ThmGdr, ThmGdr);
+                Msj = HH.InsertRec(p.PPId, Id, Ad, ThmGdr, ThmGdr);
+                if (!string.IsNullOrEmpty(Msj))
+                {
+                    Action.Cancelled = true;
+                    return;
+                }
             }
             Opened = false;
 
@@ -47,6 +52,23 @@ namespace MM0.ViewModels
         void Handle(Input.UpdTrgr Action)
         {
             HH.UpdateRec(Id, Ad, ThmGdr, ThmGlr);
+
+            Session.RunTaskForAll((s, id) =>
+            {
+                s.CalculatePatchAndPushOnWebSocket();
+            });
+
+            Opened = false;
+        }
+
+        void Handle(Input.DelTrgr Action)
+        {
+            Msj = HH.DeleteRec(Id);
+            if (!string.IsNullOrEmpty(Msj))
+            {
+                Action.Cancelled = true;
+                return;
+            }
 
             Session.RunTaskForAll((s, id) =>
             {

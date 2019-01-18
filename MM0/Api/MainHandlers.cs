@@ -109,8 +109,9 @@ namespace MM0.Api
             });
 
             Handle.GET("/MM0/HHs/{?}", (long PPId) => WrapPage<HHsPage>($"/MM0/partials/HHs/{PPId}"));
+            Handle.GET("/MM0/HHsCumBky/{?}", (long HHId) => WrapPage<HHsPage>($"/MM0/partials/HHsCumBky/{HHId}"));
 
-            Handle.GET("/MM0/FFsPage/{?}", (long PPId) => WrapPage<FFsPage>($"/MM0/partials/FFsPage/{PPId}"));
+            Handle.GET("/MM0/FFs/{?}", (long PPId) => WrapPage<FFsPage>($"/MM0/partials/FFs/{PPId}"));
 
 
             Handle.GET("/MM0/FFsRpr/{?}", (long PPId) => WrapPage<FFsRpr>($"/MM0/partials/FFsRpr/{PPId}"));
@@ -138,19 +139,23 @@ namespace MM0.Api
                 return master;
             });
 
-            Handle.GET("/MM0/HHsXlsx/{?}", (string PPId) =>
+            Handle.GET("/MM0/HHsXlsx/{?}", (long PPId) =>
             {
                 return HHsXlsx(PPId);
             });
 
-            Handle.GET("/MM0/FFsXlsx/{?}", (string PPId) =>
+            Handle.GET("/MM0/FFsXlsx/{?}", (long PPId) =>
             {
                 return FFsXlsx(PPId);
             });
 
+            Handle.GET("/MM0/HHsCumBkyXlsx/{?}", (long HHId) =>
+            {
+                return HHsCumBkyXlsx(HHId);
+            });
         }
 
-        public static Response HHsXlsx(string PPId)
+        public static Response HHsXlsx(long PPId)
         {
             using (ExcelPackage pck = new ExcelPackage())
             {
@@ -179,7 +184,7 @@ namespace MM0.Api
                 ws.Column(4).Style.Numberformat.Format = "#,###";
                 ws.Column(5).Style.Numberformat.Format = "#,###";
 
-                if (Db.FromId(Convert.ToUInt64(PPId)) is PP pp)
+                if (Db.FromId((ulong)PPId) is PP pp)
                 {
                     //var hhs = Db.SQL<HH>("select r from HH r where r.PP = ?", pp);
                     int cr = 3;
@@ -224,7 +229,7 @@ namespace MM0.Api
             }
         }
 
-        public static Response FFsXlsx(string PPId)
+        public static Response FFsXlsx(long PPId)
         {
             using (ExcelPackage pck = new ExcelPackage())
             {
@@ -243,7 +248,7 @@ namespace MM0.Api
                 ws.Column(3).Style.Numberformat.Format = "#,###";
                 ws.Column(4).Style.Numberformat.Format = "#,###";
 
-                if (Db.FromId(Convert.ToUInt64(PPId)) is PP pp)
+                if (Db.FromId((ulong)PPId) is PP pp)
                 {
                     var ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh < ?", pp, DateTime.Today.AddDays(30));
                     int cr = 2;
@@ -283,6 +288,85 @@ namespace MM0.Api
                 //r.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 r.ContentType = "application/octet-stream";
                 r.Headers["Content-Disposition"] = "attachment; filename=\"FFsRpr.xlsx\"";
+
+                var oms = new MemoryStream();
+                pck.SaveAs(oms);
+                oms.Seek(0, SeekOrigin.Begin);
+
+                r.StreamedBody = oms;
+                return r;
+            }
+        }
+
+        public static Response HHsCumBkyXlsx(long HHId)
+        {
+            using (ExcelPackage pck = new ExcelPackage())
+            {
+                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("HHsCumBky");
+
+                // Header (first row)
+                ws.Cells[1, 1].Value = "Yıl";
+                ws.Cells[1, 2].Value = "Ay";
+                ws.Cells[1, 3].Value = "Gider";
+                ws.Cells[1, 4].Value = "Gelir";
+                ws.Cells[1, 5].Value = "CumKln";
+
+                ws.Row(1).Style.Font.Bold = true;
+
+                ws.Column(3).Style.Numberformat.Format = "#,###";
+                ws.Column(4).Style.Numberformat.Format = "#,###";
+                ws.Column(5).Style.Numberformat.Format = "#,###";
+
+                string OutputFileName = "HesapToplam.xlsx";
+                if (Db.FromId((ulong)HHId) is HH hh)
+                {
+                    OutputFileName = $"HesapToplam-{HH.FullParentAd(hh)}-{DateTime.Today.ToString("yyMMdd")}.xlsx";
+
+                    pck.Workbook.Properties.Title = "Hesap Toplamları";
+                    pck.Workbook.Properties.Author = "Şener DEMİRAL";
+                    pck.Workbook.Properties.Subject = $"{hh.PP.CC.Ad}►{HH.FullParentAd(hh)}";
+
+                    int cr = 2;
+                    foreach (var ff in HH.CumBky(hh))
+                    {
+                        ws.Cells[cr, 1].Value = ff.Yil;
+                        ws.Cells[cr, 2].Value = ff.Ay;
+                        ws.Cells[cr, 3].Value = ff.Gdr;
+                        ws.Cells[cr, 4].Value = ff.Glr;
+                        ws.Cells[cr, 5].Value = ff.CumBky;
+                        ws.Cells[cr, 6].Value = ff.Adt;
+
+                        cr++;
+                    }
+                    using (var range = ws.Cells["A1:F1"])
+                    {
+                        range.AutoFilter = true;
+                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                    }
+
+                    ws.Row(1).Height = 20;
+                    ws.Row(1).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                    ws.Row(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+
+                    ws.Column(1).Width = 10;
+                    ws.Column(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    ws.Column(2).Width = 10;
+                    ws.Column(2).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    ws.Column(3).Width = 12;
+                    ws.Column(4).Width = 12;
+                    ws.Column(5).Width = 12;
+
+                    ws.Column(6).Width = 10;
+                    ws.Column(6).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                }
+
+
+                Response r = new Response();
+                //r.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                r.ContentType = "application/octet-stream";
+                //r.Headers["Content-Disposition"] = $"attachment; filename=\"HHsCumBky{DateTime.Today.ToString("yyMMdd")}.xlsx\"";
+                r.Headers["Content-Disposition"] = $"attachment; filename=\"{OutputFileName}\"";
 
                 var oms = new MemoryStream();
                 pck.SaveAs(oms);

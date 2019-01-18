@@ -13,7 +13,7 @@ namespace MM0.ViewModels
 
             if (Db.FromId((ulong)PPId) is PP pp)
             {
-                Hdr = $"{pp.CC.Ad} ► {pp.Ad}";
+                Hdr = $"{pp.CC.Ad}►{pp.Ad}";
 
                 IEnumerable<FF> ffs = null;
 
@@ -55,9 +55,10 @@ namespace MM0.ViewModels
     {
         void Handle(Input.NewTrgr Action)
         {
+            var p = this.Parent as FFsPage;
             Id = 0;
             HHId = 0;
-            TrhX = DateTime.Today.ToString("yyyy-MM-dd");
+            TrhX = p.QryTrhX; // DateTime.Today.ToString("yyyy-MM-dd");
             Msj = "";
             IsNew = true;
             Opened = true;
@@ -65,24 +66,23 @@ namespace MM0.ViewModels
 
         void Handle(Input.InsTrgr Action)
         {
-            if (HHId == 0)
-            {
-                Action.Cancelled = true;
-                Msj = "Hesap girin";
-                return;
-            }
             //TrhX girilmediginde 00:00:00 geliyor. DateTime'a convert edince Gunun tarihi geliyor!
             //When only the time is present, the date portion uses the current date.
             //When only the date is present, the time portion is midnight.
             //When the year isn't specified in a date, the current year is used.
             //When the day of the month isn't specified, the first of the month is used.
-            
+
             //How to set only time part of a DateTime variable
             //var newDate = oldDate.Date + new TimeSpan(11, 30, 55);
 
             var p = this.Parent as FFsPage;
 
-            FF.InsertRec(p.PPId, HHId, TrhX, Ad, Gdr, Glr);
+            Msj = FF.InsertRec(p.PPId, HHId, TrhX, Ad, Gdr, Glr);
+            if (!string.IsNullOrEmpty(Msj))
+            {
+                Action.Cancelled = true;
+                return;
+            }
 
             Id = 0;
             Opened = false;

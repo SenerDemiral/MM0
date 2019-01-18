@@ -16,14 +16,14 @@ namespace MM0.ViewModels
 
             if (Db.FromId((ulong)PPId) is PP pp)
             {
-                Hdr = $"{pp.CC.Ad} ► {pp.Ad}";
+                Hdr = $"{pp.CC.Ad}►{pp.Ad}";
                 IEnumerable<FF> ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by r.Trh DESC", pp);
 
                 if (HHId != 0)
                 {
                     if (Db.FromId((ulong)HHId) is HH hh)
                     {
-                        Hdr = $"{pp.CC.Ad} ► {HH.FullParentAd(hh)}";
+                        Hdr = $"{pp.CC.Ad}►{HH.FullParentAd(hh)}";
                         if (hh.Skl == 99)    // Leaf ise sadece kendi gecenleri
                             ffs = Db.SQL<FF>("select r from FF r where r.HH = ?", hh);
                         else // Altindaki Leaf leri
@@ -34,7 +34,7 @@ namespace MM0.ViewModels
                 {
                     DateTime trh = Convert.ToDateTime(Trh);
                     string tt = string.Format(Hlp.cultureTR, "{0:dd MMMM yyyy dddd}", trh);
-                    Hdr = $"{pp.CC.Ad} ► {pp.Ad} ► {tt}";
+                    Hdr = $"{pp.CC.Ad}►{pp.Ad}►{tt}";
                     //Hdr = $"{pp.Ad} ► {trh.Date:dddd dd.MMMM.yyyy} ► İşlemleri";
                     //ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ? order by r.Trh DESC", pp, trh.Date, trh.Date.AddDays(1));
                     ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ?", pp, trh.Date, trh.Date.AddDays(1));

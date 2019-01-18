@@ -20,6 +20,9 @@
                 <div class="mdfRecAction">
                     <button dialog-dismiss value="{{model.HH.RejTrgr$::click}}" onmousedown="++this.value" style="width:100%">Vazgeç</button>
                 </div>
+                <div class="mdfRecAction">
+                    <div>[[model.HH.Msj]]</div>
+                </div>
             </paper-dialog>
 
 
@@ -40,12 +43,14 @@
                             <col style="width:7rem" />
 
                             <col style="width:2.8rem" />
+                            <col style="width:2.8rem" />
                         </colgroup>
                         <thead>
                             <tr>
                                 <th rowspan="2">Hesap</th>
                                 <th colspan="2">Gerçek</th>
                                 <th colspan="2">Tahmin</th>
+                                <th rowspan="2"></th>
                                 <th rowspan="2"></th>
                             </tr>
                             <tr>
@@ -63,6 +68,7 @@
                                     <td class="txtRight">[[item.GrcGlrX]]</td>
                                     <td class="txtRight">[[item.ThmGdrX]]</td>
                                     <td class="txtRight">[[item.ThmGlrX]]</td>
+                                    <td class="txtCenter"><a href="/mm0/HHsCumBky/[[item.Id]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
                                     <td><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>

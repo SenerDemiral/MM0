@@ -50,7 +50,7 @@
   "HHs": [ // Lookup, Sadece PP's HH->Leafs
     {
       "Id": 0,
-      "Ad": ""
+      "AdFull": ""
     }
   ]
 

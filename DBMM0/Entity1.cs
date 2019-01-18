@@ -177,14 +177,16 @@ namespace DBMM0
         public string PPAd => PP?.Ad;
         public ulong HHId => HH?.GetObjectNo() ?? 0;
         public string HHAd => HH?.Ad;
+        public string HHAdPrn => HH?.AdPrn;
 
         public string TrhZ => $"{Trh:O}";
         public string TrhX => $"{Trh:dd.MM.yy}";
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
         public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
 
-        public static void InsertRec(long ppId, long hhId, string Trh, string Ad, decimal Gdr, decimal Glr)
+        public static string InsertRec(long ppId, long hhId, string Trh, string Ad, decimal Gdr, decimal Glr)
         {
+            string msj = "";
             Db.Transact(() =>
             {
                 if (Db.FromId((ulong)ppId) is PP pp)
@@ -201,10 +203,13 @@ namespace DBMM0
                             Glr = Glr
                         };
                     }
+                    else
+                        msj = "Tanımsız Hesap";
                 }
             });
-
+            return msj;
         }
+
         public static void UpdateRec(long Id, long hhId, string Trh, string Ad, decimal Gdr, decimal Glr)
         {
             Db.Transact(() =>
@@ -238,6 +243,7 @@ namespace DBMM0
                 }
             }
         }
+
         public static IEnumerable<FF> View(HH hh)
         {
             // Herhangi bir node'un (Leaf olmasi gerekmiyor) altindaki Leaf lerin hareketleri FF
@@ -245,6 +251,7 @@ namespace DBMM0
             // 2. FFs of PP + HH(s)
             // 3.        PP + Trh
             List<HH> hhList = new List<HH>();
+            int Lvl = hh.Lvl;
 
             if (hh.Skl == 99)    // Zaten leaf
                 hhList.Add(hh);
@@ -255,7 +262,9 @@ namespace DBMM0
             foreach (var h in hhList)
             {
                 foreach (var f in Db.SQL<FF>("select r from FF r where r.HH = ?", h))
+                {
                     ffList.Add(f);
+                }
             }
 
             foreach (var f in ffList)
@@ -291,7 +300,7 @@ namespace DBMM0
                 HH.UpdateParentsGrcToplam(hh);
             }
         }
-        public static void PostFF(long hhONo)
+        public static void PostMdf(long hhONo)
         {
             if (Db.FromId((ulong)hhONo) is HH hh)
                 PostMdf(hh);
@@ -330,25 +339,59 @@ namespace DBMM0
         public string ThmGlrX => $"{ThmGlr:#,#.##;-#,#.##;#}";
         public string ThmGdrX => $"{ThmGdr:#,#.##;-#,#.##;#}";
 
-
-        public static void InsertRec(long ppId, long prnId, string Ad, decimal ThmGdr, decimal ThmGlr)
+        public string AdFull
         {
+            get
+            {
+                string full = this.Ad;
+                HH pHH = this.Prn;
+                while (pHH != null && pHH.Lvl > 1)
+                {
+                    full = $"{full}◄{pHH.Ad}";
+                    pHH = pHH.Prn;
+                }
+                return full;
+            }
+        }
+        public string AdPrn
+        {
+            get
+            {
+                string adParent = "";
+                HH pHH = Prn;
+                while (pHH != null && pHH.Lvl > 1)
+                {
+                    adParent = $"{pHH.Ad}●{adParent}";
+                    pHH = pHH.Prn;
+                }
+                return adParent.TrimEnd(new char[] { '●' });
+            }
+        }
+
+
+        public static string InsertRec(long ppId, long prnId, string Ad, decimal ThmGdr, decimal ThmGlr)
+        {
+            string msj = "";
             Db.Transact(() =>
             {
                 if (Db.FromId((ulong)prnId) is HH phh)
                 {
-                    new HH
+                    if (phh.HasHrk)
+                        msj = "Hesabin hareketleri var, Bu hesabin altına hesap ekleyemezsiniz.";
+                    else
                     {
-                        Prn = phh,
-                        PP = Db.FromId<PP>((ulong)ppId),
-                        Ad = Ad,
-                        ThmGdr = ThmGdr,
-                        ThmGlr = ThmGlr
-                    };
+                        new HH
+                        {
+                            Prn = phh,
+                            PP = Db.FromId<PP>((ulong)ppId),
+                            Ad = Ad,
+                            ThmGdr = ThmGdr,
+                            ThmGlr = ThmGlr
+                        };
+                    }
                 }
-
             });
-
+            return msj;
         }
 
         public static void UpdateRec(long Id, string Ad, decimal ThmGdr, decimal ThmGlr)
@@ -363,6 +406,24 @@ namespace DBMM0
                 }
             });
 
+        }
+
+        public static string DeleteRec(long Id)
+        {
+            string msj = "";
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)Id) is HH hh)
+                {
+                    if (hh.HasHrk)
+                        msj = "Hareketleri var silemezsiniz.";
+                    else if (hh.Skl < 99)
+                        msj = "Alt Hesapları var silemezsiniz.";
+                    else
+                        hh.Delete();
+                }
+            });
+            return msj;
         }
 
         public static void PostIns(HH hh)
@@ -390,6 +451,18 @@ namespace DBMM0
             });
         }
 
+        public static string AdFullLvl(HH hh, int Lvl)
+        {
+            string full = hh.Ad;
+            HH pHH = hh.Prn;
+            while (pHH != null && pHH.Lvl > Lvl)
+            {
+                full = $"{full}◄{pHH.Ad}";
+                pHH = pHH.Prn;
+            }
+            return full;
+        }
+
         public static string FullParentAd(HH hh)
         {
             string fullAd = $"{hh.Ad}";
@@ -398,10 +471,63 @@ namespace DBMM0
 
             while (pHH != null && pHH.Lvl > 0)
             {
-                fullAd = $"{pHH.Ad} ► {fullAd}";
+                fullAd = $"{pHH.Ad}►{fullAd}";
                 pHH = pHH.Prn;
             }
             return fullAd;
+        }
+
+        public static IEnumerable<CumBkyFF> CumBky(HH node)
+        {
+            List<HH> hhList = new List<HH>();
+
+            if (node.Skl == 99)    // Zaten leaf
+                hhList.Add(node);
+            else
+                LeafsOfNode(node, hhList);
+
+            List<FF> ffList = new List<FF>();
+            foreach (var hh in hhList)
+            {
+                foreach (var ff in Db.SQL<FF>("select r from FF r where r.HH = ?", hh))
+                {
+                    ffList.Add(ff);
+                }
+            }
+
+            var ffGrp = ffList
+               .GroupBy(s => new { s.Trh.Year, s.Trh.Month })
+               .Select(g => new
+               {
+                   Yil = g.Key.Year,
+                   Ay = g.Key.Month,
+                   Gdr = g.Sum(x => x.Gdr),
+                   Glr = g.Sum(x => x.Glr),
+                   Adt = g.Count()
+               });
+
+            List<CumBkyFF> cbList = new List<CumBkyFF>();
+
+            decimal CumBky = 0;
+            foreach (var f in ffGrp.OrderBy((x) => x.Yil).ThenBy((x) => x.Ay))
+            {
+                CumBky += f.Glr - f.Gdr;
+                cbList.Add(new CumBkyFF
+                {
+                    Yil = f.Yil,
+                    Ay = f.Ay,
+                    Gdr = f.Gdr,
+                    Glr = f.Glr,
+                    Adt = f.Adt,
+                    CumBky = CumBky
+                });
+            }
+
+            foreach (var f in cbList.OrderByDescending((x) => x.Yil).ThenByDescending((x) => x.Ay))
+            {
+                yield return f;
+            }
+
         }
 
         public static IEnumerable<HH> View(PP pp)
@@ -600,6 +726,7 @@ namespace DBMM0
                 };
                 oguzP1H = new HH
                 {
+                    PP = oguzP1,
                     No = 1,
                     Prn = oguzH,
                     ThmGlr = 1000000,
@@ -737,5 +864,19 @@ namespace DBMM0
         public ulong ONo;
         public string hNo;
         public string Ad;
+    }
+
+    public class CumBkyFF
+    {
+        public int Yil;
+        public int Ay;
+        public decimal Gdr;
+        public decimal Glr;
+        public decimal CumBky;
+        public int Adt;
+
+        public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
+        public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
+        public string CumBkyX => $"{CumBky:#,#.##;-#,#.##;#}";
     }
 }

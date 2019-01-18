@@ -1,0 +1,59 @@
+﻿<template>
+    <dom-bind id="HHsCumBky">
+        <template is="dom-bind">
+            <div class="gridTbl">
+                <div class="gridTbl_header">
+                    <iron-icon icon="vaadin:abacus"></iron-icon>
+                    <div>[[model.Hdr]]</div>
+                    <button class="download" data-link="/mm0/HHsCumBkyXlsx/[[model.HHId]]" on-tap="MyDownload"><iron-icon icon="vaadin:download"></iron-icon></button>
+                </div>
+                <div class="gridTbl_main">
+                    <table id="HHsCumBkyTbl" class="fixTbl">
+                        <colgroup>
+                            <col style="width:4rem" />
+                            <col style="width:3rem" />
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+                            <col style="width:7rem" />
+                            <col style="width:4rem" />
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th>Yıl</th>
+                                <th>Ay</th>
+                                <th>Gider</th>
+                                <th>Gelir</th>
+                                <th>Kalan</th>
+                                <th>Adet</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template is="dom-repeat" items="{{model.AAs}}">
+                                <tr>
+                                    <td class="txtCenter">[[item.Yil]]</td>
+                                    <td class="txtCenter">[[item.Ay]]</td>
+                                    <td class="txtRight">[[item.GdrX]]</td>
+                                    <td class="txtRight">[[item.GlrX]]</td>
+                                    <td class="txtRight">[[item.CumBkyX]]</td>
+                                    <td class="txtRight">[[item.Adt]]</td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </template>
+    </dom-bind>
+    <script>
+        console.log("MasterPage");
+        var tmplt = (document._currentScript || document.currentScript).previousElementSibling;  // Global
+
+        tmplt.MyDownload = function (e) {
+            e.stopImmediatePropagation(); //stopPropagation();
+            window.open(e.target.dataLink, '_self');
+        }
+
+    </script>
+</template>
+

@@ -42,6 +42,14 @@ namespace MM0
                 FF.PostMdf(ff.HH);
             };
 
+            var can = Db.FromId<HH>(33);
+            foreach(var f in HH.CumBky(can))
+            {
+                var aaa = $"{f.Yil}-{f.Ay:D2}  Gdr {f.Gdr:n2} - Glr {f.Glr:n2}  Bky {f.CumBky:n2}";
+                Console.WriteLine(aaa);
+            }
+
+
             //HH.Populate();
             //HH.Display();
 

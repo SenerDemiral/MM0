@@ -3,7 +3,7 @@
         <template is="dom-bind">
             <div class="gridTbl">
                 <div class="gridTbl_header">
-                    <iron-icon icon="vaadin:records"></iron-icon>
+                    <iron-icon icon="vaadin:cash"></iron-icon>
                     <div>[[model.Hdr]]</div>
                     <button class="download" data-link="/mm0/FFsXlsx/[[model.PPId]]" on-tap="MyDownload"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
@@ -11,6 +11,7 @@
                     <table id="FFsRprTbl" class="fixTbl">
                         <colgroup>
                             <col style="width:6rem" />
+                            <col style="width:12rem" />
                             <col style="width:12rem" />
 
                             <col style="width:7rem" />
@@ -22,6 +23,7 @@
                             <tr>
                                 <th>Tarih</th>
                                 <th>Hesap</th>
+                                <th>ÜstHesap</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
                                 <th>Açıklama</th>
@@ -31,7 +33,8 @@
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
                                     <td class="txtCenter"><a href="/mm0/FFsRprTrh/[[model.PPId]]/[[item.TrhZ]]">[[item.TrhX]]</a></td>
-                                    <td>[[item.HHAd]]</td>
+                                    <td><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.HHId]]">[[item.HHAd]]</a></td>
+                                    <td style="font-size:smaller">[[item.HHAdPrn]]</td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
                                     <td>[[item.Ad]]</td>
@@ -40,6 +43,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
+                                <td></td>
                                 <td></td>
                                 <td class="txtRight">[[model.NORX]]</td>
                                 <td class="txtRight">[[model.GdrTopX]]</td>
