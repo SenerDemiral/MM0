@@ -129,13 +129,14 @@ namespace DBMM0
             CC cc = Db.FromId<CC>((ulong)ccId);
             PP ppNew = null;
             HH hhNew = null;
+            DateTime? nullDT = null;
             Db.Transact(() =>
             {
                 ppNew = new PP()
                 {
                     Ad = Ad,
-                    BasTrh = Convert.ToDateTime(BasTrh),
-                    BitTrh = Convert.ToDateTime(BitTrh),
+                    BasTrh = string.IsNullOrEmpty(BasTrh) ? nullDT : DateTime.Parse(BasTrh),  //Convert.ToDateTime(BasTrh),
+                    BitTrh = string.IsNullOrEmpty(BitTrh) ? nullDT : Convert.ToDateTime(BitTrh),
                     CC = cc
                 };
             });
@@ -174,7 +175,7 @@ namespace DBMM0
         public decimal Gdr { get; set; }
 
         public string PPAd => PP?.Ad;
-        public ulong HHId => HH.GetObjectNo();
+        public ulong HHId => HH?.GetObjectNo() ?? 0;
         public string HHAd => HH?.Ad;
 
         public string TrhZ => $"{Trh:O}";
@@ -188,15 +189,18 @@ namespace DBMM0
             {
                 if (Db.FromId((ulong)ppId) is PP pp)
                 {
-                    new FF()
+                    if (Db.FromId((ulong)hhId) is HH hh)
                     {
-                        PP = pp,
-                        HH = Db.FromId((ulong)hhId) is HH hh ? hh : null,
-                        Ad = Ad,
-                        Trh = Convert.ToDateTime(Trh),
-                        Gdr = Gdr,
-                        Glr = Glr
-                    };
+                        new FF()
+                        {
+                            PP = pp,
+                            HH = hh,
+                            Ad = Ad,
+                            Trh = Convert.ToDateTime(Trh),
+                            Gdr = Gdr,
+                            Glr = Glr
+                        };
+                    }
                 }
             });
 
@@ -207,11 +211,14 @@ namespace DBMM0
             {
                 if (Db.FromId((ulong)Id) is FF ff)
                 {
-                    ff.HH = Db.FromId((ulong)hhId) is HH hh ? hh : null;
-                    ff.Ad = Ad;
-                    ff.Trh = Convert.ToDateTime(Trh);
-                    ff.Gdr = Gdr;
-                    ff.Glr = Glr;
+                    if (Db.FromId((ulong)hhId) is HH hh)
+                    {
+                        ff.HH = hh;
+                        ff.Ad = Ad;
+                        ff.Trh = Convert.ToDateTime(Trh);
+                        ff.Gdr = Gdr;
+                        ff.Glr = Glr;
+                    }
                 }
             });
 

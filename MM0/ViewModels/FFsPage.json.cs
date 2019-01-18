@@ -57,22 +57,34 @@ namespace MM0.ViewModels
         {
             Id = 0;
             HHId = 0;
-            TrhX = DateTime.Today.ToLongTimeString();
-
+            TrhX = DateTime.Today.ToString("yyyy-MM-dd");
+            Msj = "";
             IsNew = true;
             Opened = true;
         }
 
         void Handle(Input.InsTrgr Action)
         {
+            if (HHId == 0)
+            {
+                Action.Cancelled = true;
+                Msj = "Hesap girin";
+                return;
+            }
+            //TrhX girilmediginde 00:00:00 geliyor. DateTime'a convert edince Gunun tarihi geliyor!
+            //When only the time is present, the date portion uses the current date.
+            //When only the date is present, the time portion is midnight.
+            //When the year isn't specified in a date, the current year is used.
+            //When the day of the month isn't specified, the first of the month is used.
+            
+            //How to set only time part of a DateTime variable
+            //var newDate = oldDate.Date + new TimeSpan(11, 30, 55);
+
             var p = this.Parent as FFsPage;
 
-            if (!string.IsNullOrWhiteSpace(Ad))
-            {
-                FF.InsertRec(p.PPId, HHId, TrhX, Ad, Gdr, Glr);
+            FF.InsertRec(p.PPId, HHId, TrhX, Ad, Gdr, Glr);
 
-                Id = 0;
-            }
+            Id = 0;
             Opened = false;
 
             p.Data = null;
