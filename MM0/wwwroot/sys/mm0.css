@@ -16,28 +16,40 @@ body {
     background-size: contain;
 }
 */
-[data-Lvl="1"] {
-    font-weight:bold;
+
+.tarih{
+    width: 4rem;
 }
+.icon {
+    width: 20px;
+}
+button{
+    min-width:unset;
+}
+
+[data-Lvl="1"] {
+    font-weight: bold;
+}
+
 [data-Lvl="2"] {
     padding-left: 1rem !important;
-    font-size: 0.95rem;
+    /*font-size: 0.95rem;*/
 }
 [data-Lvl="3"] {
     padding-left: 2rem !important;
-    font-size: 0.90rem;
+    /*font-size: 0.90rem;*/
 }
 [data-Lvl="4"] {
     padding-left: 3rem !important;
-    font-size: 0.85rem;
+    /*font-size: 0.85rem;*/`
 }
 [data-Lvl="5"] {
     padding-left: 4rem !important;
-    font-size: 0.80rem;
+    /*font-size: 0.80rem;*/
 }
 [data-Lvl="6"] {
     padding-left: 5rem !important;
-    font-size: 0.75rem;
+    /*font-size: 0.75rem;*/
 }
 
 .txtLeft {
@@ -52,14 +64,15 @@ body {
 
 
 .fixTbl {
-    table-layout: fixed;
-    width: 0px;
+    /*table-layout: fixed;*/
+    /*width: 0px;*/
     border-collapse: collapse;
 }
 
     .fixTbl th {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+        /*padding-top: 0.5rem;
+        padding-bottom: 0.5rem;*/
+        padding: 0 5px;
         font-weight: bold;
         text-align: center;
         background-color: #eaeace;
@@ -75,8 +88,8 @@ body {
     }
 
     .fixTbl tfoot td {
-        padding-top: 0.5rem;
-        padding-bottom: 0.5rem;
+        /*padding-top: 0.5rem;
+        padding-bottom: 0.5rem;*/
         border-color: transparent;
         background-color: #eaeace;
     }

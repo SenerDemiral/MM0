@@ -12,12 +12,11 @@
                     <label>Hesap</label>
                     <juicy-select style="background-color:yellow" caption-text="Hesap" value="{{model.FF.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
                     <label>Gider</label>
-                    <div>
-                        <input placeholder="Gider" type="number" value="{{model.FF.Gdr$::change}}" />
-                        <input placeholder="Gelir" type="number" value="{{model.FF.Glr$::change}}" />
-                    </div>
-                    <label>Açıklama</label>
-                    <input placeholder="Açıklama" type="text" value="{{model.FF.Ad$::change}}" size="40" />
+                    <input placeholder="Gider" type="number" value="{{model.FF.Gdr$::change}}" />
+                    <label>Gelir</label>
+                    <input placeholder="Gelir" type="number" value="{{model.FF.Glr$::change}}" />
+                    <label>Not</label>
+                    <input placeholder="Not" type="text" value="{{model.FF.Ad$::change}}" />
                 </div>
                 <div class="mdfRecAction">
                     <template is="dom-if" if="[[model.FF.IsNew]]">
@@ -47,24 +46,9 @@
                 </div>
                 <div class="gridTbl_main">
                     <table id="FFsPageTbl" class="fixTbl">
-                        <colgroup>
-                            <col style="width:5rem" />
-                            <col style="width:12rem" />
-
-                            <col style="width:7rem" />
-                            <col style="width:7rem" />
-
-                            <col style="width:15rem" />
-
-                            <col style="width:4rem" />
-
-                            <col style="width:2.8rem" />
-                            <col style="width:2.8rem" />
-
-                        </colgroup>
                         <thead>
                             <tr>
-                                <th>Tarih</th>
+                                <th class="tarih">Tarih</th>
                                 <th>Hesap</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
@@ -73,19 +57,6 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <template is="dom-repeat" items="{{model.FFs}}">
-                                <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRprTrh/[[model.PPId]]/[[item.TrhZ]]">[[item.TrhX]]</a></td>
-                                    <td><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.HHId]]">[[item.HHAd]]</a></td>
-                                    <td class="txtRight">[[item.GdrX]]</td>
-                                    <td class="txtRight">[[item.GlrX]]</td>
-                                    <td>[[item.Ad]]</td>
-                                    <td class="txtCenter"><a href="/mm0/HHsCumBky/[[item.HHId]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
-                                    <td><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
-                                </tr>
-                            </template>
-                        </tbody>
                         <tfoot>
                             <tr>
                                 <td></td>
@@ -97,6 +68,19 @@
                                 <td></td>
                             </tr>
                         </tfoot>
+                        <tbody>
+                            <template is="dom-repeat" items="{{model.FFs}}">
+                                <tr>
+                                    <td class="txtCenter"><a href="/mm0/FFsRprTrh/[[model.PPId]]/[[item.TrhZ]]">[[item.TrhX]]</a></td>
+                                    <td><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.HHId]]">[[item.HHAd]]</a></td>
+                                    <td class="txtRight">[[item.GdrX]]</td>
+                                    <td class="txtRight">[[item.GlrX]]</td>
+                                    <td>[[item.Ad]]</td>
+                                    <td class="icon"><a href="/mm0/HHsCumBky/[[item.HHId]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
+                                    <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
+                                </tr>
+                            </template>
+                        </tbody>
                     </table>
                 </div>
             </div>

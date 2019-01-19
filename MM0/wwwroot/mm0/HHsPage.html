@@ -34,17 +34,6 @@
                 </div>
                 <div class="gridTbl_main">
                     <table id="HHsPageTbl" class="fixTbl">
-                        <colgroup>
-                            <col style="width:14rem" />
-
-                            <col style="width:7rem" />
-                            <col style="width:7rem" />
-                            <col style="width:7rem" />
-                            <col style="width:7rem" />
-
-                            <col style="width:2.8rem" />
-                            <col style="width:2.8rem" />
-                        </colgroup>
                         <thead>
                             <tr>
                                 <th rowspan="2">Hesap</th>
@@ -68,8 +57,8 @@
                                     <td class="txtRight">[[item.GrcGlrX]]</td>
                                     <td class="txtRight">[[item.ThmGdrX]]</td>
                                     <td class="txtRight">[[item.ThmGlrX]]</td>
-                                    <td class="txtCenter"><a href="/mm0/HHsCumBky/[[item.Id]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
-                                    <td><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
+                                    <td class="icon"><a href="/mm0/HHsCumBky/[[item.Id]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
+                                    <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>
                         </tbody>

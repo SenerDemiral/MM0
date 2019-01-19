@@ -6,7 +6,7 @@
                     <label>Rec#</label>
                     <input placeholder="Id" type="text" value="[[model.PP.Id]]" readonly style="text-align:center" />
                     <label>Ad</label>
-                    <input placeholder="Ad" type="text" value="{{model.PP.Ad$::change}}" size="40" maxlength="80" />
+                    <input placeholder="Ad" type="text" value="{{model.PP.Ad$::change}}" maxlength="80" />
                     <label>Başlangıç</label>
                     <input placeholder="Başlangıç" type="date" value="{{model.PP.BasTrh$::change}}" />
                     <label>Bitiş</label>
@@ -36,23 +36,6 @@
                 </div>
                 <div class="gridTbl_main">
                     <table id="PPsPageTbl" class="fixTbl">
-                        <colgroup>
-                            <col style="width:2.8rem" />
-                            <col style="width:12rem" />
-                            <col style="width:2.8rem" />
-
-                            <col style="width:7rem" />
-                            <col style="width:7rem" />
-                            <col style="width:7rem" />
-                            <col style="width:7rem" />
-
-                            <col style="width:6rem" />
-                            <col style="width:6rem" />
-
-                            <col style="width:2.8rem" />
-                            <col style="width:2.8rem" />
-
-                        </colgroup>
                         <thead>
                             <tr>
                                 <th rowspan="2"></th>
@@ -69,27 +52,10 @@
                                 <th>Gelir</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
-                                <th>Başlangıç</th>
-                                <th>Bitiş</th>
+                                <th class="tarih">Başlangıç</th>
+                                <th class="tarih">Bitiş</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <template is="dom-repeat" items="{{model.PPs}}">
-                                <tr>
-                                    <td><a href="/mm0/FFs/[[item.Id]]"><iron-icon icon="vaadin:money-exchange"></iron-icon></a></td>
-                                    <td><a href="/mm0/FFsRpr/[[item.Id]]">[[item.Ad]]</a></td>
-                                    <td><a href="/mm0/HHs/[[item.Id]]"><iron-icon icon="vaadin:file-tree"></iron-icon></a></td>
-                                    <td class="txtRight">[[item.GrcGdrX]]</td>
-                                    <td class="txtRight">[[item.GrcGlrX]]</td>
-                                    <td class="txtRight">[[item.ThmGdrX]]</td>
-                                    <td class="txtRight">[[item.ThmGlrX]]</td>
-                                    <td class="txtCenter">[[item.BasTrhX]]</td>
-                                    <td class="txtCenter">[[item.BitTrhX]]</td>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr/[[item.Id]]"><iron-icon icon="vaadin:cash"></iron-icon></a></td>
-                                    <td><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
-                                </tr>
-                            </template>
-                        </tbody>
                         <tfoot>
                             <tr>
                                 <td></td>
@@ -102,9 +68,25 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
                             </tr>
                         </tfoot>
+                        <tbody>
+                            <template is="dom-repeat" items="{{model.PPs}}">
+                                <tr>
+                                    <td class="icon"><a href="/mm0/FFs/[[item.Id]]"><iron-icon icon="vaadin:money-exchange"></iron-icon></a></td>
+                                    <td><a href="/mm0/FFsRpr/[[item.Id]]">[[item.Ad]]</a></td>
+                                    <td class="icon"><a href="/mm0/HHs/[[item.Id]]"><iron-icon icon="vaadin:file-tree"></iron-icon></a></td>
+                                    <td class="txtRight">[[item.GrcGdrX]]</td>
+                                    <td class="txtRight">[[item.GrcGlrX]]</td>
+                                    <td class="txtRight">[[item.ThmGdrX]]</td>
+                                    <td class="txtRight">[[item.ThmGlrX]]</td>
+                                    <td class="txtCenter">[[item.BasTrhX]]</td>
+                                    <td class="txtCenter">[[item.BitTrhX]]</td>
+                                    <td class="icon"><a href="/mm0/FFsRpr/[[item.Id]]"><iron-icon icon="vaadin:cash"></iron-icon></a></td>
+                                    <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
+                                </tr>
+                            </template>
+                        </tbody>
                     </table>
                 </div>
             </div>
