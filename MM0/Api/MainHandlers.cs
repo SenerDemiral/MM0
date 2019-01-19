@@ -72,6 +72,11 @@ namespace MM0.Api
 
             // Workspace home page (landing page from launchpad) dashboard alias
 
+            Handle.GET("/", () =>
+            {
+                MasterPage master = GetMasterPageFromSession();
+                return master;
+            });
             Handle.GET("/MM0", () =>
             {
                 MasterPage master = GetMasterPageFromSession();
