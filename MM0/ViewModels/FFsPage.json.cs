@@ -40,6 +40,26 @@ namespace MM0.ViewModels
             }
         }
 
+        public void RefreshToplam()
+        {
+            if (Db.FromId((ulong)PPId) is PP pp)
+            {
+                if (!string.IsNullOrEmpty(QryTrhX))
+                {
+                    var ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh = ?", pp, Convert.ToDateTime(QryTrhX));
+
+                    decimal GlrTop = 0, GdrTop = 0;
+                    foreach (var ff in ffs)
+                    {
+                        GlrTop += ff.Glr;
+                        GdrTop += ff.Gdr;
+                    }
+                    GlrTopX = $"{GlrTop:#,#.##;-#,#.##;#}";
+                    GdrTopX = $"{GdrTop:#,#.##;-#,#.##;#}";
+                }
+            }
+        }
+
         void Handle(Input.QryTrhX Action)
         {
             if (Action.OldValue != Action.Value)
@@ -105,6 +125,9 @@ namespace MM0.ViewModels
             if (Id != 0)
             {
                 FF.UpdateRec(Id, HHId, TrhX, Ad, Gdr, Glr);
+
+                var p = this.Parent as FFsPage;
+                p.RefreshToplam();
 
                 Id = 0;
 
