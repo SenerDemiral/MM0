@@ -42,7 +42,7 @@ namespace MM0
                 FF.PostMdf(ff.HH);
             };
 
-            HH.Populate();
+            HH.Populate();  // Birkere
             //HH.Display();
 
             //HHspage hp = new HHspage();
