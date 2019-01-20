@@ -1,6 +1,7 @@
 ﻿using Starcounter;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -59,7 +60,7 @@ namespace DBMM0
             try
             {
                 //System.Net.WebUtility.UrlEncode
-                //byte[] data_byte = Convert.FromBase64String(HttpUtility.UrlDecode(data));
+                //byte[] data_byte = Convert.FromBase64String( System.Web.HttpUtility.UrlDecode(data));
                 byte[] data_byte = Convert.FromBase64String(System.Net.WebUtility.UrlDecode(data));
                 decodedData = Encoding.UTF8.GetString(data_byte);
             }
@@ -93,6 +94,15 @@ namespace DBMM0
             //smtp.Send(mail);
             object userToken = null;
             smtp.SendAsync(mail, userToken);
+        }
+
+        public static void Write2Log(string Msg)
+        {
+            using (StreamWriter sw = new StreamWriter(@"C:\Starcounter\MyLog\MM0-Log.txt", true))
+            {
+                //sw.WriteLine(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ": " + Msg);
+                sw.WriteLine($"{DateTime.Now:yy-MM-dd HH:mm:ss} {Msg}");
+            }
         }
 
 

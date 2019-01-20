@@ -74,7 +74,7 @@
                             <template is="dom-repeat" items="{{model.PPs}}">
                                 <tr>
                                     <td class="icon"><a href="/mm0/FFs/[[item.Id]]"><iron-icon icon="vaadin:money-exchange"></iron-icon></a></td>
-                                    <td><a href="/mm0/FFsRpr/[[item.Id]]">[[item.Ad]]</a></td>
+                                    <td>[[item.Ad]]</td>
                                     <td class="icon"><a href="/mm0/HHs/[[item.Id]]"><iron-icon icon="vaadin:file-tree"></iron-icon></a></td>
                                     <td class="txtRight">[[item.GrcGdrX]]</td>
                                     <td class="txtRight">[[item.GrcGlrX]]</td>
@@ -82,7 +82,7 @@
                                     <td class="txtRight">[[item.ThmGlrX]]</td>
                                     <td class="txtCenter">[[item.BasTrhX]]</td>
                                     <td class="txtCenter">[[item.BitTrhX]]</td>
-                                    <td class="icon"><a href="/mm0/FFsRpr/[[item.Id]]"><iron-icon icon="vaadin:cash"></iron-icon></a></td>
+                                    <td class="icon"><a href="/mm0/FFsRpr?ppid=[[item.Id]]"><iron-icon icon="vaadin:cash"></iron-icon></a></td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>

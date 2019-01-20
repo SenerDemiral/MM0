@@ -2,9 +2,11 @@
 using Starcounter;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MM0.Api
 {
@@ -55,35 +57,22 @@ namespace MM0.Api
                 return page;
             });
 
-            Handle.GET("/MM0/partials/FFsRpr/{?}", (long PPId) =>
+            Handle.GET("/MM0/partials/FFsRpr?{?}", (string queryString) =>
             {
+                string decodedQuery = HttpUtility.UrlDecode(queryString);
+                NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
+                string PPId = queryCollection.Get("ppid");
+                string HHId = queryCollection["hhid"];
+                string TrhX = queryCollection["trhx"];
+
                 var page = new FFsRpr
                 {
-                    PPId = PPId
+                    PPId = PPId == null ? 0 : long.Parse(PPId),
+                    HHId = HHId == null ? 0 : long.Parse(HHId),
+                    TrhX = TrhX ?? ""
                 };
                 return page;
             });
-
-            Handle.GET("/MM0/partials/FFsRprHsp/{?}/{?}", (long PPId, long HHId) =>
-            {
-                var page = new FFsRpr
-                {
-                    PPId = PPId,
-                    HHId = HHId
-                };
-                return page;
-            });
-
-            Handle.GET("/MM0/partials/FFsRprTrh/{?}/{?}", (long PPId, string Trh) =>
-            {
-                var page = new FFsRpr
-                {
-                    PPId = PPId,
-                    Trh = Trh
-                };
-                return page;
-            });
-
 
         }
     }

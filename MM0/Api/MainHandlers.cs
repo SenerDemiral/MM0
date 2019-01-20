@@ -5,11 +5,13 @@ using OfficeOpenXml.Style;
 using Starcounter;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace MM0.Api
 {
@@ -74,8 +76,7 @@ namespace MM0.Api
 
             Handle.GET("/", () =>
             {
-                MasterPage master = GetMasterPageFromSession();
-                return master;
+                return Self.GET("/MM0");
             });
             Handle.GET("/MM0", () =>
             {
@@ -119,9 +120,10 @@ namespace MM0.Api
             Handle.GET("/MM0/FFs/{?}", (long PPId) => WrapPage<FFsPage>($"/MM0/partials/FFs/{PPId}"));
 
 
-            Handle.GET("/MM0/FFsRpr/{?}", (long PPId) => WrapPage<FFsRpr>($"/MM0/partials/FFsRpr/{PPId}"));
-            Handle.GET("/MM0/FFsRprHsp/{?}/{?}", (long PPId, long HHId) => WrapPage<FFsRpr>($"/MM0/partials/FFsRprHsp/{PPId}/{HHId}"));
-            Handle.GET("/MM0/FFsRprTrh/{?}/{?}", (long PPId, string Trh) => WrapPage<FFsRpr>($"/MM0/partials/FFsRprTrh/{PPId}/{Trh}"));
+            Handle.GET("/MM0/FFsRpr?{?}", (string queryString) =>
+            {
+                return WrapPage<FFsRpr>($"/MM0/partials/FFsRpr?{queryString}");
+            });
 
             Handle.GET("/MM0/confirmemail/{?}", (string deMail) =>
             {
@@ -149,15 +151,26 @@ namespace MM0.Api
                 return HHsXlsx(PPId);
             });
 
-            Handle.GET("/MM0/FFsXlsx/{?}", (long PPId) =>
+            Handle.GET("/MM0/FFsXlsx?{?}", (string queryString) =>
             {
-                return FFsXlsx(PPId);
+                string decodedQuery = HttpUtility.UrlDecode(queryString);
+                NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
+                string ppid = queryCollection.Get("ppid");
+                string hhid = queryCollection["hhid"];
+                string TrhX = queryCollection["trhx"];
+
+                long PPId = ppid == null ? 0 : long.Parse(ppid);
+                long HHId = hhid == null ? 0 : long.Parse(hhid);
+                TrhX = TrhX ?? "";
+
+                return FFsXlsx(PPId, HHId, TrhX);
             });
 
             Handle.GET("/MM0/HHsCumBkyXlsx/{?}", (long HHId) =>
             {
                 return HHsCumBkyXlsx(HHId);
             });
+
         }
 
         public static Response HHsXlsx(long PPId)
@@ -234,7 +247,7 @@ namespace MM0.Api
             }
         }
 
-        public static Response FFsXlsx(long PPId)
+        public static Response FFsXlsx(long PPId, long HHId, string TrhX)
         {
             using (ExcelPackage pck = new ExcelPackage())
             {
@@ -242,32 +255,34 @@ namespace MM0.Api
 
                 // Header (first row)
                 ws.Cells[1, 1].Value = "Tarih";
-                ws.Cells[1, 2].Value = "Hesap";
-                ws.Cells[1, 3].Value = "Gider";
-                ws.Cells[1, 4].Value = "Gelir";
-                ws.Cells[1, 5].Value = "Açıklama";
+                ws.Cells[1, 2].Value = "ÜstHesap";
+                ws.Cells[1, 3].Value = "Hesap";
+                ws.Cells[1, 4].Value = "Gider";
+                ws.Cells[1, 5].Value = "Gelir";
+                ws.Cells[1, 6].Value = "Açıklama";
 
                 ws.Row(1).Style.Font.Bold = true;
 
                 ws.Column(1).Style.Numberformat.Format = "dd.mm.yy";
-                ws.Column(3).Style.Numberformat.Format = "#,###";
                 ws.Column(4).Style.Numberformat.Format = "#,###";
+                ws.Column(5).Style.Numberformat.Format = "#,###";
 
                 if (Db.FromId((ulong)PPId) is PP pp)
                 {
-                    var ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh < ?", pp, DateTime.Today.AddDays(30));
+                    //var ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by Trh DESC", pp);
                     int cr = 2;
-                    foreach (var ff in ffs)
+                    foreach (var ff in FF.View(PPId, HHId, TrhX))
                     {
                         ws.Cells[cr, 1].Value = ff.Trh;
-                        ws.Cells[cr, 2].Value = ff.HHAd;
-                        ws.Cells[cr, 3].Value = ff.Gdr;
-                        ws.Cells[cr, 4].Value = ff.Glr;
-                        ws.Cells[cr, 5].Value = ff.Ad;
+                        ws.Cells[cr, 2].Value = ff.HHAdPrn;
+                        ws.Cells[cr, 3].Value = ff.HHAd;
+                        ws.Cells[cr, 4].Value = ff.Gdr;
+                        ws.Cells[cr, 5].Value = ff.Glr;
+                        ws.Cells[cr, 6].Value = ff.Ad;
 
                         cr++;
                     }
-                    using (var range = ws.Cells["A1:E1"]) {
+                    using (var range = ws.Cells["A1:F1"]) {
                         range.AutoFilter = true;
                         range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                         range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
@@ -279,13 +294,14 @@ namespace MM0.Api
 
                     ws.Column(1).Width = 12;
                     ws.Column(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    ws.Column(2).AutoFit();
-                    ws.Column(3).Width = 12;
+                    ws.Column(2).Width = 15;
+                    ws.Column(3).Width = 15;
                     ws.Column(4).Width = 12;
-                    ws.Column(5).AutoFit();
+                    ws.Column(5).Width = 12;
+                    ws.Column(6).AutoFit();
 
-                    ws.Cells[cr, 3].Formula = $"SUM(C2:C{cr-1})";
                     ws.Cells[cr, 4].Formula = $"SUM(D2:D{cr-1})";
+                    ws.Cells[cr, 5].Formula = $"SUM(E2:E{cr-1})";
                 }
 
 

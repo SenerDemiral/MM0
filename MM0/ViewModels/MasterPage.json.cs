@@ -25,6 +25,7 @@ namespace MM0.ViewModels
                 }
                 else
                 {
+                    Hlp.Write2Log($"SignOut {Email}");
                     p.Token = "";
                     OpnDlgTxt = "Oturum Aç";
                     IsOpened = false;
@@ -47,13 +48,16 @@ namespace MM0.ViewModels
                     p.CurrentPage = null;
                     p.MorphUrl = "/mm0/AboutPage";
                     Mesaj = "";
+                    Hlp.Write2Log("SignIn");
                 }
                 else
                 {
                     p.Token = Token;
+                    Email = cc.Email;
                     OpnDlgTxt = "Oturum Kapat";
                     p.MorphUrl = $"/mm0/PPs/{cc.Id}";
                     Mesaj = "Signed";
+                    Hlp.Write2Log($"SignInA {cc.Email}");
                 }
                 /*
                 Session.RunTaskForAll((s, id) =>
@@ -79,12 +83,15 @@ namespace MM0.ViewModels
                         Mesaj = "";
                         OpnDlgTxt = "Oturum Kapat";
                         p.MorphUrl = $"/mm0/PPs/{cc.Id}";
+
+                        Hlp.Write2Log($"SignIn. {cc.Email}");
                     }
                     else   // SignUp
                     {
                         var newToken = Hlp.EncodeQueryString(Email); // CreateToken
 
                         CC.InsertRec(Email, Pwd, newToken);
+                        Hlp.Write2Log($"SignUp. {cc.Email}");
 
                         var email = Hlp.EncodeQueryString(Email);
                         Hlp.SendMail(email);
@@ -112,18 +119,32 @@ namespace MM0.ViewModels
                             Pwd = "";
                             Token = cc.Token;
                             p.Token = cc.Token;
-                            Mesaj = "SignedIn";
+                            Mesaj = "";
                             IsOpened = false;
                             OpnDlgTxt = "Oturum Kapat";
                             p.MorphUrl = $"/mm0/PPs/{cc.Id}";
+
+                            Hlp.Write2Log($"SignIn. {cc.Email}");
                         }
                         else
                         {
+                            Hlp.Write2Log($"SignInX {cc.Email} {Pwd}");
+
                             Pwd = "";
                             Token = "";
                             p.Token = "";
-                            Mesaj = "Hatali eMail/Password";
+                            Mesaj = "Hatali Password";
+
                         }
+                    }
+                    else
+                    {
+                        Hlp.Write2Log($"SignInZ {Email} {Pwd}");
+
+                        //Pwd = "";
+                        Token = "";
+                        p.Token = "";
+                        Mesaj = "Hatali eMail";
                     }
                 }
             }

@@ -4,36 +4,56 @@
     <dom-bind id="FFsPage">
         <template is="dom-bind">
             <paper-dialog opened="[[model.FF.Opened]]" modal="true">
-                <div class="mdfRecWrap">
-                    <label>Rec#</label>
-                    <input placeholder="Id" type="text" value="[[model.FF.Id]]" readonly style="text-align:center" />
-                    <label>Tarih</label>
-                    <input placeholder="Tarih" type="date" value="{{model.FF.TrhX$::change}}" />
-                    <label>Hesap</label>
-                    <juicy-select style="background-color:yellow" caption-text="Hesap" value="{{model.FF.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
-                    <label>Gider</label>
-                    <input placeholder="Gider" type="number" value="{{model.FF.Gdr$::change}}" />
-                    <label>Gelir</label>
-                    <input placeholder="Gelir" type="number" value="{{model.FF.Glr$::change}}" />
-                    <label>Not</label>
-                    <input placeholder="Not" type="text" value="{{model.FF.Ad$::change}}" />
+                <div class="mdfDlg">
+                    <table class="mdfRecTbl">
+                        <tbody>
+                            <tr>
+                                <td>Rec#</td>
+                                <td><input placeholder="Id" type="text" value="[[model.FF.Id]]" readonly style="text-align:center" /></td>
+                            </tr>
+                            <tr>
+                                <td>Tarih</td>
+                                <td><input placeholder="Tarih" type="date" value="{{model.FF.TrhX$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Hesap</td>
+                                <td><juicy-select style="background-color:yellow" caption-text="Hesap" value="{{model.FF.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
+                            </tr>
+                            <tr>
+                                <td>Gider</td>
+                                <td><input placeholder="Gider" type="number" value="{{model.FF.Gdr$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Gelir</td>
+                                <td><input placeholder="Gelir" type="number" value="{{model.FF.Glr$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Not</td>
+                                <td><input placeholder="Not" type="text" value="{{model.FF.Ad$::change}}" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mdfRecAction">
+                        <template is="dom-if" if="[[model.FF.IsNew]]">
+                            <button value="{{model.FF.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
+                        </template>
+                        <template is="dom-if" if="[[!model.FF.IsNew]]">
+                            <button value="{{model.FF.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
+                            <button value="{{model.FF.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
+                            <button value="{{model.FF.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
+                        </template>
+                    </div>
+
+                    <div class="mdfRecAction">
+                        <button dialog-dismiss value="{{model.FF.RejTrgr$::click}}" onmousedown="++this.value" style="width:100%">Vazgeç</button>
+                    </div>
+
+                    <div class="mdfRecAction">
+                        <div>[[model.FF.Msj]]</div>
+                    </div>
                 </div>
-                <div class="mdfRecAction">
-                    <template is="dom-if" if="[[model.FF.IsNew]]">
-                        <button value="{{model.FF.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
-                    </template>
-                    <template is="dom-if" if="[[!model.FF.IsNew]]">
-                        <button value="{{model.FF.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
-                        <button value="{{model.FF.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
-                        <button value="{{model.FF.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
-                    </template>
-                </div>
-                <div class="mdfRecAction">
-                    <button dialog-dismiss value="{{model.FF.RejTrgr$::click}}" onmousedown="++this.value" style="width:100%">Vazgeç</button>
-                </div>
-                <div class="mdfRecAction">
-                    <div>[[model.FF.Msj]]</div>
-                </div>
+
             </paper-dialog>
 
 
@@ -71,7 +91,7 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRprTrh/[[model.PPId]]/[[item.TrhZ]]">[[item.TrhX]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
                                     <td><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.HHId]]">[[item.HHAd]]</a></td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>

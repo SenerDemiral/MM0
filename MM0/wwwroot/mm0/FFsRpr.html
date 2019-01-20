@@ -5,7 +5,7 @@
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:cash"></iron-icon>
                     <div>[[model.Hdr]]</div>
-                    <button class="download" data-link="/mm0/FFsXlsx/[[model.PPId]]" on-tap="MyDownload"><iron-icon icon="vaadin:download"></iron-icon></button>
+                    <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
                     <table id="FFsRprTbl" class="fixTbl">
@@ -32,8 +32,9 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRprTrh/[[model.PPId]]/[[item.TrhZ]]">[[item.TrhX]]</a></td>
-                                    <td><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.HHId]]">[[item.HHAd]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
+                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAd]]</a></td>
+
                                     <td style="font-size:smaller">[[item.HHAdPrn]]</td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
@@ -44,18 +45,8 @@
                     </table>
                 </div>
             </div>
-
+            <palindrom-redirect is="palindrom-redirect" download url="{{model.MorphUrl$}}"></palindrom-redirect>
         </template>
     </dom-bind >
-    <script>
-        console.log("MasterPage");
-        var tmplt = (document._currentScript || document.currentScript).previousElementSibling;  // Global
-
-        tmplt.MyDownload = function (e) {
-            e.stopImmediatePropagation(); //stopPropagation();
-            window.open(e.target.dataLink, '_self');
-        }
-
-    </script>
 </template>
 

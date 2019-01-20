@@ -91,7 +91,7 @@ namespace MM0.ViewModels
 
             p.HH.ThmGdr = ThmGdr;
             p.HH.ThmGlr = ThmGlr;
-
+            p.HH.Msj = "";
 
             p.HH.Opened = true;
 

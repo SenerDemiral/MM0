@@ -13,7 +13,8 @@
                     <label>Password</label>
                     <input id="dlgSgnPwd" placeholder="Password" type="password" value="{{model.Sgn.Pwd$::change}}" required />
                     <label>Mesaj</label>
-                    <input id="dlgSgnMsj" class="colInfo" type="text" value="[[model.Sgn.Mesaj]]" readonly />
+                    <div>[[model.Sgn.Mesaj]]</div>
+                    <!--<input id="dlgSgnMsj" class="colInfo" type="text" value="[[model.Sgn.Mesaj]]" readonly />-->
                 </div>
                 <div class="mdfRecAction">
                     <button value="{{model.Sgn.SignInT$::click}}" onmousedown="++this.value">SignIn</button>

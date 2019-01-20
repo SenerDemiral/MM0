@@ -244,6 +244,47 @@ namespace DBMM0
             }
         }
 
+        public static IEnumerable<FF> View(long ppId, long hhId, string trhx)
+        {
+            if (Db.FromId((ulong)hhId) is HH hh)
+            {
+                List<HH> hhList = new List<HH>();
+                int Lvl = hh.Lvl;
+
+                if (hh.Skl == 99)    // Zaten leaf
+                    hhList.Add(hh);
+                else
+                    Leafs(hh, hhList);
+
+                List<FF> ffList = new List<FF>();
+                foreach (var h in hhList)
+                {
+                    foreach (var f in Db.SQL<FF>("select r from FF r where r.HH = ?", h))
+                    {
+                        ffList.Add(f);
+                    }
+                }
+
+                foreach (var f in ffList)
+                    yield return f;
+            }
+            else if (Db.FromId((ulong)ppId) is PP pp)
+            {
+                IEnumerable<FF> ffs;
+                if (!string.IsNullOrEmpty(trhx))
+                {
+                    DateTime trh = Convert.ToDateTime(trhx);
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh = ?", pp, trh);
+                }
+                else
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by r.Trh DESC", pp);
+
+                foreach (var f in ffs)
+                    yield return f;
+            }
+        }
+
+
         public static IEnumerable<FF> View(HH hh)
         {
             // Herhangi bir node'un (Leaf olmasi gerekmiyor) altindaki Leaf lerin hareketleri FF
@@ -320,6 +361,8 @@ namespace DBMM0
 
         public int No { get; set; }
         public string Ad { get; set; }
+        public string Info { get; set; }
+
         public int Lvl { get; set; }
         public int Skl { get; set; }    // 0:Client, 1:Proje, 2..8:AraHesap, 99:CalisanHesap/Leaf
 

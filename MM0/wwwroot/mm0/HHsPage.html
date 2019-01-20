@@ -2,26 +2,41 @@
     <dom-bind id="HHsPage">
         <template is="dom-bind">
             <paper-dialog opened="[[model.HH.Opened]]" modal="true">
-                <div class="mdfRecWrap">
-                    <label>Rec#</label>
-                    <input placeholder="Id" type="text" value="[[model.HH.Id]]" readonly style="text-align:center" />
-                    <label>Ad</label>
-                    <input placeholder="Ad" type="text" value="{{model.HH.Ad$::change}}" />
-                    <label>ThmGider</label>
-                    <input placeholder="ThmGider" type="number" value="{{model.HH.ThmGdr$::change}}" />
-                    <label>ThmGelir</label>
-                    <input placeholder="ThmGelir" type="number" value="{{model.HH.ThmGlr$::change}}" />
-                </div>
-                <div class="mdfRecAction">
-                    <button value="{{model.HH.ApdTrgr$::click}}" onmousedown="++this.value">Append</button>
-                    <button value="{{model.HH.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
-                    <button value="{{model.HH.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
-                </div>
-                <div class="mdfRecAction">
-                    <button dialog-dismiss value="{{model.HH.RejTrgr$::click}}" onmousedown="++this.value" style="width:100%">Vazgeç</button>
-                </div>
-                <div class="mdfRecAction">
-                    <div>[[model.HH.Msj]]</div>
+                <div class="mdfDlg">
+                    <table class="mdfRecTbl">
+                        <tbody>
+                            <tr>
+                                <td>Rec#</td>
+                                <td><input placeholder="Id" type="text" value="[[model.HH.Id]]" readonly style="text-align:center" /></td>
+                            </tr>
+                            <tr>
+                                <td>Ad</td>
+                                <td><input placeholder="Ad" type="text" value="{{model.HH.Ad$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>ThmGider</td>
+                                <td><input placeholder="Gider" type="number" value="{{model.HH.ThmGdr$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>ThmGelir</td>
+                                <td><input placeholder="Gelir" type="number" value="{{model.HH.ThmGlr$::change}}" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mdfRecAction">
+                        <button value="{{model.HH.ApdTrgr$::click}}" onmousedown="++this.value">Apend</button>
+                        <button value="{{model.HH.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
+                        <button value="{{model.HH.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
+                    </div>
+
+                    <div class="mdfRecAction">
+                        <button dialog-dismiss value="{{model.HH.RejTrgr$::click}}" onmousedown="++this.value" style="width:100%">Vazgeç</button>
+                    </div>
+
+                    <div class="mdfRecAction">
+                        <div style="background-color:red;color:white">[[model.HH.Msj]]</div>
+                    </div>
                 </div>
             </paper-dialog>
 
@@ -52,7 +67,7 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.HHs}}">
                                 <tr>
-                                    <td data-lvl$="[[item.Lvl]]"><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.Id]]">[[item.Ad]]</a></td>
+                                    <td data-lvl$="[[item.Lvl]]"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.Id]]">[[item.Ad]]</a></td>
                                     <td class="txtRight">[[item.GrcGdrX]]</td>
                                     <td class="txtRight">[[item.GrcGlrX]]</td>
                                     <td class="txtRight">[[item.ThmGdrX]]</td>

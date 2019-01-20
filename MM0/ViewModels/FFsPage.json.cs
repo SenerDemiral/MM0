@@ -161,7 +161,7 @@ namespace MM0.ViewModels
                 p.FF.TrhX = "";
             else
                 p.FF.TrhX = Convert.ToDateTime(TrhX).ToString("yyyy-MM-dd");
-
+            p.FF.Msj = "";
             p.FF.IsNew = false; // Edit
             p.FF.Opened = true;
         }
