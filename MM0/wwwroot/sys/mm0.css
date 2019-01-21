@@ -226,8 +226,8 @@ button{
 .mdfRecAction {
     display: grid;
     grid-auto-flow: column;
-    padding: 0 5px;
-    /*justify-content: space-between;*/
+    justify-content: stretch;
+    /*padding: 0 5px;*/
 }
 
 button.edit {

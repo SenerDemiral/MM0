@@ -2,28 +2,46 @@
     <dom-bind id="PPsPage">
         <template is="dom-bind">
             <paper-dialog opened="[[model.PP.Opened]]" modal="true">
-                <div class="mdfRecWrap">
-                    <label>Rec#</label>
-                    <input placeholder="Id" type="text" value="[[model.PP.Id]]" readonly style="text-align:center" />
-                    <label>Ad</label>
-                    <input placeholder="Ad" type="text" value="{{model.PP.Ad$::change}}" maxlength="80" />
-                    <label>Başlangıç</label>
-                    <input placeholder="Başlangıç" type="date" value="{{model.PP.BasTrh$::change}}" />
-                    <label>Bitiş</label>
-                    <input placeholder="Bitiş" type="date" value="{{model.PP.BitTrh$::change}}" />
-                </div>
-                <div class="mdfRecAction">
-                    <template is="dom-if" if="[[model.PP.IsNew]]">
-                        <button value="{{model.PP.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
-                    </template>
-                    <template is="dom-if" if="[[!model.PP.IsNew]]">
-                        <button value="{{model.PP.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
-                        <button value="{{model.PP.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
-                        <button value="{{model.PP.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
-                    </template>
-                </div>
-                <div class="mdfRecAction">
-                    <button dialog-dismiss value="{{model.PP.RejTrgr$::click}}" onmousedown="++this.value" style="width:100%">Vazgeç</button>
+                <div class="mdfDlg">
+                    <table class="mdfRecTbl">
+                        <tbody>
+                            <tr>
+                                <td>Rec#</td>
+                                <td><input placeholder="Id" type="text" value="[[model.PP.Id]]" readonly style="text-align:center" /></td>
+                            </tr>
+                            <tr>
+                                <td>Ad</td>
+                                <td><input placeholder="Ad" type="text" value="{{model.PP.Ad$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Başlangıç</td>
+                                <td><input placeholder="Başlangıç" type="date" value="{{model.PP.BasTrhX$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Bitiş</td>
+                                <td><input placeholder="Bitiş" type="date" value="{{model.PP.BitTrhX$::change}}" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mdfRecAction">
+                        <template is="dom-if" if="[[model.PP.IsNew]]">
+                            <button value="{{model.PP.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
+                        </template>
+                        <template is="dom-if" if="[[!model.PP.IsNew]]">
+                            <button value="{{model.PP.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
+                            <button value="{{model.PP.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
+                            <button value="{{model.PP.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
+                        </template>
+                    </div>
+
+                    <div class="mdfRecAction">
+                        <button dialog-dismiss value="{{model.pp.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                    </div>
+
+                    <div class="mdfRecAction">
+                        <div>[[model.FF.Msj]]</div>
+                    </div>
                 </div>
             </paper-dialog>
 

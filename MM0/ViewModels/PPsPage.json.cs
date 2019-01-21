@@ -33,7 +33,7 @@ namespace MM0.ViewModels
         void Handle(Input.NewTrgr Action)
         {
             Id = 0;
-            BasTrh = DateTime.Today.ToLongTimeString();
+            BasTrhX = DateTime.Today.ToString("yyyy-MM-dd");
             IsNew = true;
             Opened = true;
         }
@@ -44,7 +44,7 @@ namespace MM0.ViewModels
 
             if (!string.IsNullOrWhiteSpace(Ad))
             {
-                PP.InsertRec(p.CCId, Ad, BasTrh, BitTrh);
+                PP.InsertRec(p.CCId, Ad, BasTrhX, BitTrhX);
 
                 Id = 0;
             }
@@ -67,7 +67,7 @@ namespace MM0.ViewModels
         {
             if (Id != 0)
             {
-                PP.UpdateRec(Id, Ad, BasTrh, BitTrh);
+                PP.UpdateRec(Id, Ad, BasTrhX, BitTrhX);
 
                 Id = 0;
 
@@ -91,13 +91,13 @@ namespace MM0.ViewModels
             p.PP.Id = Id;
             p.PP.Ad = Ad;
             if (string.IsNullOrEmpty(BasTrhX))
-                p.PP.BasTrh = "";
+                p.PP.BasTrhX = "";
             else
-                p.PP.BasTrh = Convert.ToDateTime(BasTrhX).ToString("yyyy-MM-dd");
+                p.PP.BasTrhX = Convert.ToDateTime(BasTrhX).ToString("yyyy-MM-dd");
             if (string.IsNullOrEmpty(BitTrhX))
-                p.PP.BitTrh = "";
+                p.PP.BitTrhX = "";
             else
-                p.PP.BitTrh = Convert.ToDateTime(BitTrhX).ToString("yyyy-MM-dd");
+                p.PP.BitTrhX = Convert.ToDateTime(BitTrhX).ToString("yyyy-MM-dd");
 
             p.PP.IsNew = false; // Edit
             p.PP.Opened = true;
