@@ -230,6 +230,12 @@ button{
     /*padding: 0 5px;*/
 }
 
+.dlgMsj {
+    padding: 5px;
+    background-color: red;
+    color: white;
+}
+
 button.edit {
     padding: 1px 4px;
     /*border-radius: 5px;*/

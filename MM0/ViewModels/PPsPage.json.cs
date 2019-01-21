@@ -27,7 +27,7 @@ namespace MM0.ViewModels
         }
     }
 
-    [PPsPage_json.PP]
+    [PPsPage_json.DlgRec]
     partial class PPPartil : Json
     {
         void Handle(Input.NewTrgr Action)
@@ -88,19 +88,19 @@ namespace MM0.ViewModels
         {
             var p = this.Parent.Parent as PPsPage;
 
-            p.PP.Id = Id;
-            p.PP.Ad = Ad;
+            p.DlgRec.Id = Id;
+            p.DlgRec.Ad = Ad;
             if (string.IsNullOrEmpty(BasTrhX))
-                p.PP.BasTrhX = "";
+                p.DlgRec.BasTrhX = "";
             else
-                p.PP.BasTrhX = Convert.ToDateTime(BasTrhX).ToString("yyyy-MM-dd");
+                p.DlgRec.BasTrhX = Convert.ToDateTime(BasTrhX).ToString("yyyy-MM-dd");
             if (string.IsNullOrEmpty(BitTrhX))
-                p.PP.BitTrhX = "";
+                p.DlgRec.BitTrhX = "";
             else
-                p.PP.BitTrhX = Convert.ToDateTime(BitTrhX).ToString("yyyy-MM-dd");
+                p.DlgRec.BitTrhX = Convert.ToDateTime(BitTrhX).ToString("yyyy-MM-dd");
 
-            p.PP.IsNew = false; // Edit
-            p.PP.Opened = true;
+            p.DlgRec.IsNew = false; // Edit
+            p.DlgRec.Opened = true;
         }
     }
 

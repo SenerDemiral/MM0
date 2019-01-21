@@ -18,7 +18,7 @@ namespace MM0.ViewModels
         }
     }
 
-    [HHsPage_json.HH]
+    [HHsPage_json.DlgRec]
     partial class HHPartial : Json
     {
         void Handle(Input.ApdTrgr Action)
@@ -86,14 +86,14 @@ namespace MM0.ViewModels
         {
             var p = this.Parent.Parent as HHsPage;
 
-            p.HH.Ad = Ad;
-            p.HH.Id = Id;
+            p.DlgRec.Ad = Ad;
+            p.DlgRec.Id = Id;
 
-            p.HH.ThmGdr = ThmGdr;
-            p.HH.ThmGlr = ThmGlr;
-            p.HH.Msj = "";
+            p.DlgRec.ThmGdr = ThmGdr;
+            p.DlgRec.ThmGlr = ThmGlr;
+            p.DlgRec.Msj = "";
 
-            p.HH.Opened = true;
+            p.DlgRec.Opened = true;
 
         }
 

@@ -7,20 +7,32 @@
     <dom-bind id="MasterPage">
         <template is="dom-bind">
             <paper-dialog opened="[[model.Sgn.IsOpened$]]" modal="true">
-                <div class="mdfRecWrap">
-                    <label>eMail</label>
-                    <input id="dlgSgnEml" placeholder="eMail" type="text" value="{{model.Sgn.Email$::change}}" autofocus />
-                    <label>Password</label>
-                    <input id="dlgSgnPwd" placeholder="Password" type="password" value="{{model.Sgn.Pwd$::change}}" required />
-                    <label>Mesaj</label>
-                    <div>[[model.Sgn.Mesaj]]</div>
-                    <!--<input id="dlgSgnMsj" class="colInfo" type="text" value="[[model.Sgn.Mesaj]]" readonly />-->
+                <div class="mdfDlg">
+                    <table class="mdfRecTbl">
+                        <tbody>
+                            <tr>
+                                <td>eMail</td>
+                                <td><input id="dlgSgnEml" placeholder="eMail" type="text" value="{{model.Sgn.Email$::change}}" autofocus /></td>
+                            </tr>
+                            <tr>
+                                <td>Password</td>
+                                <td><input id="dlgSgnPwd" placeholder="Password" type="password" value="{{model.Sgn.Pwd$::change}}" required /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mdfRecAction">
+                        <button value="{{model.Sgn.SignInT$::click}}" onmousedown="++this.value">SignIn</button>
+                        <button value="{{model.Sgn.CancelT$::click}}" onmousedown="++this.value">Cancel</button>
+                        <button value="{{model.Sgn.SignUpT$::click}}" onmousedown="++this.value">SignUp</button>
+                    </div>
+                    <div class="mdfRecAction">
+                        <template is="dom-if" if="[[model.Sgn.Msj]]">
+                            <div class="dlgMsj">[[model.Sgn.Msj]]</div>
+                        </template>
+                    </div>
                 </div>
-                <div class="mdfRecAction">
-                    <button value="{{model.Sgn.SignInT$::click}}" onmousedown="++this.value">SignIn</button>
-                    <button value="{{model.Sgn.CancelT$::click}}" onmousedown="++this.value">Cancel</button>
-                    <button value="{{model.Sgn.SignUpT$::click}}" onmousedown="++this.value">SignUp</button>
-                </div>
+
             </paper-dialog>
 
             <palindrom-redirect is="palindrom-redirect" history url="{{model.MorphUrl$}}"></palindrom-redirect>

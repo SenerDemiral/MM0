@@ -8,7 +8,7 @@
   "ThmGlrTopX": "",
   "ThmGdrTopX": "",
 
-  "PP": {
+  "DlgRec": {
     "Id": 0,
     "Ad$": "",
     "BasTrhX$": "",
@@ -36,7 +36,7 @@
       "ThmGlrX": "",
       "ThmGdrX": "",
 
-      "EdtTrgr$": 0,
+      "EdtTrgr$": 0
     }
   ]
 }

@@ -21,6 +21,7 @@ namespace MM0.ViewModels
                 var p = this.Parent as MasterPage;
                 if (p.Token == "")
                 {
+                    p.Sgn.Msj = "";
                     IsOpened = true;
                 }
                 else
@@ -30,6 +31,7 @@ namespace MM0.ViewModels
                     OpnDlgTxt = "Oturum Aç";
                     IsOpened = false;
                     p.CurrentPage = null;
+
                     p.MorphUrl = "/mm0/AboutPage";
                 }
             }
@@ -47,7 +49,7 @@ namespace MM0.ViewModels
                     OpnDlgTxt = "Oturum Aç";
                     p.CurrentPage = null;
                     p.MorphUrl = "/mm0/AboutPage";
-                    Mesaj = "";
+                    Msj = "";
                     Hlp.Write2Log("SignIn");
                 }
                 else
@@ -56,7 +58,7 @@ namespace MM0.ViewModels
                     Email = cc.Email;
                     OpnDlgTxt = "Oturum Kapat";
                     p.MorphUrl = $"/mm0/PPs/{cc.Id}";
-                    Mesaj = "Signed";
+                    Msj = "Signed";
                     Hlp.Write2Log($"SignInA {cc.Email}");
                 }
                 /*
@@ -80,7 +82,7 @@ namespace MM0.ViewModels
                         p.Token = cc.Token;
                         Pwd = "";
                         IsOpened = false;
-                        Mesaj = "";
+                        Msj = "";
                         OpnDlgTxt = "Oturum Kapat";
                         p.MorphUrl = $"/mm0/PPs/{cc.Id}";
 
@@ -98,7 +100,7 @@ namespace MM0.ViewModels
                         Email = "";
                         Pwd = "";
                         Token = "";
-                        Mesaj = "Mailinize gelen linki týklayarak doðrulama iþlemini tamamlayýn.";
+                        Msj = "Mailinize gelen linki týklayarak doðrulama iþlemini tamamlayýn.";
                     }
                 }
             }
@@ -119,7 +121,7 @@ namespace MM0.ViewModels
                             Pwd = "";
                             Token = cc.Token;
                             p.Token = cc.Token;
-                            Mesaj = "";
+                            Msj = "";
                             IsOpened = false;
                             OpnDlgTxt = "Oturum Kapat";
                             p.MorphUrl = $"/mm0/PPs/{cc.Id}";
@@ -133,7 +135,7 @@ namespace MM0.ViewModels
                             Pwd = "";
                             Token = "";
                             p.Token = "";
-                            Mesaj = "Hatali Password";
+                            Msj = "Hatali Password";
 
                         }
                     }
@@ -144,7 +146,7 @@ namespace MM0.ViewModels
                         //Pwd = "";
                         Token = "";
                         p.Token = "";
-                        Mesaj = "Hatali eMail";
+                        Msj = "Hatali eMail";
                     }
                 }
             }

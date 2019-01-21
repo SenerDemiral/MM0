@@ -1,46 +1,48 @@
 ﻿<template>
     <dom-bind id="PPsPage">
         <template is="dom-bind">
-            <paper-dialog opened="[[model.PP.Opened]]" modal="true">
+            <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
                     <table class="mdfRecTbl">
                         <tbody>
                             <tr>
                                 <td>Rec#</td>
-                                <td><input placeholder="Id" type="text" value="[[model.PP.Id]]" readonly style="text-align:center" /></td>
+                                <td><input placeholder="Id" type="text" value="[[model.DlgRec.Id]]" readonly style="text-align:center" /></td>
                             </tr>
                             <tr>
                                 <td>Ad</td>
-                                <td><input placeholder="Ad" type="text" value="{{model.PP.Ad$::change}}" /></td>
+                                <td><input placeholder="Ad" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
                             </tr>
                             <tr>
                                 <td>Başlangıç</td>
-                                <td><input placeholder="Başlangıç" type="date" value="{{model.PP.BasTrhX$::change}}" /></td>
+                                <td><input placeholder="Başlangıç" type="date" value="{{model.DlgRec.BasTrhX$::change}}" /></td>
                             </tr>
                             <tr>
                                 <td>Bitiş</td>
-                                <td><input placeholder="Bitiş" type="date" value="{{model.PP.BitTrhX$::change}}" /></td>
+                                <td><input placeholder="Bitiş" type="date" value="{{model.DlgRec.BitTrhX$::change}}" /></td>
                             </tr>
                         </tbody>
                     </table>
 
                     <div class="mdfRecAction">
-                        <template is="dom-if" if="[[model.PP.IsNew]]">
+                        <template is="dom-if" if="[[model.DlgRec.IsNew]]">
                             <button value="{{model.PP.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
                         </template>
-                        <template is="dom-if" if="[[!model.PP.IsNew]]">
-                            <button value="{{model.PP.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
-                            <button value="{{model.PP.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
-                            <button value="{{model.PP.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
+                        <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
+                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
+                            <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
+                            <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
                         </template>
                     </div>
 
                     <div class="mdfRecAction">
-                        <button dialog-dismiss value="{{model.pp.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
                     </div>
 
                     <div class="mdfRecAction">
-                        <div>[[model.FF.Msj]]</div>
+                        <template is="dom-if" if="[[model.DlgRec.Msj]]">
+                            <div class="dlgMsj">[[model.DlgRec.Msj]]</div>
+                        </template>
                     </div>
                 </div>
             </paper-dialog>
@@ -50,7 +52,7 @@
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:factory"></iron-icon>
                     <div>[[model.Hdr]]</div>
-                    <button class="insert" value="{{model.PP.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                    <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
                     <table id="PPsPageTbl" class="fixTbl">

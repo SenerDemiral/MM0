@@ -70,7 +70,7 @@ namespace MM0.ViewModels
         }
     }
 
-    [FFsPage_json.FF]
+    [FFsPage_json.DlgRec]
     partial class FFPartial : Json
     {
         void Handle(Input.NewTrgr Action)
@@ -149,21 +149,21 @@ namespace MM0.ViewModels
         {
             var p = this.Parent.Parent as FFsPage;
 
-            p.FF.Id = Id;
-            p.FF.Ad = Ad;
+            p.DlgRec.Id = Id;
+            p.DlgRec.Ad = Ad;
 
-            p.FF.Gdr = Gdr;
-            p.FF.Glr = Glr;
+            p.DlgRec.Gdr = Gdr;
+            p.DlgRec.Glr = Glr;
 
-            p.FF.HHId = HHId;
+            p.DlgRec.HHId = HHId;
 
             if (string.IsNullOrEmpty(TrhX))
-                p.FF.TrhX = "";
+                p.DlgRec.TrhX = "";
             else
-                p.FF.TrhX = Convert.ToDateTime(TrhX).ToString("yyyy-MM-dd");
-            p.FF.Msj = "";
-            p.FF.IsNew = false; // Edit
-            p.FF.Opened = true;
+                p.DlgRec.TrhX = Convert.ToDateTime(TrhX).ToString("yyyy-MM-dd");
+            p.DlgRec.Msj = "";
+            p.DlgRec.IsNew = false; // Edit
+            p.DlgRec.Opened = true;
         }
 
     }

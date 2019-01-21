@@ -3,54 +3,56 @@
 <template>
     <dom-bind id="FFsPage">
         <template is="dom-bind">
-            <paper-dialog opened="[[model.FF.Opened]]" modal="true">
+            <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
                     <table class="mdfRecTbl">
                         <tbody>
                             <tr>
                                 <td>Rec#</td>
-                                <td><input placeholder="Id" type="text" value="[[model.FF.Id]]" readonly style="text-align:center" /></td>
+                                <td><input placeholder="Id" type="text" value="[[model.DlgRec.Id]]" readonly style="text-align:center" /></td>
                             </tr>
                             <tr>
                                 <td>Tarih</td>
-                                <td><input placeholder="Tarih" type="date" value="{{model.FF.TrhX$::change}}" /></td>
+                                <td><input placeholder="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}" /></td>
                             </tr>
                             <tr>
                                 <td>Hesap</td>
-                                <td><juicy-select style="background-color:yellow" caption-text="Hesap" value="{{model.FF.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
+                                <td><juicy-select style="background-color:yellow" caption-text="Hesap" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
                             </tr>
                             <tr>
                                 <td>Gider</td>
-                                <td><input placeholder="Gider" type="number" value="{{model.FF.Gdr$::change}}" /></td>
+                                <td><input placeholder="Gider" type="number" value="{{model.DlgRec.Gdr$::change}}" /></td>
                             </tr>
                             <tr>
                                 <td>Gelir</td>
-                                <td><input placeholder="Gelir" type="number" value="{{model.FF.Glr$::change}}" /></td>
+                                <td><input placeholder="Gelir" type="number" value="{{model.DlgRec.Glr$::change}}" /></td>
                             </tr>
                             <tr>
                                 <td>Not</td>
-                                <td><input placeholder="Not" type="text" value="{{model.FF.Ad$::change}}" /></td>
+                                <td><input placeholder="Not" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
                             </tr>
                         </tbody>
                     </table>
 
                     <div class="mdfRecAction">
-                        <template is="dom-if" if="[[model.FF.IsNew]]">
-                            <button value="{{model.FF.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
+                        <template is="dom-if" if="[[model.DlgRec.IsNew]]">
+                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
                         </template>
-                        <template is="dom-if" if="[[!model.FF.IsNew]]">
-                            <button value="{{model.FF.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
-                            <button value="{{model.FF.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
-                            <button value="{{model.FF.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
+                        <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
+                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
+                            <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
+                            <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
                         </template>
                     </div>
 
                     <div class="mdfRecAction">
-                        <button dialog-dismiss value="{{model.FF.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
                     </div>
 
                     <div class="mdfRecAction">
-                        <div>[[model.FF.Msj]]</div>
+                        <template is="dom-if" if="[[model.DlgRec.Msj]]">
+                            <div class="dlgMsj">[[model.DlgRec.Msj]]</div>
+                        </template>
                     </div>
                 </div>
 
@@ -61,7 +63,7 @@
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:money-exchange"></iron-icon>
                     <div>[[model.Hdr]]</div>
-                    <button class="insert" value="{{model.FF.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                    <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                     <input type="date" value="{{model.QryTrhX$::change}}" />
                 </div>
                 <div class="gridTbl_main">

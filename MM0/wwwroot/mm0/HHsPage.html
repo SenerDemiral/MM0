@@ -1,41 +1,43 @@
 ﻿<template>
     <dom-bind id="HHsPage">
         <template is="dom-bind">
-            <paper-dialog opened="[[model.HH.Opened]]" modal="true">
+            <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
                     <table class="mdfRecTbl">
                         <tbody>
                             <tr>
                                 <td>Rec#</td>
-                                <td><input placeholder="Id" type="text" value="[[model.HH.Id]]" readonly style="text-align:center" /></td>
+                                <td><input placeholder="Id" type="text" value="[[model.DlgRec.Id]]" readonly style="text-align:center" /></td>
                             </tr>
                             <tr>
                                 <td>Ad</td>
-                                <td><input placeholder="Ad" type="text" value="{{model.HH.Ad$::change}}" /></td>
+                                <td><input placeholder="Ad" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
                             </tr>
                             <tr>
                                 <td>ThmGider</td>
-                                <td><input placeholder="Gider" type="number" value="{{model.HH.ThmGdr$::change}}" /></td>
+                                <td><input placeholder="Gider" type="number" value="{{model.DlgRec.ThmGdr$::change}}" /></td>
                             </tr>
                             <tr>
                                 <td>ThmGelir</td>
-                                <td><input placeholder="Gelir" type="number" value="{{model.HH.ThmGlr$::change}}" /></td>
+                                <td><input placeholder="Gelir" type="number" value="{{model.DlgRec.ThmGlr$::change}}" /></td>
                             </tr>
                         </tbody>
                     </table>
 
                     <div class="mdfRecAction">
-                        <button value="{{model.HH.ApdTrgr$::click}}" onmousedown="++this.value">Apend</button>
-                        <button value="{{model.HH.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
-                        <button value="{{model.HH.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
+                        <button value="{{model.DlgRec.ApdTrgr$::click}}" onmousedown="++this.value">Apend</button>
+                        <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
+                        <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
                     </div>
 
                     <div class="mdfRecAction">
-                        <button dialog-dismiss value="{{model.HH.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
                     </div>
 
                     <div class="mdfRecAction">
-                        <div style="background-color:red;color:white">[[model.HH.Msj]]</div>
+                        <template is="dom-if" if="[[model.DlgRec.Msj]]">
+                            <div class="dlgMsj">[[model.DlgRec.Msj]]</div>
+                        </template>
                     </div>
                 </div>
             </paper-dialog>
