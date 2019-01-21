@@ -74,11 +74,10 @@ button{
     grid-auto-flow: row;
     grid-gap: 5px;
 }
-
-.mdfRecTbl{
+.mdfDlgTbl{
     border-spacing:1px;
 }
-.mdfRecTbl td {
+.mdfDlgTbl td {
     padding: 0 5px;
     border: .1rem solid #e2d1d1;
     overflow: hidden;
@@ -86,6 +85,19 @@ button{
     word-wrap: break-word;
     border-spacing: 0px 0px;
 }
+.mdfDlgAction {
+    display: grid;
+    grid-auto-flow: column;
+    justify-content: stretch;
+    /*padding: 0 5px;*/
+}
+.dlgMsj {
+    padding: 5px;
+    background-color: red;
+    color: white;
+}
+
+
 
 .fixTbl {
     /*table-layout: fixed;*/
@@ -126,21 +138,7 @@ button{
         /*background-color: #ddd;*/
         background-color: yellow;
     }
-/*
-#HHsPageTbl th {
-    background-color: #347737;
-    color: white;
-}
-#FFsRprTbl th, #FFsRprTbl tfoot td {
-    background-color: maroon;
-    color: white;
-}
 
-#PPsPageTbl th, #PPsPageTbl tfoot td {
-    background-color: chocolate;
-    color: white;
-}
-*/
 .grid {
     display: grid;
     grid-template-areas: "header" "main";
@@ -213,29 +211,6 @@ button{
     overflow: auto;
 }
 
-.mdfRecWrap {
-    display: grid;
-    grid-template-columns: min-content 1fr;
-    justify-content: start;
-    align-items: center;
-    grid-gap: 3px 5px;
-    padding: 0 5px;
-    /*margin-top: 10px;*/
-}
-
-.mdfRecAction {
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: stretch;
-    /*padding: 0 5px;*/
-}
-
-.dlgMsj {
-    padding: 5px;
-    background-color: red;
-    color: white;
-}
-
 button.edit {
     padding: 1px 4px;
     /*border-radius: 5px;*/
@@ -271,4 +246,12 @@ input[type="date"]{
 select{
     padding:0 !important;
     box-shadow:none !important;
+}
+
+hr{
+    margin:1rem 0;
+}
+li {
+    margin-top: 1rem;
+    padding: 0 5px;
 }

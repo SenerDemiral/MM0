@@ -5,12 +5,8 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <table class="mdfRecTbl">
+                    <table class="mdfDlgTbl">
                         <tbody>
-                            <tr>
-                                <td>Rec#</td>
-                                <td><input placeholder="Id" type="text" value="[[model.DlgRec.Id]]" readonly style="text-align:center" /></td>
-                            </tr>
                             <tr>
                                 <td>Tarih</td>
                                 <td><input placeholder="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}" /></td>
@@ -34,7 +30,7 @@
                         </tbody>
                     </table>
 
-                    <div class="mdfRecAction">
+                    <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">
                             <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
                         </template>
@@ -45,11 +41,11 @@
                         </template>
                     </div>
 
-                    <div class="mdfRecAction">
+                    <div class="mdfDlgAction">
                         <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
                     </div>
 
-                    <div class="mdfRecAction">
+                    <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.Msj]]">
                             <div class="dlgMsj">[[model.DlgRec.Msj]]</div>
                         </template>

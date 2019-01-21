@@ -8,7 +8,7 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.Sgn.IsOpened$]]" modal="true">
                 <div class="mdfDlg">
-                    <table class="mdfRecTbl">
+                    <table class="mdfDlgTbl">
                         <tbody>
                             <tr>
                                 <td>eMail</td>
@@ -21,12 +21,12 @@
                         </tbody>
                     </table>
 
-                    <div class="mdfRecAction">
+                    <div class="mdfDlgAction">
                         <button value="{{model.Sgn.SignInT$::click}}" onmousedown="++this.value">SignIn</button>
                         <button value="{{model.Sgn.CancelT$::click}}" onmousedown="++this.value">Cancel</button>
                         <button value="{{model.Sgn.SignUpT$::click}}" onmousedown="++this.value">SignUp</button>
                     </div>
-                    <div class="mdfRecAction">
+                    <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.Sgn.Msj]]">
                             <div class="dlgMsj">[[model.Sgn.Msj]]</div>
                         </template>
