@@ -20,6 +20,7 @@ namespace DBMM0
         public bool IsConfirmed { get; set; }
         public DateTime InsTS { get; set; }
         public DateTime? UpdTS { get; set; }
+        public DateTime? CnfTS { get; set; }
 
         public string Tel { get; set; }
         public DateTime UyeBasTrh { get; set; }
@@ -30,11 +31,13 @@ namespace DBMM0
 
         public static void InsertRec(string Email, string Pwd, string newToken)
         {
+            string ad = Email.TrimEnd('@');
             CC ccNew = null;
             Db.Transact(() =>
             {
                 ccNew = new CC
                 {
+                    Ad = ad,
                     Email = Email,
                     Pwd = Pwd,
                     Token = newToken,

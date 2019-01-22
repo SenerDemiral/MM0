@@ -138,9 +138,9 @@ namespace MM0.Api
                     Db.Transact(() =>
                     {
                         cc.IsConfirmed = true;
+                        cc.CnfTS = DateTime.Now;
                     });
                     master.Token = cc.Token;
-                    //return Self.GET($"/MM0/PPs/{cc.Id.ToString()}");
                     master.MorphUrl = $"/MM0/PPs/{cc.Id.ToString()}";
                 }
                 return master;

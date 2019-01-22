@@ -42,6 +42,15 @@ namespace MM0
                 FF.PostMdf(ff.HH);
             };
 
+            //Duzeltme
+            Db.Transact(() => {
+                foreach (var cc in Db.SQL<CC>("select r from CC r where r.Ad IS NULL"))
+                {
+                    cc.Ad = cc.Email.TrimEnd('@');
+                }
+            });
+
+
             //HH.Populate();  // Birkere
             //HH.Display();
 
