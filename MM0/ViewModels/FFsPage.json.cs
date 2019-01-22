@@ -140,6 +140,26 @@ namespace MM0.ViewModels
 
         }
 
+        void Handle(Input.DelTrgr Action)
+        {
+            Msj = FF.DeleteRec(Id);
+            if (!string.IsNullOrEmpty(Msj))
+            {
+                Action.Cancelled = true;
+                return;
+            }
+
+            Session.RunTaskForAll((s, sId) => {
+                var cp = (s.Store[nameof(MasterPage)] as MasterPage).CurrentPage;
+                if (cp is FFsPage)
+                {
+                    (s.Store[nameof(MasterPage)] as MasterPage).CurrentPage.Data = null;
+                    s.CalculatePatchAndPushOnWebSocket();
+                }
+            });
+
+            Opened = false;
+        }
     }
 
     [FFsPage_json.FFs]

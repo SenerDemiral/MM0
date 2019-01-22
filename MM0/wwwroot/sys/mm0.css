@@ -20,7 +20,7 @@ body {
 body {
     /*margin: 10px;*/
     height: auto;
-    font-size: .9rem;
+    /*font-size: .9rem;*/
     /*font-family: Arial, Helvetica, sans-serif;*/
 }
 
@@ -28,10 +28,14 @@ body {
     width: 4rem;
 }
 .icon {
-    width: 20px;
+    width: 4rem;
+    text-align: center;
 }
 button{
     min-width:unset;
+}
+.token{
+    display: none;
 }
 
 [data-Lvl="1"] {
@@ -136,7 +140,7 @@ button{
 
     .fixTbl tr:hover {
         /*background-color: #ddd;*/
-        background-color: yellow;
+        background-color:darkkhaki;
     }
 
 .grid {

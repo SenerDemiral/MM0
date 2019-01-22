@@ -54,6 +54,11 @@ namespace MM0.Api
                     PPId = PPId,
                     QryTrhX = DateTime.Today.ToString("yyyy-MM-dd")
                 };
+
+                page.DlgRec.TrhX = page.QryTrhX;
+                page.DlgRec.Opened = true;
+                page.DlgRec.IsNew = true;
+
                 return page;
             });
 

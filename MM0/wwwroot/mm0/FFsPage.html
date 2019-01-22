@@ -32,12 +32,12 @@
 
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">
-                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Insert</button>
+                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Ekle</button>
                         </template>
                         <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
-                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Duplicate</button>
-                            <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Update</button>
-                            <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Delete</button>
+                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Çoğalt</button>
+                            <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Değiştir</button>
+                            <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Sil</button>
                         </template>
                     </div>
 

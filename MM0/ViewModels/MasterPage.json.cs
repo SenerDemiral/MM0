@@ -103,6 +103,10 @@ namespace MM0.ViewModels
                         Msj = "Mailinize gelen linki týklayarak doðrulama iþlemini tamamlayýn.";
                     }
                 }
+                else
+                {
+                    Msj = "Mail adresinizi ve þifrenizi girin.";
+                }
             }
 
 

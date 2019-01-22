@@ -229,6 +229,20 @@ namespace DBMM0
 
         }
 
+        public static string DeleteRec(long Id)
+        {
+            string msj = "";
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)Id) is FF ff)
+                {
+                    ff.Delete();
+                }
+                else
+                    msj = "Silinemedi";
+            });
+            return msj;
+        }
         public static void ViewZZ(HH hh)
         {
             List<HH> list = new List<HH>();
