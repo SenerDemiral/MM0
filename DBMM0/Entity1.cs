@@ -31,19 +31,22 @@ namespace DBMM0
 
         public static void InsertRec(string Email, string Pwd, string newToken)
         {
-            string ad = Email.TrimEnd('@');
             CC ccNew = null;
             Db.Transact(() =>
             {
                 ccNew = new CC
                 {
-                    Ad = ad,
                     Email = Email,
                     Pwd = Pwd,
                     Token = newToken,
                     InsTS = DateTime.Now,
                     IsConfirmed = false,
                 };
+
+                int i = Email.IndexOf('@');
+                if (i > 0)
+                    ccNew.Ad = Email.Remove(i);
+
             });
             Db.Transact(() =>
             {

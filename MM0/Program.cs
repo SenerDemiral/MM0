@@ -42,11 +42,14 @@ namespace MM0
                 FF.PostMdf(ff.HH);
             };
 
-            //Duzeltme
+            //Duzeltme bir kere yap
             Db.Transact(() => {
-                foreach (var cc in Db.SQL<CC>("select r from CC r where r.Ad IS NULL"))
+                int i = 0;
+                foreach (var cc in Db.SQL<CC>("select r from CC r"))
                 {
-                    cc.Ad = cc.Email.TrimEnd('@');
+                    i = cc.Email.IndexOf('@');
+                    if(i > 0)
+                        cc.Ad = cc.Email.Remove(i);
                 }
             });
 
