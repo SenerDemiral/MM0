@@ -58,6 +58,23 @@ namespace DBMM0
             });
 
         }
+
+        public static void Kill(ulong ccId)
+        {
+            if (Db.FromId(ccId) is CC cc)
+            {
+                Db.Transact(() =>
+                {
+                    foreach(var pp in Db.SQL<PP>("select r from PP r where r.CC = ?", cc))
+                    {
+                        PP.Kill(pp.GetObjectNo());
+                    }
+                    cc.HHroot.Delete();
+                    cc.Delete();
+                });
+            }
+        }
+
     }
 
     [Database]
@@ -162,8 +179,18 @@ namespace DBMM0
 
         }
 
-
-
+        public static void Kill(ulong ppId)
+        {
+            if (Db.FromId(ppId) is PP pp)
+            {
+                Db.Transact(() =>
+                {
+                    Db.SQL("delete from FF where PP = ?", pp);
+                    Db.SQL("delete from HH where PP = ?", pp);
+                    pp.Delete();
+                });
+            }
+        }
     }
 
     // HH dolaylı yoldan Hesabın kime ait oldugunu biliyor.
@@ -618,6 +645,43 @@ namespace DBMM0
                 ChildreenOfNode(hh, lvl + 1, list);
             }
         }
+        public static bool CanCopyTo(PP dpp)
+        {
+            // dPP nin HH leri olmamali (Sadece PP ye bagli AnaHesap disinda);
+            var hhCount = Db.SQL<HH>("select r from HH r where r.PP = ?", dpp).Count();
+            return hhCount == 1;
+        }
+
+        public static void CopyFromPP(PP spp, PP dpp)
+        {
+            if (!CanCopyTo(dpp))
+                return;
+
+            HH[] dhh = new HH[9];
+            dhh[0] = dpp.HHroot;
+            int not = 0;
+
+            List<HH> list = new List<HH>();
+            ChildreenOfNode(spp.HHroot, 0, list);
+
+            Db.Transact(() =>
+            {
+                foreach (var hh in list)
+                {
+                    not = hh.Lvl - 1;   // 2den baslar. 1den baslasin 0:dpp.HHroot 
+
+                    dhh[not] = new HH
+                    {
+                        PP = dpp,
+                        Prn = dhh[not-1],
+                        Ad = hh.Ad,
+                    };
+
+                }
+            });
+        }
+
+
 
         public static void LeafsOfNode(HH node, List<HH> hhList)
         {

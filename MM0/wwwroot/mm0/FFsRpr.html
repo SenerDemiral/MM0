@@ -1,10 +1,64 @@
-﻿<template>
+﻿<link rel="import" href="/sys/juicy-select/juicy-select.html">
+
+<template>
     <dom-bind id="FFsRpr">
         <template is="dom-bind">
+            <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
+                <div class="mdfDlg">
+                    <table class="mdfDlgTbl">
+                        <tbody>
+                            <tr>
+                                <td>Tarih</td>
+                                <td><input placeholder="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Hesap</td>
+                                <td><juicy-select style="background-color:yellow" caption-text="HesapSeçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
+                            </tr>
+                            <tr>
+                                <td>Gider</td>
+                                <td><input placeholder="Gider" type="number" value="{{model.DlgRec.Gdr$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Gelir</td>
+                                <td><input placeholder="Gelir" type="number" value="{{model.DlgRec.Glr$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Not</td>
+                                <td><input placeholder="Not" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mdfDlgAction">
+                        <template is="dom-if" if="[[model.DlgRec.IsNew]]">
+                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Ekle</button>
+                        </template>
+                        <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
+                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Çoğalt</button>
+                            <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Değiştir</button>
+                            <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Sil</button>
+                        </template>
+                    </div>
+
+                    <div class="mdfDlgAction">
+                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                    </div>
+
+                    <div class="mdfDlgAction">
+                        <template is="dom-if" if="[[model.DlgRec.Msj]]">
+                            <div class="dlgMsj">[[model.DlgRec.Msj]]</div>
+                        </template>
+                    </div>
+                </div>
+
+            </paper-dialog>
+
             <div class="gridTbl">
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:cash"></iron-icon>
                     <div>[[model.Hdr]]</div>
+                    <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                     <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
@@ -17,6 +71,7 @@
                                 <th>Gider</th>
                                 <th>Gelir</th>
                                 <th>Açıklama</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -26,6 +81,7 @@
                                 <td class="txtRight">[[model.NORX]]</td>
                                 <td class="txtRight">[[model.GdrTopX]]</td>
                                 <td class="txtRight">[[model.GlrTopX]]</td>
+                                <td></td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -39,6 +95,7 @@
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
                                     <td>[[item.Ad]]</td>
+                                    <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>
                         </tbody>
@@ -47,6 +104,6 @@
             </div>
             <palindrom-redirect is="palindrom-redirect" download url="{{model.MorphUrl$}}"></palindrom-redirect>
         </template>
-    </dom-bind >
+    </dom-bind>
 </template>
 

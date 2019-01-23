@@ -42,6 +42,19 @@ namespace MM0
                 FF.PostMdf(ff.HH);
             };
 
+
+
+            //Hlp.SablondanEkle(15);
+
+
+            if (Db.FromId(15) is PP spp)
+            {
+                if (Db.FromId(37) is PP dpp)
+                    HH.CopyFromPP(spp, dpp);
+            }
+
+
+
             //Duzeltme bir kere yap
             Db.Transact(() => {
                 int i = 0;

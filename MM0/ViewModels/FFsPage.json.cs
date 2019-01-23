@@ -149,6 +149,9 @@ namespace MM0.ViewModels
                 return;
             }
 
+            var p = this.Parent as FFsPage;
+            p.Data = null;
+
             Session.RunTaskForAll((s, sId) => {
                 var cp = (s.Store[nameof(MasterPage)] as MasterPage).CurrentPage;
                 if (cp is FFsPage)

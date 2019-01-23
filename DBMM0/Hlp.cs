@@ -105,6 +105,86 @@ namespace DBMM0
             }
         }
 
+        public static void SablondanEkle(ulong ppId)
+        {
+            PP dpp = Db.FromId((ulong)ppId) as PP;
+            if (dpp == null)
+                return;
+
+            using (StreamReader sr = new StreamReader($@"C:\Starcounter\MM0Data\HHSablon1.txt", System.Text.Encoding.UTF8))
+            {
+                string line;
+                HH hh0 = null, hh1 = null, hh2 = null, hh3 = null;
+                HH[] dhh = new HH[9];
+                dhh[0] = dpp.HHroot;
+
+                int not = 0;
+                Db.Transact(() =>
+                {
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (!string.IsNullOrWhiteSpace(line) && !line.StartsWith("#"))
+                        {
+                            not = 1;
+                            foreach(var c in line)
+                            {
+                                if (c == '\t')
+                                    not++;
+                            }
+                            dhh[not] = new HH
+                            {
+                                PP = dpp,
+                                Prn = dhh[not - 1],
+                                Ad = line.TrimStart('\t'),
+                            };
+
+                            /*
+                            switch (not)
+                            {
+                                case 0:
+                                    hh0 = new HH
+                                    {
+                                        PP = pp,
+                                        Prn = pp.HHroot,
+                                        Ad = line,
+                                    };
+                                    break;
+                                case 1:
+                                    hh1 = new HH
+                                    {
+                                        PP = pp,
+                                        Prn = hh0,
+                                        Ad = line.TrimStart('\t'),
+                                    };
+                                    break;
+                                case 2:
+                                    hh2 = new HH
+                                    {
+                                        PP = pp,
+                                        Prn = hh1,
+                                        Ad = line.TrimStart('\t'),
+                                    };
+                                    break;
+                                case 3:
+                                    hh3 = new HH
+                                    {
+                                        PP = pp,
+                                        Prn = hh2,
+                                        Ad = line.TrimStart('\t'),
+                                    };
+                                    break;
+
+                                default:
+                                    break;
+                            }
+                            */
+                        }
+                    }
+                });
+            }
+
+
+        }
 
     }
 }

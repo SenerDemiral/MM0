@@ -14,6 +14,26 @@
   "GlrTopX": "",
   "GdrTopX": "",
 
+  "DlgRec": {
+    "Id": 0,
+
+    "TrhX$": "",
+    "Ad$": "",
+    "Glr$": 0.0,
+    "Gdr$": 0.0,
+    "HHId$": 0,
+
+    "Msj": "",
+
+    "Opened": false,
+    "IsNew": false,
+    "NewTrgr$": 0,
+    "InsTrgr$": 0,
+    "UpdTrgr$": 0,
+    "DelTrgr$": 0,
+    "RejTrgr$": 0
+  },
+
   "FFs": [
     {
       "Id": 0,
@@ -25,8 +45,16 @@
       "HHAdPrn": "",
       "GlrX": "",
       "GdrX": "",
-      "Ad": ""
+      "Ad": "",
 
+      "EdtTrgr$": 0
+    }
+  ],
+
+  "HHs": [ // Lookup, Sadece PP's HH->Leafs
+    {
+      "Id": 0,
+      "AdFull": ""
     }
   ]
 
