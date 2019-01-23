@@ -79,24 +79,29 @@ namespace MM0.ViewModels
                     var cc = Db.SQL<CC>("select r from CC r where r.Email = ?", Email).FirstOrDefault();
                     if (cc != null && cc.Pwd == Pwd)    // Kayitli ve dogru
                     {
-                        p.Token = cc.Token;
-                        Pwd = "";
-                        IsOpened = false;
-                        Msj = "";
-                        OpnDlgTxt = "Oturum Kapat";
-                        p.MorphUrl = $"/mm0/PPs/{cc.Id}";
-
-                        Hlp.Write2Log($"SignIn. {cc.Email}");
+                        if (cc.IsConfirmed)
+                        {
+                            p.Token = cc.Token;
+                            Pwd = "";
+                            IsOpened = false;
+                            OpnDlgTxt = "Oturum Kapat";
+                            p.MorphUrl = $"/mm0/PPs/{cc.Id}";
+                            Hlp.Write2Log($"SignIn. {cc.Email}");
+                        }
+                        else
+                        {
+                            Msj = "Mailinize gelen linki týklayarak doðrulama iþlemini tamamlayýn.";
+                            Hlp.Write2Log($"SignInW {cc.Email}");
+                        }
                     }
-                    else   // SignUp
+                    else   // SignUp  // Tekrar Confirm Maili gondermek gerekebilir!
                     {
                         var newToken = Hlp.EncodeQueryString(Email); // CreateToken
 
                         CC.InsertRec(Email, Pwd, newToken);
-                        Hlp.Write2Log($"SignUp. {cc.Email}");
+                        Hlp.Write2Log($"SignUp. {Email}");
 
-                        var email = Hlp.EncodeQueryString(Email);
-                        Hlp.SendMail(email);
+                        Hlp.SendMail(Email, newToken);
                         Email = "";
                         Pwd = "";
                         Token = "";

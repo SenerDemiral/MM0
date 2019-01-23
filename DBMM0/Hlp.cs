@@ -71,19 +71,19 @@ namespace DBMM0
             return decodedData;
         }
 
-        public static void SendMail(string eMail)
+        public static void SendMail(string to, string token)
         {
             // gMail
-            string body = $"<!DOCTYPE html><html><body><a href='http://masatenisi.online/bodved/confirmemail/{eMail}'>BODVED üyeliğiniz için tıklayınız</a></body></html>";
+            string body = $"<!DOCTYPE html><html><body><a href='http://www.hsbm.online/mm0/confirmemail/{token}'>hsbm üyeliğiniz için tıklayınız</a></body></html>";
 
             MailMessage mail = new MailMessage();
-            mail.To.Add("sener.demiral@gmail.com");
-            mail.Subject = "Deneme";
+            //mail.To.Add("sener.demiral@gmail.com");
+            mail.To.Add(to);
+            mail.Subject = "hsbm kayıt";
 
             mail.From = new MailAddress("masatenisi.online@gmail.com", "BODVED");  // gMail
             mail.IsBodyHtml = true;
             mail.Body = body;
-
 
             SmtpClient smtp = new SmtpClient("smtp.gmail.com");   // gMail
             smtp.Credentials = new System.Net.NetworkCredential("masatenisi.online", "CanDilSen09");  // gMail
