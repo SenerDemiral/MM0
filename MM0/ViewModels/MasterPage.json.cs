@@ -1,4 +1,4 @@
-using DBMM0;
+ï»¿using DBMM0;
 using Starcounter;
 using System;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace MM0.ViewModels
                 {
                     Hlp.Write2Log($"SignOut {Email}");
                     p.Token = "";
-                    OpnDlgTxt = "Oturum Aç";
+                    OpnDlgTxt = "Oturum AÃ§";
                     IsOpened = false;
                     p.CurrentPage = null;
 
@@ -46,7 +46,7 @@ namespace MM0.ViewModels
                 {
                     Token = "";
                     p.Token = "";
-                    OpnDlgTxt = "Oturum Aç";
+                    OpnDlgTxt = "Oturum AÃ§";
                     p.CurrentPage = null;
                     p.MorphUrl = "/mm0/AboutPage";
                     Msj = "";
@@ -90,7 +90,7 @@ namespace MM0.ViewModels
                         }
                         else
                         {
-                            Msj = "Mailinize gelen linki týklayarak doðrulama iþlemini tamamlayýn.";
+                            Msj = "Mailinize gelen linki tÄ±klayarak doÄŸrulama iÅŸlemini tamamlayÄ±n!";
                             Hlp.Write2Log($"SignInW {cc.Email}");
                         }
                     }
@@ -105,12 +105,12 @@ namespace MM0.ViewModels
                         Email = "";
                         Pwd = "";
                         Token = "";
-                        Msj = "Mailinize gelen linki týklayarak doðrulama iþlemini tamamlayýn.";
+                        Msj = "Mailinize gelen linki tÄ±klayarak doÄŸrulama iÅŸlemini tamamlayÄ±n.";
                     }
                 }
                 else
                 {
-                    Msj = "Mail adresinizi ve þifrenizi girin.";
+                    Msj = "Mail adresinizi ve ÅŸifrenizi girin.";
                 }
             }
 

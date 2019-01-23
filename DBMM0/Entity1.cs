@@ -242,7 +242,10 @@ namespace DBMM0
             {
                 if (Db.FromId((ulong)Id) is FF ff)
                 {
+                    var hhId = ff.HHId;
                     ff.Delete();
+                    FF.PostMdf(hhId);
+
                 }
                 else
                     msj = "Silinemedi";
@@ -343,7 +346,7 @@ namespace DBMM0
             }
         }
 
-        public static void PostMdf(HH hh)    // FF ins/upd Sonrasi yapilacaklar
+        public static void PostMdf(HH hh)    // FF ins/upd/del Sonrasi yapilacaklar
         {
             // Fisler toplamini bul. Fis insert/edit yapildiginda bunu yap
             // Fislerde sadece Leaf hesaplar calistigi icin 
@@ -361,9 +364,9 @@ namespace DBMM0
                 HH.UpdateParentsGrcToplam(hh);
             }
         }
-        public static void PostMdf(long hhONo)
+        public static void PostMdf(ulong hhId)
         {
-            if (Db.FromId((ulong)hhONo) is HH hh)
+            if (Db.FromId(hhId) is HH hh)
                 PostMdf(hh);
         }
     }
