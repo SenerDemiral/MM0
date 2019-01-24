@@ -297,7 +297,7 @@ namespace DBMM0
             }
         }
 
-        public static IEnumerable<FF> View(long ppId, long hhId, string trhx)
+        public static IEnumerable<FF> View(long ppId, long hhId, string basTrhX, string bitTrhX)
         {
             if (Db.FromId((ulong)hhId) is HH hh)
             {
@@ -324,10 +324,11 @@ namespace DBMM0
             else if (Db.FromId((ulong)ppId) is PP pp)
             {
                 IEnumerable<FF> ffs;
-                if (!string.IsNullOrEmpty(trhx))
+                if (!string.IsNullOrEmpty(basTrhX))
                 {
-                    DateTime trh = Convert.ToDateTime(trhx);
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh = ?", pp, trh);
+                    DateTime basTrh = Convert.ToDateTime(basTrhX);
+                    DateTime bitTrh = Convert.ToDateTime(bitTrhX);
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh <= ?", pp, basTrh, bitTrh);
                 }
                 else
                     ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by r.Trh DESC", pp);

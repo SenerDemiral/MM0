@@ -101,7 +101,13 @@ button{
     color: white;
 }
 
-
+.fltTbl {
+    display: inline-grid;
+    grid-template-columns: 70px 110px 50px 110px;
+    padding: 0;
+    align-items: center;
+    justify-items: center;
+}
 
 .fixTbl {
     /*table-layout: fixed;*/
@@ -190,7 +196,7 @@ button{
     grid-template-areas: "headerTbl" "mainTbl";
     grid-template-columns: 1fr;
     grid-template-rows: var(--h-GrdTblHdr) var(--h-GrdTblMain); /*75px calc(100vh - 80px);*/
-    grid-gap: var(--g-Grd);
+    /*grid-gap: var(--g-Grd);*/
 }
 
 .gridTbl_header {

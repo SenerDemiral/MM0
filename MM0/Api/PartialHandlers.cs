@@ -68,13 +68,15 @@ namespace MM0.Api
                 NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
                 string PPId = queryCollection.Get("ppid");
                 string HHId = queryCollection["hhid"];
-                string TrhX = queryCollection["trhx"];
+                string BasTrhX = queryCollection["bastrhx"];
+                string BitTrhX = queryCollection["bittrhx"];
 
                 var page = new FFsRpr
                 {
                     PPId = PPId == null ? 0 : long.Parse(PPId),
                     HHId = HHId == null ? 0 : long.Parse(HHId),
-                    TrhX = TrhX ?? ""
+                    BasTrhX = BasTrhX ?? "",
+                    BitTrhX = BitTrhX ?? ""
                 };
                 return page;
             });

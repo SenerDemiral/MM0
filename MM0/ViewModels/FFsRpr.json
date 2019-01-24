@@ -8,11 +8,20 @@
 
   "PPId": 0,
   "HHId": 0,
-  "TrhX": "",
+  "BasTrhX": "",
+  "BitTrhX": "",
 
   "NORX": "",
   "GlrTopX": "",
   "GdrTopX": "",
+
+  "DlgFlt": {
+    "BasTrhX$": "",
+    "BitTrhX$": "",
+    "FltTrgr$": 0,
+    "OpnTrgr$": 0,
+    "Opened": false
+  },
 
   "DlgRec": {
     "Id": 0,

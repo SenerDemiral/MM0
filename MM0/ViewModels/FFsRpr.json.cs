@@ -13,22 +13,32 @@ namespace MM0.ViewModels
         protected override void OnData()
         {
             base.OnData();
+
+            //var r = Root as MasterPage;
+            //DlgFlt.BasTrhX = r.BasTrhX;
+            //DlgFlt.BitTrhX = r.BitTrhX;
+
             if (Db.FromId((ulong)HHId) is HH hh)
                 Hdr = $"{hh.PP.CC.Ad}►{HH.FullParentAd(hh)}";
             else if (Db.FromId((ulong)PPId) is PP pp)
             {
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";
 
-                if (!string.IsNullOrEmpty(TrhX))
+                if (!string.IsNullOrEmpty(BasTrhX))
                 {
-                    DateTime trh = Convert.ToDateTime(TrhX);
-                    string tt = string.Format(Hlp.cultureTR, "{0:dd MMMM yyyy dddd}", trh);
+                    DateTime basTrh = Convert.ToDateTime(BasTrhX);
+                    //string basT = string.Format(Hlp.cultureTR, "{0:dd.MMMM yyyy dddd}", basTrh);
+                    DateTime bitTrh = Convert.ToDateTime(BitTrhX);
+                    //string bitT = string.Format(Hlp.cultureTR, "{0:dd MMMM yyyy dddd}", bitTrh);
 
-                    Hdr = $"{pp.CC.Ad}►{pp.Ad}►{tt}";
+                    if(basTrh == bitTrh)
+                        Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy}";
+                    else
+                        Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy} >=< {bitTrh:dd.MM.yy}";
                 }
             }
 
-            IEnumerable<FF> ffs = FF.View(PPId, HHId, TrhX);
+            IEnumerable<FF> ffs = FF.View(PPId, HHId, BasTrhX, BitTrhX);
             
             /*
             if (HHId != 0)
@@ -80,7 +90,7 @@ namespace MM0.ViewModels
 
         public void RefreshToplam()
         {
-            IEnumerable<FF> ffs = FF.View(PPId, HHId, TrhX);
+            IEnumerable<FF> ffs = FF.View(PPId, HHId, BasTrhX, BitTrhX);
 
             decimal GlrTop = 0, GdrTop = 0;
             int cnt = 0;
@@ -99,9 +109,35 @@ namespace MM0.ViewModels
         void Handle(Input.DwnldTrgr Action)
         {
             //MorphUrl = $"/mm0/FFsXlsx/{PPId}";
-            MorphUrl = $"/mm0/FFsXlsx?ppid={PPId}&hhid={HHId}&trhx={TrhX}";
+            MorphUrl = $"/mm0/FFsXlsx?ppid={PPId}&hhid={HHId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}";
         }
 
+    }
+
+    [FFsRpr_json.DlgFlt]
+    partial class FFsFltDlgPartial : Json
+    {
+        void Handle(Input.OpnTrgr Action)
+        {
+            var r = Root as MasterPage;
+            BasTrhX = r.BasTrhX;
+            BitTrhX = r.BitTrhX;
+            Opened = true;
+        }
+        void Handle(Input.FltTrgr Action)
+        {
+            var r = Root as MasterPage;
+            r.BasTrhX = BasTrhX;
+            r.BitTrhX = BitTrhX;
+
+            var p = this.Parent as FFsRpr;
+            p.BasTrhX = BasTrhX;
+            p.BitTrhX = BitTrhX;
+            p.HHId = 0;
+
+            Opened = false;
+            p.Data = null;
+        }
     }
 
     [FFsRpr_json.DlgRec]

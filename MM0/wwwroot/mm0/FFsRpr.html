@@ -1,8 +1,38 @@
-﻿<link rel="import" href="/sys/juicy-select/juicy-select.html">
+<link rel="import" href="/sys/juicy-select/juicy-select.html">
 
 <template>
     <dom-bind id="FFsRpr">
         <template is="dom-bind">
+            <paper-dialog opened="[[model.DlgFlt.Opened]]" modal="true">
+                <div class="mdfDlg">
+                    <table class="mdfDlgTbl">
+                        <tbody>
+                            <tr>
+                                <td>Baş</td>
+                                <td><input placeholder="Tarih" type="date" value="{{model.DlgFlt.BasTrhX$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Bit</td>
+                                <td><input placeholder="Tarih" type="date" value="{{model.DlgFlt.BitTrhX$::change}}" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mdfDlgAction">
+                        <button value="{{model.DlgFlt.FltTrgr$::click}}" onmousedown="++this.value">Filtre</button>
+                        <button dialog-dismiss value="{{model.DlgFlt.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                    </div>
+
+                    <div class="mdfDlgAction">
+                        <template is="dom-if" if="[[model.DlgFlt.Msj]]">
+                            <div class="dlgMsj">[[model.DlgFlt.Msj]]</div>
+                        </template>
+                    </div>
+                </div>
+
+            </paper-dialog>
+
+
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
                     <table class="mdfDlgTbl">
@@ -58,11 +88,11 @@
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:cash"></iron-icon>
                     <div>[[model.Hdr]]</div>
+                    <button class="insert" value="{{model.DlgFlt.OpnTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:filter"></iron-icon></button>
                     <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                     <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
-                    <div>Gelir/Gider İşlemleri</div>
                     <table id="FFsRprTbl" class="fixTbl">
                         <thead>
                             <tr>
@@ -89,7 +119,7 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&bastrhx=[[item.TrhX]]&bittrhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
                                     <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAd]]</a></td>
 
                                     <td style="font-size:smaller">[[item.HHAdPrn]]</td>

@@ -57,11 +57,15 @@ namespace MM0.Api
 
             if (master == null)
             {
+                var TrhStr = DateTime.Today.ToString("yyyy-MM-dd");
                 master = new MasterPage
                 {
                     //NavPage = Self.GET("/uniformdocs/nav")
+                    TrhX = TrhStr,
+                    BasTrhX = TrhStr,
+                    BitTrhX = TrhStr
                 };
-                Session.Current.Store[nameof(MasterPage)] = master;
+            Session.Current.Store[nameof(MasterPage)] = master;
             }
 
             return master;
@@ -158,13 +162,15 @@ namespace MM0.Api
                 NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
                 string ppid = queryCollection.Get("ppid");
                 string hhid = queryCollection["hhid"];
-                string TrhX = queryCollection["trhx"];
+                string BasTrhX = queryCollection["bastrhx"];
+                string BitTrhX = queryCollection["bittrhx"];
 
                 long PPId = ppid == null ? 0 : long.Parse(ppid);
                 long HHId = hhid == null ? 0 : long.Parse(hhid);
-                TrhX = TrhX ?? "";
+                BasTrhX = BasTrhX ?? "";
+                BitTrhX = BitTrhX ?? "";
 
-                return FFsXlsx(PPId, HHId, TrhX);
+                return FFsXlsx(PPId, HHId, BasTrhX, BitTrhX);
             });
 
             Handle.GET("/MM0/HHsCumBkyXlsx/{?}", (long HHId) =>
@@ -248,7 +254,7 @@ namespace MM0.Api
             }
         }
 
-        public static Response FFsXlsx(long PPId, long HHId, string TrhX)
+        public static Response FFsXlsx(long PPId, long HHId, string BasTrhX, string BitTrhX)
         {
             using (ExcelPackage pck = new ExcelPackage())
             {
@@ -272,7 +278,7 @@ namespace MM0.Api
                 {
                     //var ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by Trh DESC", pp);
                     int cr = 2;
-                    foreach (var ff in FF.View(PPId, HHId, TrhX))
+                    foreach (var ff in FF.View(PPId, HHId, BasTrhX, BitTrhX))
                     {
                         ws.Cells[cr, 1].Value = ff.Trh;
                         ws.Cells[cr, 2].Value = ff.HHAdPrn;
