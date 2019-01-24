@@ -1,6 +1,7 @@
-{
+﻿{
   "Html": "/MM0/HHsPage.html",
-  "Hdr": "",
+  "Hdr": "", 
+  "Hdr2": "Hesap Planı",
   "PPId": 0,
 
   "DlgRec": {
@@ -9,6 +10,7 @@
     "Ad$": "",
     "ThmGlr$": 0.0,
     "ThmGdr$": 0.0,
+    "Info$": "",
     "Msj": "",
     "Opened": false,
     "ApdTrgr$": 0,
@@ -23,6 +25,7 @@
       "Lvl": 0,
 
       "Ad": "",
+      "Info": "",
       "GrcGdrX": "",
       "GrcGlrX": "",
       "ThmGdrX": "",

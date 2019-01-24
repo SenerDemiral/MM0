@@ -25,7 +25,7 @@ namespace MM0.ViewModels
 
                 FFs.Data = ffs;
 
-                HHs.Data = Db.SQL<HH>("select r from HH r where r.PP = ? and r.Skl = ? order by r.AdFull", pp, 99); // Sadece Leafs
+                HHs.Data = Db.SQL<HH>("select r from HH r where r.PP = ? and r.Skl = ? order by r.AdPrn, r.Ad", pp, 99); // Sadece Leafs
 
                 NORX = $"Kayıt Sayısı: {FFs.Count:n0}";
 

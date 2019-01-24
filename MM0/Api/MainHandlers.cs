@@ -141,7 +141,8 @@ namespace MM0.Api
                         cc.CnfTS = DateTime.Now;
                     });
                     master.Token = cc.Token;
-                    master.MorphUrl = $"/MM0/PPs/{cc.Id.ToString()}";
+                    master.Sgn.Token = cc.Token;
+                    //master.MorphUrl = $"/MM0/PPs/{cc.Id}";
                 }
                 return master;
             });

@@ -27,7 +27,7 @@ namespace MM0.ViewModels
 
             if (!string.IsNullOrWhiteSpace(Ad))
             {
-                Msj = HH.InsertRec(p.PPId, Id, Ad, ThmGdr, ThmGdr);
+                Msj = HH.InsertRec(p.PPId, Id, Ad, ThmGdr, ThmGdr, Info);
                 if (!string.IsNullOrEmpty(Msj))
                 {
                     Action.Cancelled = true;
@@ -51,7 +51,7 @@ namespace MM0.ViewModels
 
         void Handle(Input.UpdTrgr Action)
         {
-            HH.UpdateRec(Id, Ad, ThmGdr, ThmGlr);
+            HH.UpdateRec(Id, Ad, ThmGdr, ThmGlr, Info);
 
             Session.RunTaskForAll((s, id) =>
             {
@@ -88,6 +88,7 @@ namespace MM0.ViewModels
 
             p.DlgRec.Ad = Ad;
             p.DlgRec.Id = Id;
+            p.DlgRec.Info = Info;
 
             p.DlgRec.ThmGdr = ThmGdr;
             p.DlgRec.ThmGlr = ThmGlr;

@@ -46,13 +46,13 @@ namespace MM0
 
             //Hlp.SablondanEkle(15);
 
-
+            /*
             if (Db.FromId(15) is PP spp)
             {
                 if (Db.FromId(37) is PP dpp)
                     HH.CopyFromPP(spp, dpp);
             }
-
+            */
 
 
             //Duzeltme bir kere yap
@@ -66,6 +66,7 @@ namespace MM0
                 }
             });
 
+            //CC.InsertRec("balu", "balu", "balu", true);
 
             //HH.Populate();  // Birkere
             //HH.Display();

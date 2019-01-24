@@ -17,6 +17,10 @@
                                 <td>ThmGelir</td>
                                 <td><input placeholder="Gelir" type="number" value="{{model.DlgRec.ThmGlr$::change}}" /></td>
                             </tr>
+                            <tr>
+                                <td>Info</td>
+                                <td><input type="text" value="{{model.DlgRec.Info$::change}}" /></td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -46,14 +50,16 @@
                     <button class="download" data-link="/mm0/HHsXlsx/[[model.PPId]]" on-tap="MyDownload"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
+                    <div>[[model.Hdr2]]</div>
                     <table id="HHsPageTbl" class="fixTbl">
                         <thead>
                             <tr>
                                 <th rowspan="2">Hesap</th>
                                 <th colspan="2">Gerçek</th>
-                                <th colspan="2">Tahmin</th>
+                                <th colspan="2">Hedef</th>
                                 <th rowspan="2"></th>
                                 <th rowspan="2"></th>
+                                <th rowspan="2">Info</th>
                             </tr>
                             <tr>
                                 <th class="txtRight">Gider</th>
@@ -72,6 +78,7 @@
                                     <td class="txtRight">[[item.ThmGlrX]]</td>
                                     <td class="icon"><a href="/mm0/HHsCumBky/[[item.Id]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
+                                    <td>[[item.Info]]</td>
                                 </tr>
                             </template>
                         </tbody>

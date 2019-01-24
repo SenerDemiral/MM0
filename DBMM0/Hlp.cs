@@ -74,19 +74,19 @@ namespace DBMM0
         public static void SendMail(string to, string token)
         {
             // gMail
-            string body = $"<!DOCTYPE html><html><body><a href='http://www.hsbm.online/mm0/confirmemail/{token}'>hsbm üyeliğiniz için tıklayınız</a></body></html>";
+            string body = $"<!DOCTYPE html><html><body><a href='http://www.hsbm.online/mm0/confirmemail/{token}'>HeSaBıM üyeliğiniz başlatmak için tıklayınız.</a></body></html>";
 
             MailMessage mail = new MailMessage();
             //mail.To.Add("sener.demiral@gmail.com");
             mail.To.Add(to);
             mail.Subject = "hsbm kayıt";
 
-            mail.From = new MailAddress("masatenisi.online@gmail.com", "BODVED");  // gMail
+            mail.From = new MailAddress("hsbm.online@gmail.com", "HeSaBıM");  // gMail
             mail.IsBodyHtml = true;
             mail.Body = body;
 
             SmtpClient smtp = new SmtpClient("smtp.gmail.com");   // gMail
-            smtp.Credentials = new System.Net.NetworkCredential("masatenisi.online", "CanDilSen09");  // gMail
+            smtp.Credentials = new System.Net.NetworkCredential("hsbm.online", "09hsbm60");  // gMail
             smtp.EnableSsl = true;    // gMail
             smtp.Port = 587;
 
@@ -114,7 +114,6 @@ namespace DBMM0
             using (StreamReader sr = new StreamReader($@"C:\Starcounter\MM0Data\HHSablon1.txt", System.Text.Encoding.UTF8))
             {
                 string line;
-                HH hh0 = null, hh1 = null, hh2 = null, hh3 = null;
                 HH[] dhh = new HH[9];
                 dhh[0] = dpp.HHroot;
 
@@ -137,47 +136,6 @@ namespace DBMM0
                                 Prn = dhh[not - 1],
                                 Ad = line.TrimStart('\t'),
                             };
-
-                            /*
-                            switch (not)
-                            {
-                                case 0:
-                                    hh0 = new HH
-                                    {
-                                        PP = pp,
-                                        Prn = pp.HHroot,
-                                        Ad = line,
-                                    };
-                                    break;
-                                case 1:
-                                    hh1 = new HH
-                                    {
-                                        PP = pp,
-                                        Prn = hh0,
-                                        Ad = line.TrimStart('\t'),
-                                    };
-                                    break;
-                                case 2:
-                                    hh2 = new HH
-                                    {
-                                        PP = pp,
-                                        Prn = hh1,
-                                        Ad = line.TrimStart('\t'),
-                                    };
-                                    break;
-                                case 3:
-                                    hh3 = new HH
-                                    {
-                                        PP = pp,
-                                        Prn = hh2,
-                                        Ad = line.TrimStart('\t'),
-                                    };
-                                    break;
-
-                                default:
-                                    break;
-                            }
-                            */
                         }
                     }
                 });

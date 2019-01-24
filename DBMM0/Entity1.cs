@@ -29,7 +29,7 @@ namespace DBMM0
         public DateTime TstBasTrh { get; set; } // DenemeSuresi baslangici
         public DateTime TstBitTrh { get; set; }
 
-        public static void InsertRec(string Email, string Pwd, string newToken)
+        public static void InsertRec(string Email, string Pwd, string newToken, bool isConfirmed = false)
         {
             CC ccNew = null;
             Db.Transact(() =>
@@ -40,13 +40,14 @@ namespace DBMM0
                     Pwd = Pwd,
                     Token = newToken,
                     InsTS = DateTime.Now,
-                    IsConfirmed = false,
+                    IsConfirmed = isConfirmed,
                 };
 
                 int i = Email.IndexOf('@');
-                if (i > 0)
+                if (i >= 0)
                     ccNew.Ad = Email.Remove(i);
-
+                else
+                    ccNew.Ad = Email;
             });
             Db.Transact(() =>
             {
@@ -57,6 +58,8 @@ namespace DBMM0
                 ccNew.HHroot = hh;
             });
 
+            PP ppNew = PP.InsertRec((long)ccNew.GetObjectNo(), "Örnek", null, null);
+            Hlp.SablondanEkle(ppNew.GetObjectNo());
         }
 
         public static void Kill(ulong ccId)
@@ -147,7 +150,7 @@ namespace DBMM0
             });
         }
 
-        public static void InsertRec(long ccId, string Ad, string BasTrh, string BitTrh)
+        public static PP InsertRec(long ccId, string Ad, string BasTrh, string BitTrh)
         {
             CC cc = Db.FromId<CC>((ulong)ccId);
             PP ppNew = null;
@@ -176,7 +179,7 @@ namespace DBMM0
             {
                 ppNew.HHroot = hhNew;
             });
-
+            return ppNew;
         }
 
         public static void Kill(ulong ppId)
@@ -462,7 +465,7 @@ namespace DBMM0
         }
 
 
-        public static string InsertRec(long ppId, long prnId, string Ad, decimal ThmGdr, decimal ThmGlr)
+        public static string InsertRec(long ppId, long prnId, string Ad, decimal ThmGdr, decimal ThmGlr, string Info)
         {
             string msj = "";
             Db.Transact(() =>
@@ -478,6 +481,7 @@ namespace DBMM0
                             Prn = phh,
                             PP = Db.FromId<PP>((ulong)ppId),
                             Ad = Ad,
+                            Info = Info,
                             ThmGdr = ThmGdr,
                             ThmGlr = ThmGlr
                         };
@@ -487,13 +491,14 @@ namespace DBMM0
             return msj;
         }
 
-        public static void UpdateRec(long Id, string Ad, decimal ThmGdr, decimal ThmGlr)
+        public static void UpdateRec(long Id, string Ad, decimal ThmGdr, decimal ThmGlr, string Info)
         {
             Db.Transact(() =>
             {
                 if (Db.FromId((ulong)Id) is HH hh)
                 {
                     hh.Ad = Ad;
+                    hh.Info = Info;
                     hh.ThmGdr = ThmGdr;
                     hh.ThmGlr = ThmGlr;
                 }
