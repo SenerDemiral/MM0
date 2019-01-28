@@ -1,11 +1,11 @@
-﻿<template>
+<template>
     <dom-bind id="HHsCumBky">
         <template is="dom-bind">
             <div class="gridTbl">
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:abacus"></iron-icon>
                     <div>[[model.Hdr]]</div>
-                    <button class="download" data-link="/mm0/HHsCumBkyXlsx/[[model.HHId]]" on-tap="MyDownload"><iron-icon icon="vaadin:download"></iron-icon></button>
+                    <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
                     <div>Aylık Toplamlar</div>
@@ -35,7 +35,7 @@
                     </table>
                 </div>
             </div>
-
+            <palindrom-redirect is="palindrom-redirect" download url="{{model.MorphUrl$}}"></palindrom-redirect>
         </template>
     </dom-bind>
     <script>

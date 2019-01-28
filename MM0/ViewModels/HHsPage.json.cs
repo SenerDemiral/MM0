@@ -16,7 +16,12 @@ namespace MM0.ViewModels
                 HHs.Data = DBMM0.HH.View(pp);  //Db.SQL<HH>("select r from HH r");
             }
         }
-    }
+
+        void Handle(Input.DwnldTrgr Action)
+        { 
+            MorphUrl = $"/mm0/HHsXlsx/{PPId}";
+        }
+}
 
     [HHsPage_json.DlgRec]
     partial class HHPartial : Json

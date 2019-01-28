@@ -16,5 +16,10 @@ namespace MM0.ViewModels
                 AAs.Data = HH.CumBky(hh);
             }
         }
+
+        void Handle(Input.DwnldTrgr Action)
+        {
+            MorphUrl = $"/mm0/HHsCumBkyXlsx/{HHId}";
+        }
     }
 }

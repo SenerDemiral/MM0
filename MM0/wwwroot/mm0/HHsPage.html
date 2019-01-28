@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <dom-bind id="HHsPage">
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
@@ -47,7 +47,7 @@
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:file-tree"></iron-icon>
                     <div>[[model.Hdr]]</div>
-                    <button class="download" data-link="/mm0/HHsXlsx/[[model.PPId]]" on-tap="MyDownload"><iron-icon icon="vaadin:download"></iron-icon></button>
+                    <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
                     <div>[[model.Hdr2]]</div>
@@ -85,7 +85,7 @@
                     </table>
                 </div>
             </div>
-
+            <palindrom-redirect is="palindrom-redirect" download url="{{model.MorphUrl$}}"></palindrom-redirect>
         </template>
     </dom-bind>
     <script>

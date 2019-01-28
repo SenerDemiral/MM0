@@ -1,8 +1,10 @@
 ﻿{
   "Html": "/MM0/HHsPage.html",
-  "Hdr": "", 
+  "Hdr": "",
   "Hdr2": "Hesap Planı",
   "PPId": 0,
+  "DwnldTrgr$": 0,
+  "MorphUrl$": "",
 
   "DlgRec": {
     "Id": 0,
