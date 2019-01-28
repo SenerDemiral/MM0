@@ -1,4 +1,4 @@
-﻿<link rel="import" href="/sys/juicy-select/juicy-select.html">
+<link rel="import" href="/sys/juicy-select/juicy-select.html">
 
 <template>
     <dom-bind id="FFsPage">
@@ -35,7 +35,7 @@
                             <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Ekle</button>
                         </template>
                         <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
-                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Çoğalt</button>
+                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Ekle</button>
                             <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Değiştir</button>
                             <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Sil</button>
                         </template>

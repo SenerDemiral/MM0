@@ -7,7 +7,146 @@ using Starcounter;
 namespace DBMM0
 {
     [Database]
-    public class CC //Clients
+    public class TT // TAGs
+    {
+        public ulong Id => this.GetObjectNo();
+        public string Ad { get; set; }  // Unique olmali
+    }
+
+    [Database]
+    public class TF // TT-FF
+    {
+        public ulong Id => this.GetObjectNo();
+        public TT TT { get; set; }
+        public FF FF { get; set; }
+        
+
+        public static IEnumerable<FF> GetIntersectFFsView(params ulong[] ttIds)    // Caller: GetIntersectFFs(1234, 4535, 45452)
+        {
+            HashSet<ulong> hs1 = new HashSet<ulong>();
+            HashSet<ulong> hs2 = new HashSet<ulong>();
+
+            bool ilk = true;
+            for (int i = 0; i < ttIds.Length; i++)
+            {
+                if (Db.FromId<TT>(ttIds[i]) is TT tt)
+                {
+                    if (ilk)
+                    {
+                        foreach (var tf in Db.SQL<TF>("select r from TF r where r.TT = ?", tt))
+                            hs1.Add(tf.FF.GetObjectNo());
+
+                        ilk = false;
+                    }
+                    else
+                    {
+                        if (hs1.Count == 0) // Set bos daha fazla yapmaya gerek yok.
+                            break;
+
+                        hs2.Clear();
+                        foreach (var tf in Db.SQL<TF>("select r from TF r where r.TT = ?", tt))
+                            hs2.Add(tf.FF.GetObjectNo());
+
+                        hs1.IntersectWith(hs2);
+                    }
+                }
+            }
+            foreach(var ffId in hs1)
+            {
+                if (Db.FromId<FF>(ffId) is FF ff)
+                    yield return ff;
+            }
+        }
+
+        public static HashSet<ulong> GetIntersectFFs(params ulong[] ttIds)    // Caller: GetIntersectFFs(1234, 4535, 45452)
+        {
+            HashSet<ulong> hs1 = new HashSet<ulong>();
+            HashSet<ulong> hs2 = new HashSet<ulong>();
+
+            bool ilk = true;
+            for (int i = 0; i < ttIds.Length; i++)
+            {
+                if (Db.FromId<TT>(ttIds[i]) is TT tt)
+                {
+                    if (ilk)
+                    {
+                        foreach (var tf in Db.SQL<TF>("select r from TF r where r.TT = ?", tt))
+                            hs1.Add(tf.FF.GetObjectNo());
+
+                        ilk = false;
+                    }
+                    else
+                    {
+                        if (hs1.Count == 0) // Set bos daha fazla yapmaya gerek yok.
+                            break;
+
+                        hs2.Clear();
+                        foreach (var tf in Db.SQL<TF>("select r from TF r where r.TT = ?", tt))
+                            hs2.Add(tf.FF.GetObjectNo());
+
+                        hs1.IntersectWith(hs2);
+                    }
+                }
+            }
+            return hs1;
+        }
+
+        public static HashSet<ulong> GetIntersectFFs(List<TT> TTL)
+        {
+            HashSet<ulong> hs1 = new HashSet<ulong>();
+            HashSet<ulong> hs2 = new HashSet<ulong>();
+
+            bool ilk = true;
+            foreach (var tt in TTL)
+            {
+                if (ilk)
+                {
+                    foreach (var tf in Db.SQL<TF>("select r from TF r where r.TT = ?", tt))
+                        hs1.Add(tf.FF.GetObjectNo());
+                    ilk = false;
+                }
+                else
+                {
+                    if (hs1.Count == 0) // Set bos daha fazla yapmaya gerek yok.
+                        break;
+
+                    hs2.Clear();
+                    foreach (var tf in Db.SQL<TF>("select r from TF r where r.TT = ?", tt))
+                        hs2.Add(tf.FF.GetObjectNo());
+
+                    hs1.IntersectWith(hs2);
+                }
+            }
+            return hs1;
+        }
+
+        public static HashSet<ulong> GetIntersectFFs(TT[] TTA)
+        {
+            HashSet<ulong> hs1 = new HashSet<ulong>();
+            HashSet<ulong> hs2 = new HashSet<ulong>();
+
+            foreach ( var tf in Db.SQL<TF>("select r from TF r where r.TT = ?", TTA[0]))
+                hs1.Add(tf.FF.GetObjectNo());
+
+            for (int i = 1; i < 5; i++)
+            {
+                hs2.Clear();
+                foreach (var tf in Db.SQL<TF>("select r from TF r where r.TT = ?", TTA[i]))
+                    hs2.Add(tf.FF.GetObjectNo());
+
+                hs1.IntersectWith(hs2);
+
+                if (hs1.Count == 0) // Set bos daha fazla yapmaya gerek yok.
+                    break;
+            }
+
+            return hs1;
+        }
+    }
+
+
+    [Database]
+    public class CC // Clients
     {
         public ulong Id => this.GetObjectNo();
 
