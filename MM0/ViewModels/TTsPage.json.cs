@@ -1,10 +1,9 @@
 ﻿using DBMM0;
 using Starcounter;
-using System;
 
 namespace MM0.ViewModels
 {
-    partial class HHsPage : Json
+    partial class TTsPage : Json
     {
         protected override void OnData()
         {
@@ -13,26 +12,33 @@ namespace MM0.ViewModels
             if (Db.FromId((ulong)PPId) is PP pp)
             {
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";
-                HHs.Data = DBMM0.HH.View(pp);  //Db.SQL<HH>("select r from HH r");
+                TTs.Data = Db.SQL<TT>("select r from TT r");
             }
         }
 
         void Handle(Input.DwnldTrgr Action)
-        { 
-            MorphUrl = $"/mm0/HHsXlsx/{PPId}";
+        {
+            MorphUrl = $"/mm0/TTsXlsx/{PPId}";
         }
     }
 
-    [HHsPage_json.DlgRec]
-    partial class HHPartial : Json
+    [TTsPage_json.DlgRec]
+    partial class TTPartial : Json
     {
-        void Handle(Input.ApdTrgr Action)
+        void Handle(Input.NewTrgr Action)
         {
-            var p = this.Parent as HHsPage;
+            Id = 0;
+            IsNew = true;
+            Opened = true;
+        }
+
+        void Handle(Input.InsTrgr Action)
+        {
+            var p = this.Parent as TTsPage;
 
             if (!string.IsNullOrWhiteSpace(Ad))
             {
-                Msj = HH.InsertRec(p.PPId, Id, Ad, ThmGdr, ThmGdr, Info);
+                Msj = TT.InsertRec(p.PPId, Ad, Info);
                 if (!string.IsNullOrEmpty(Msj))
                 {
                     Action.Cancelled = true;
@@ -56,7 +62,7 @@ namespace MM0.ViewModels
 
         void Handle(Input.UpdTrgr Action)
         {
-            HH.UpdateRec(Id, Ad, ThmGdr, ThmGlr, Info);
+            TT.UpdateRec(Id, Ad, Info);
 
             Session.RunTaskForAll((s, id) =>
             {
@@ -68,7 +74,7 @@ namespace MM0.ViewModels
 
         void Handle(Input.DelTrgr Action)
         {
-            Msj = HH.DeleteRec(Id);
+            Msj = TT.DeleteRec(Id);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -83,20 +89,17 @@ namespace MM0.ViewModels
             Opened = false;
         }
     }
-
-    [HHsPage_json.HHs]
-    partial class HHsPartial : Json
+    [TTsPage_json.TTs]
+    partial class TTsPartial: Json
     {
         void Handle(Input.EdtTrgr Action)
         {
-            var p = this.Parent.Parent as HHsPage;
+            var p = this.Parent.Parent as TTsPage;
 
-            p.DlgRec.Ad = Ad;
             p.DlgRec.Id = Id;
+            p.DlgRec.Ad = Ad;
             p.DlgRec.Info = Info;
 
-            p.DlgRec.ThmGdr = ThmGdr;
-            p.DlgRec.ThmGlr = ThmGlr;
             p.DlgRec.Msj = "";
 
             p.DlgRec.Opened = true;

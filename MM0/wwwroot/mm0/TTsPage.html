@@ -1,0 +1,71 @@
+<template>
+    <dom-bind id="TTsPage">
+        <template is="dom-bind">
+            <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
+                <div class="mdfDlg">
+                    <table class="mdfDlgTbl">
+                        <tbody>
+                            <tr>
+                                <td>Ad</td>
+                                <td><input placeholder="Ad" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Info</td>
+                                <td><input type="text" value="{{model.DlgRec.Info$::change}}" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="mdfDlgAction">
+                        <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Ekle</button>
+                        <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Değiştir</button>
+                        <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Sil</button>
+                    </div>
+
+                    <div class="mdfDlgAction">
+                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                    </div>
+
+                    <div class="mdfDlgAction">
+                        <template is="dom-if" if="[[model.DlgRec.Msj]]">
+                            <div class="dlgMsj">[[model.DlgRec.Msj]]</div>
+                        </template>
+                    </div>
+                </div>
+            </paper-dialog>
+
+
+            <div class="gridTbl">
+                <div class="gridTbl_header">
+                    <iron-icon icon="vaadin:tags"></iron-icon>
+                    <div>[[model.Hdr]]</div>
+                    <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                    <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
+                </div>
+                <div class="gridTbl_main">
+                    <div>[[model.Hdr2]]</div>
+                    <table id="TTsPageTbl" class="fixTbl">
+                        <thead>
+                            <tr>
+                                <th class="txtRight">Ad</th>
+                                <th class="txtRight">Info</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template is="dom-repeat" items="{{model.TTs}}">
+                                <tr>
+                                    <td data-lvl$="[[item.Lvl]]"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.Id]]">[[item.Ad]]</a></td>
+                                    <td>[[item.Info]]</td>
+                                    <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <palindrom-redirect is="palindrom-redirect" download url="{{model.MorphUrl$}}"></palindrom-redirect>
+        </template>
+    </dom-bind>
+</template>
+

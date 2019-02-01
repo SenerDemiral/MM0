@@ -46,6 +46,10 @@
                                 <td><juicy-select style="background-color:yellow" caption-text="HesapSeçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
                             </tr>
                             <tr>
+                                <td>Etiket</td>
+                                <td><juicy-select style="background-color:yellow" caption-text="EtiketSeçin" value="{{model.DlgRec.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select></td>
+                            </tr>
+                            <tr>
                                 <td>Gider</td>
                                 <td><input placeholder="Gider" type="number" value="{{model.DlgRec.Gdr$::change}}" /></td>
                             </tr>
@@ -99,6 +103,7 @@
                                 <th class="tarih">Tarih</th>
                                 <th>Hesap</th>
                                 <th>ÜstHesap</th>
+                                <th>Etiket</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
                                 <th>Açıklama</th>
@@ -107,6 +112,7 @@
                         </thead>
                         <tfoot>
                             <tr>
+                                <td></td>
                                 <td></td>
                                 <td></td>
                                 <td class="txtRight">[[model.NORX]]</td>
@@ -119,10 +125,11 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&bastrhx=[[item.TrhX]]&bittrhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[model.TTId]]&bastrhx=[[item.TrhX]]&bittrhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
                                     <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAd]]</a></td>
 
                                     <td style="font-size:smaller">[[item.HHAdPrn]]</td>
+                                    <td>[[item.TTAd]]</td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
                                     <td>[[item.Ad]]</td>

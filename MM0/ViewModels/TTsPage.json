@@ -1,0 +1,36 @@
+{
+  "Html": "/MM0/TTsPage.html",
+  "Hdr": "",
+  "Hdr2": "Etiket",
+  "PPId": 0,
+  "DwnldTrgr$": 0,
+  "MorphUrl$": "",
+
+  "DlgRec": {
+    "Id": 0,
+
+    "Ad$": "",
+    "Info$": "",
+
+    "Msj": "",
+    "Opened": false,
+    "IsNew": false,
+    "NewTrgr$": 0,
+    "InsTrgr$": 0,
+    "UpdTrgr$": 0,
+    "DelTrgr$": 0,
+    "RejTrgr$": 0
+  },
+
+  "TTs": [
+    {
+      "Id": 0,
+
+      "Ad": "",
+      "Info": "",
+
+      "EdtTrgr$": 0
+
+    }
+  ]
+}

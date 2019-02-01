@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <dom-bind id="PPsPage">
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
@@ -58,6 +58,7 @@
                                 <th rowspan="2"></th>
                                 <th rowspan="2">Ad</th>
                                 <th rowspan="2"></th>
+                                <th rowspan="2"></th>
                                 <th colspan="2">Gerçek</th>
                                 <th colspan="2">Hedef</th>
                                 <th colspan="2">Tarih</th>
@@ -76,6 +77,7 @@
                         <tfoot>
                             <tr>
                                 <td></td>
+                                <td></td>
                                 <td colspan="2" class="txtRight">TOPLAM</td>
                                 <td class="txtRight">[[model.GrcGdrTopX]]</td>
                                 <td class="txtRight">[[model.GrcGlrTopX]]</td>
@@ -93,6 +95,7 @@
                                     <td class="icon"><a href="/mm0/FFs/[[item.Id]]"><iron-icon icon="vaadin:money-exchange"></iron-icon></a></td>
                                     <td>[[item.Ad]]</td>
                                     <td class="icon"><a href="/mm0/HHs/[[item.Id]]"><iron-icon icon="vaadin:file-tree"></iron-icon></a></td>
+                                    <td class="icon"><a href="/mm0/TTs/[[item.Id]]"><iron-icon icon="vaadin:tags"></iron-icon></a></td>
                                     <td class="txtRight">[[item.GrcGdrX]]</td>
                                     <td class="txtRight">[[item.GrcGlrX]]</td>
                                     <td class="txtRight">[[item.ThmGdrX]]</td>

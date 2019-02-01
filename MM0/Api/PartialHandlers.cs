@@ -29,6 +29,15 @@ namespace MM0.Api
                 return page;
             });
 
+            Handle.GET("/MM0/partials/TTs/{?}", (long PPId) =>
+            {
+                var page = new TTsPage
+                {
+                    PPId = PPId
+                };
+                return page;
+            });
+
             Handle.GET("/MM0/partials/HHs/{?}", (long PPId) =>
             {
                 var page = new HHsPage

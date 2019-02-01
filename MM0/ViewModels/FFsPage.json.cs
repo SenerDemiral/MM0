@@ -26,6 +26,7 @@ namespace MM0.ViewModels
                 FFs.Data = ffs;
 
                 HHs.Data = Db.SQL<HH>("select r from HH r where r.PP = ? and r.Skl = ? order by r.AdPrn, r.Ad", pp, 99); // Sadece Leafs
+                TTs.Data = Db.SQL<TT>("select r from TT r where r.PP = ? order by r.Ad", pp);
 
                 NORX = $"Kayıt Sayısı: {FFs.Count:n0}";
 
@@ -78,6 +79,7 @@ namespace MM0.ViewModels
             var p = this.Parent as FFsPage;
             Id = 0;
             HHId = 0;
+            TTId = 0;
             TrhX = p.QryTrhX; // DateTime.Today.ToString("yyyy-MM-dd");
             Msj = "";
             IsNew = true;
@@ -97,7 +99,7 @@ namespace MM0.ViewModels
 
             var p = this.Parent as FFsPage;
 
-            Msj = FF.InsertRec(p.PPId, HHId, TrhX, Ad, Gdr, Glr);
+            Msj = FF.InsertRec(p.PPId, HHId, TTId, TrhX, Ad, Gdr, Glr);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -124,7 +126,7 @@ namespace MM0.ViewModels
         {
             if (Id != 0)
             {
-                FF.UpdateRec(Id, HHId, TrhX, Ad, Gdr, Glr);
+                FF.UpdateRec(Id, HHId, TTId, TrhX, Ad, Gdr, Glr);
 
                 var p = this.Parent as FFsPage;
                 p.RefreshToplam();

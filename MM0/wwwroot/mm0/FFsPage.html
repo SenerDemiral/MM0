@@ -12,8 +12,12 @@
                                 <td><input placeholder="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}" /></td>
                             </tr>
                             <tr>
-                                <td>Hesap</td>
-                                <td><juicy-select style="background-color:yellow" caption-text="HesapSeçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
+                                <td style="background-color:yellow">Hesap</td>
+                                <td><juicy-select caption-text="HesapSeçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
+                            </tr>
+                            <tr>
+                                <td style="background-color:yellow">Etiket</td>
+                                <td><juicy-select caption-text="EtiketSeçin" value="{{model.DlgRec.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select></td>
                             </tr>
                             <tr>
                                 <td>Gider</td>
@@ -68,6 +72,7 @@
                             <tr>
                                 <th class="tarih">Tarih</th>
                                 <th>Hesap</th>
+                                <th>Etiket</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
                                 <th>Açıklama</th>
@@ -77,6 +82,7 @@
                         </thead>
                         <tfoot>
                             <tr>
+                                <td></td>
                                 <td></td>
                                 <td class="txtRight">[[model.NORX]]</td>
                                 <td class="txtRight">[[model.GdrTopX]]</td>
@@ -89,8 +95,9 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[model.TTId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
                                     <td><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.HHId]]">[[item.HHAd]]</a></td>
+                                    <td>[[item.TTAd]]</td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
                                     <td>[[item.Ad]]</td>

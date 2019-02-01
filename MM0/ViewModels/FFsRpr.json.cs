@@ -85,7 +85,10 @@ namespace MM0.ViewModels
             GdrTopX = $"{GdrTop:#,#.##;-#,#.##;#}";
 
             if (Db.FromId((ulong)PPId) is PP pp2)
+            {
                 HHs.Data = Db.SQL<HH>("select r from HH r where r.PP = ? and r.Skl = ? order by r.AdFull", pp2, 99); // Sadece Leafs
+                TTs.Data = Db.SQL<TT>("select r from TT r where r.PP = ? order by r.Ad", pp2);
+            }
         }
 
         public void RefreshToplam()
@@ -167,7 +170,7 @@ namespace MM0.ViewModels
 
             var p = this.Parent as FFsRpr;
 
-            Msj = FF.InsertRec(p.PPId, HHId, TrhX, Ad, Gdr, Glr);
+            Msj = FF.InsertRec(p.PPId, HHId, TTId, TrhX, Ad, Gdr, Glr);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -194,7 +197,7 @@ namespace MM0.ViewModels
         {
             if (Id != 0)
             {
-                FF.UpdateRec(Id, HHId, TrhX, Ad, Gdr, Glr);
+                FF.UpdateRec(Id, HHId, TTId, TrhX, Ad, Gdr, Glr);
 
                 var p = this.Parent as FFsRpr;
                 p.RefreshToplam();
@@ -250,6 +253,7 @@ namespace MM0.ViewModels
                 p.DlgRec.Glr = ff.Glr;
 
                 p.DlgRec.HHId = (long)ff.HHId;
+                p.DlgRec.TTId = (long)ff.TTId;
 
                 p.DlgRec.TrhX = ff.Trh.ToString("yyyy-MM-dd");
 

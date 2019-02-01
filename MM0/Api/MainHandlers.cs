@@ -118,7 +118,10 @@ namespace MM0.Api
                 return WrapPage<PPsPage>($"/MM0/partials/PPs/{CCId}");
             });
 
+            Handle.GET("/MM0/TTs/{?}", (long PPId) => WrapPage<TTsPage>($"/MM0/partials/TTs/{PPId}"));
+
             Handle.GET("/MM0/HHs/{?}", (long PPId) => WrapPage<HHsPage>($"/MM0/partials/HHs/{PPId}"));
+
             Handle.GET("/MM0/HHsCumBky/{?}", (long HHId) => WrapPage<HHsPage>($"/MM0/partials/HHsCumBky/{HHId}"));
 
             Handle.GET("/MM0/FFs/{?}", (long PPId) => WrapPage<FFsPage>($"/MM0/partials/FFs/{PPId}"));
@@ -162,15 +165,17 @@ namespace MM0.Api
                 NameValueCollection queryCollection = HttpUtility.ParseQueryString(decodedQuery);
                 string ppid = queryCollection.Get("ppid");
                 string hhid = queryCollection["hhid"];
+                string ttid = queryCollection["ttid"];
                 string BasTrhX = queryCollection["bastrhx"];
                 string BitTrhX = queryCollection["bittrhx"];
 
                 long PPId = ppid == null ? 0 : long.Parse(ppid);
                 long HHId = hhid == null ? 0 : long.Parse(hhid);
+                long TTId = ttid == null ? 0 : long.Parse(ttid);
                 BasTrhX = BasTrhX ?? "";
                 BitTrhX = BitTrhX ?? "";
 
-                return FFsXlsx(PPId, HHId, BasTrhX, BitTrhX);
+                return FFsXlsx(PPId, HHId, TTId, BasTrhX, BitTrhX);
             });
 
             Handle.GET("/MM0/HHsCumBkyXlsx/{?}", (long HHId) =>
@@ -254,7 +259,7 @@ namespace MM0.Api
             }
         }
 
-        public static Response FFsXlsx(long PPId, long HHId, string BasTrhX, string BitTrhX)
+        public static Response FFsXlsx(long PPId, long HHId, long TTId, string BasTrhX, string BitTrhX)
         {
             using (ExcelPackage pck = new ExcelPackage())
             {
@@ -264,15 +269,16 @@ namespace MM0.Api
                 ws.Cells[1, 1].Value = "Tarih";
                 ws.Cells[1, 2].Value = "ÜstHesap";
                 ws.Cells[1, 3].Value = "Hesap";
-                ws.Cells[1, 4].Value = "Gider";
-                ws.Cells[1, 5].Value = "Gelir";
-                ws.Cells[1, 6].Value = "Açıklama";
+                ws.Cells[1, 4].Value = "Etiket";
+                ws.Cells[1, 5].Value = "Gider";
+                ws.Cells[1, 6].Value = "Gelir";
+                ws.Cells[1, 7].Value = "Açıklama";
 
                 ws.Row(1).Style.Font.Bold = true;
 
                 ws.Column(1).Style.Numberformat.Format = "dd.mm.yy";
-                ws.Column(4).Style.Numberformat.Format = "#,###";
                 ws.Column(5).Style.Numberformat.Format = "#,###";
+                ws.Column(6).Style.Numberformat.Format = "#,###";
 
                 if (Db.FromId((ulong)PPId) is PP pp)
                 {
@@ -283,13 +289,14 @@ namespace MM0.Api
                         ws.Cells[cr, 1].Value = ff.Trh;
                         ws.Cells[cr, 2].Value = ff.HHAdPrn;
                         ws.Cells[cr, 3].Value = ff.HHAd;
-                        ws.Cells[cr, 4].Value = ff.Gdr;
-                        ws.Cells[cr, 5].Value = ff.Glr;
-                        ws.Cells[cr, 6].Value = ff.Ad;
+                        ws.Cells[cr, 4].Value = ff.TTAd;
+                        ws.Cells[cr, 5].Value = ff.Gdr;
+                        ws.Cells[cr, 6].Value = ff.Glr;
+                        ws.Cells[cr, 7].Value = ff.Ad;
 
                         cr++;
                     }
-                    using (var range = ws.Cells["A1:F1"]) {
+                    using (var range = ws.Cells["A1:G1"]) {
                         range.AutoFilter = true;
                         range.Style.Fill.PatternType = ExcelFillStyle.Solid;
                         range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
@@ -301,14 +308,22 @@ namespace MM0.Api
 
                     ws.Column(1).Width = 12;
                     ws.Column(1).Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-                    ws.Column(2).Width = 15;
-                    ws.Column(3).Width = 15;
-                    ws.Column(4).Width = 12;
+                    ws.Column(2).AutoFit();
+                    ws.Column(3).AutoFit();
+                    ws.Column(4).AutoFit();
                     ws.Column(5).Width = 12;
-                    ws.Column(6).AutoFit();
+                    ws.Column(6).Width = 12;
+                    ws.Column(7).AutoFit();
 
-                    ws.Cells[cr, 4].Formula = $"SUM(D2:D{cr-1})";
                     ws.Cells[cr, 5].Formula = $"SUM(E2:E{cr-1})";
+                    ws.Cells[cr, 6].Formula = $"SUM(F2:F{cr-1})";
+
+                    using (var range = ws.Cells[$"E{cr}:F{cr}"])
+                    {
+                        range.Style.Font.Bold = true;
+                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                    }
                 }
 
 

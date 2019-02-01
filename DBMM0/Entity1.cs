@@ -10,7 +10,51 @@ namespace DBMM0
     public class TT // TAGs
     {
         public ulong Id => this.GetObjectNo();
-        public string Ad { get; set; }  // Unique olmali
+        public PP PP { get; set; }
+        public string Ad { get; set; }  // Unique
+        public string Info { get; set; }
+
+        public static string InsertRec(long ppId, string Ad, string Info)
+        {
+            string msj = "";
+            Db.Transact(() =>
+            {
+                new TT
+                {
+                    PP = Db.FromId<PP>((ulong)ppId),
+                    Ad = Ad,
+                    Info = Info,
+                };
+            });
+            return msj;
+        }
+
+        public static void UpdateRec(long Id, string Ad, string Info)
+        {
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)Id) is TT tt)
+                {
+                    tt.Ad = Ad;
+                    tt.Info = Info;
+                }
+            });
+
+        }
+
+        public static string DeleteRec(long Id)
+        {
+            string msj = "";
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)Id) is TT tt)
+                {
+                    tt.Delete();
+                }
+            });
+            return msj;
+        }
+
     }
 
     [Database]
@@ -344,6 +388,7 @@ namespace DBMM0
 
         public PP PP { get; set; }
         public HH HH { get; set; }  // Altinda baska hesap olmamali
+        public TT TT { get; set; }  // Tag
         public string Ad { get; set; }
         public DateTime Trh { get; set; }
         public decimal Glr { get; set; }
@@ -353,25 +398,30 @@ namespace DBMM0
         public ulong HHId => HH?.GetObjectNo() ?? 0;
         public string HHAd => HH?.Ad;
         public string HHAdPrn => HH?.AdPrn;
+        public ulong TTId => TT?.GetObjectNo() ?? 0;
+        public string TTAd => TT?.Ad;
 
         public string TrhZ => $"{Trh:O}";
         public string TrhX => $"{Trh:dd.MM.yy}";
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
         public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
 
-        public static string InsertRec(long ppId, long hhId, string Trh, string Ad, decimal Gdr, decimal Glr)
+        public static string InsertRec(long ppId, long hhId, long ttId, string Trh, string Ad, decimal Gdr, decimal Glr)
         {
             string msj = "";
             Db.Transact(() =>
             {
                 if (Db.FromId((ulong)ppId) is PP pp)
                 {
+                    TT tt = Db.FromId((ulong)ttId) as TT;
                     if (Db.FromId((ulong)hhId) is HH hh)
                     {
                         new FF()
                         {
                             PP = pp,
                             HH = hh,
+                            TT = tt, 
+
                             Ad = Ad,
                             Trh = Convert.ToDateTime(Trh),
                             Gdr = Gdr,
@@ -385,15 +435,17 @@ namespace DBMM0
             return msj;
         }
 
-        public static void UpdateRec(long Id, long hhId, string Trh, string Ad, decimal Gdr, decimal Glr)
+        public static void UpdateRec(long Id, long hhId, long ttId, string Trh, string Ad, decimal Gdr, decimal Glr)
         {
             Db.Transact(() =>
             {
                 if (Db.FromId((ulong)Id) is FF ff)
                 {
+                    TT tt = Db.FromId((ulong)ttId) as TT;
                     if (Db.FromId((ulong)hhId) is HH hh)
                     {
                         ff.HH = hh;
+                        ff.TT = tt;
                         ff.Ad = Ad;
                         ff.Trh = Convert.ToDateTime(Trh);
                         ff.Gdr = Gdr;

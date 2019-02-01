@@ -89,6 +89,9 @@
     <Compile Include="ViewModels\PPsPage.json.cs">
       <DependentUpon>PPsPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\TTsPage.json.cs">
+      <DependentUpon>TTsPage.json</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DBMM0\DBMM0.csproj">
@@ -136,6 +139,9 @@
     <TypedJSON Include="ViewModels\HHsCumBky.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
+    <TypedJSON Include="ViewModels\TTsPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
     <None Include="wwwroot\mm0\MasterPage.html" />
   </ItemGroup>
   <ItemGroup />
@@ -148,6 +154,7 @@
     <None Include="wwwroot\mm0\AboutPage.html" />
     <None Include="wwwroot\mm0\FFsPage.html" />
     <None Include="wwwroot\mm0\HHsCumBky.html" />
+    <None Include="wwwroot\mm0\TTsPage.html" />
     <Content Include="wwwroot\sys\app-shell\app-shell.html" />
     <Content Include="wwwroot\sys\mm0.css" />
   </ItemGroup>
