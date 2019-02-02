@@ -13,6 +13,14 @@
                                 <td>Info</td>
                                 <td><input type="text" value="{{model.DlgRec.Info$::change}}" /></td>
                             </tr>
+                            <tr>
+                                <td>eMail</td>
+                                <td><input type="email" value="{{model.DlgRec.Email$::change}}" /></td>
+                            </tr>
+                            <tr>
+                                <td>Tel</td>
+                                <td><input type="tel" value="{{model.DlgRec.Tel$::change}}" /></td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -47,8 +55,10 @@
                     <table id="TTsPageTbl" class="fixTbl">
                         <thead>
                             <tr>
-                                <th class="txtRight">Ad</th>
-                                <th class="txtRight">Info</th>
+                                <th>Ad</th>
+                                <th>Info</th>
+                                <th>eMail</th>
+                                <th>Tel</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -57,6 +67,8 @@
                                 <tr>
                                     <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[item.Id]]">[[item.Ad]]</a></td>
                                     <td>[[item.Info]]</td>
+                                    <td>[[item.Email]]</td>
+                                    <td>[[item.Tel]]</td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>
@@ -64,7 +76,7 @@
                     </table>
                 </div>
             </div>
-            <palindrom-redirect is="palindrom-redirect" download url="{{model.MorphUrl$}}"></palindrom-redirect>
+            <palindrom-redirect is="palindrom-redirect" download url="{{model.DwnldUrl$}}"></palindrom-redirect>
         </template>
     </dom-bind>
 </template>

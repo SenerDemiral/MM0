@@ -4,13 +4,15 @@
   "Hdr2": "Etiketler",
   "PPId": 0,
   "DwnldTrgr$": 0,
-  "MorphUrl$": "",
+  "DwnldUrl$": "",
 
   "DlgRec": {
     "Id": 0,
 
     "Ad$": "",
     "Info$": "",
+    "Email$": "",
+    "Tel$": "",
 
     "Msj": "",
     "Opened": false,
@@ -28,6 +30,8 @@
 
       "Ad": "",
       "Info": "",
+      "Email": "",
+      "Tel": "",
 
       "EdtTrgr$": 0
 

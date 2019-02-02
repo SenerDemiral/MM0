@@ -11,10 +11,12 @@ namespace DBMM0
     {
         public ulong Id => this.GetObjectNo();
         public PP PP { get; set; }
-        public string Ad { get; set; }  // Unique
+        public string Ad { get; set; }
         public string Info { get; set; }
+        public string Email { get; set; }
+        public string Tel { get; set; }
 
-        public static string InsertRec(long ppId, string Ad, string Info)
+        public static string InsertRec(long ppId, string Ad, string Info, string Email, string Tel)
         {
             string msj = "";
             Db.Transact(() =>
@@ -24,12 +26,14 @@ namespace DBMM0
                     PP = Db.FromId<PP>((ulong)ppId),
                     Ad = Ad,
                     Info = Info,
+                    Email = Email,
+                    Tel = Tel,
                 };
             });
             return msj;
         }
 
-        public static void UpdateRec(long Id, string Ad, string Info)
+        public static void UpdateRec(long Id, string Ad, string Info, string Email, string Tel)
         {
             Db.Transact(() =>
             {
@@ -37,6 +41,8 @@ namespace DBMM0
                 {
                     tt.Ad = Ad;
                     tt.Info = Info;
+                    tt.Email = Email;
+                    tt.Tel = Tel;
                 }
             });
 

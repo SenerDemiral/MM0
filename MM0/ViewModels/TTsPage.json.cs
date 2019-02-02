@@ -18,7 +18,7 @@ namespace MM0.ViewModels
 
         void Handle(Input.DwnldTrgr Action)
         {
-            MorphUrl = $"/mm0/TTsXlsx/{PPId}";
+            DwnldUrl = $"/mm0/TTsXlsx/{PPId}";
         }
     }
 
@@ -38,7 +38,7 @@ namespace MM0.ViewModels
 
             if (!string.IsNullOrWhiteSpace(Ad))
             {
-                Msj = TT.InsertRec(p.PPId, Ad, Info);
+                Msj = TT.InsertRec(p.PPId, Ad, Info, Email, Tel);
                 if (!string.IsNullOrEmpty(Msj))
                 {
                     Action.Cancelled = true;
@@ -62,7 +62,7 @@ namespace MM0.ViewModels
 
         void Handle(Input.UpdTrgr Action)
         {
-            TT.UpdateRec(Id, Ad, Info);
+            TT.UpdateRec(Id, Ad, Info, Email, Tel);
 
             Session.RunTaskForAll((s, id) =>
             {
@@ -99,6 +99,8 @@ namespace MM0.ViewModels
             p.DlgRec.Id = Id;
             p.DlgRec.Ad = Ad;
             p.DlgRec.Info = Info;
+            p.DlgRec.Email = Email;
+            p.DlgRec.Tel = Tel;
 
             p.DlgRec.Msj = "";
 

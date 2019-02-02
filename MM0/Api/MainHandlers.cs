@@ -183,6 +183,66 @@ namespace MM0.Api
                 return HHsCumBkyXlsx(HHId);
             });
 
+            Handle.GET("/MM0/TTsXlsx/{?}", (long PPId) =>
+            {
+                return TTsXlsx(PPId);
+            });
+        }
+
+
+        public static Response TTsXlsx(long PPId)
+        {
+            using (ExcelPackage pck = new ExcelPackage())
+            {
+                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("TTsRpr");
+
+                // Header (first row)
+                ws.Cells[1, 1].Value = "Ad";
+                ws.Cells[1, 2].Value = "Info";
+                ws.Cells[1, 3].Value = "eMail";
+                ws.Cells[1, 4].Value = "Tel";
+
+                ws.Row(1).Style.Font.Bold = true;
+                using (var range = ws.Cells["A1:D1"])
+                {
+                    range.AutoFilter = true;
+                    range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                }
+
+                if (Db.FromId((ulong)PPId) is PP pp)
+                {
+                    var tts = Db.SQL<TT>("select r from TT r where r.PP = ?", pp);
+                    int cr = 2;
+                    foreach (var tt in tts)
+                    {
+                        ws.Cells[cr, 1].Value = tt.Ad;
+                        ws.Cells[cr, 2].Value = tt.Info;
+                        ws.Cells[cr, 3].Value = tt.Email;
+                        ws.Cells[cr, 4].Value = tt.Tel;
+
+                        cr++;
+                    }
+
+                    ws.Column(1).AutoFit();
+                    ws.Column(2).AutoFit();
+                    ws.Column(3).AutoFit();
+                    ws.Column(4).AutoFit();
+                }
+
+
+                Response r = new Response();
+                //r.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                r.ContentType = "application/octet-stream";
+                r.Headers["Content-Disposition"] = "attachment; filename=\"TTsRpr.xlsx\"";
+
+                var oms = new MemoryStream();
+                pck.SaveAs(oms);
+                oms.Seek(0, SeekOrigin.Begin);
+
+                r.StreamedBody = oms;
+                return r;
+            }
         }
 
         public static Response HHsXlsx(long PPId)
@@ -287,9 +347,7 @@ namespace MM0.Api
                     if (!string.IsNullOrEmpty(BasTrhX))
                     {
                         DateTime basTrh = Convert.ToDateTime(BasTrhX);
-                        //string basT = string.Format(Hlp.cultureTR, "{0:dd.MMMM yyyy dddd}", basTrh);
                         DateTime bitTrh = Convert.ToDateTime(BitTrhX);
-                        //string bitT = string.Format(Hlp.cultureTR, "{0:dd MMMM yyyy dddd}", bitTrh);
 
                         if (basTrh == bitTrh)
                             Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy}";
