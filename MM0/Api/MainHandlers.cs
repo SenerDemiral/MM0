@@ -282,9 +282,30 @@ namespace MM0.Api
 
                 if (Db.FromId((ulong)PPId) is PP pp)
                 {
-                    //var ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by Trh DESC", pp);
+                    string Hdr = $"{pp.CC.Ad}►{pp.Ad}";
+
+                    if (!string.IsNullOrEmpty(BasTrhX))
+                    {
+                        DateTime basTrh = Convert.ToDateTime(BasTrhX);
+                        //string basT = string.Format(Hlp.cultureTR, "{0:dd.MMMM yyyy dddd}", basTrh);
+                        DateTime bitTrh = Convert.ToDateTime(BitTrhX);
+                        //string bitT = string.Format(Hlp.cultureTR, "{0:dd MMMM yyyy dddd}", bitTrh);
+
+                        if (basTrh == bitTrh)
+                            Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy}";
+                        else
+                            Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy} >=< {bitTrh:dd.MM.yy}";
+                    }
+
+                    if (Db.FromId((ulong)HHId) is HH hh)
+                        Hdr = $"{Hdr}►{HH.FullParentAd(hh)}";
+                    if (Db.FromId((ulong)TTId) is TT tt)
+                        Hdr = $"{Hdr}►{tt.Ad}";
+
+                    ws.HeaderFooter.OddHeader.CenteredText = Hdr;
+
                     int cr = 2;
-                    foreach (var ff in FF.View(PPId, HHId, BasTrhX, BitTrhX))
+                    foreach (var ff in FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX))
                     {
                         ws.Cells[cr, 1].Value = ff.Trh;
                         ws.Cells[cr, 2].Value = ff.HHAdPrn;

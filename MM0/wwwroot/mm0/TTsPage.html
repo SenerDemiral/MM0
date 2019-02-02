@@ -55,7 +55,7 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.TTs}}">
                                 <tr>
-                                    <td data-lvl$="[[item.Lvl]]"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.Id]]">[[item.Ad]]</a></td>
+                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[item.Id]]">[[item.Ad]]</a></td>
                                     <td>[[item.Info]]</td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>

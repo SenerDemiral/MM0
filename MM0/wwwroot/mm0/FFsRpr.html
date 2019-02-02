@@ -15,6 +15,14 @@
                                 <td>Bit</td>
                                 <td><input placeholder="Tarih" type="date" value="{{model.DlgFlt.BitTrhX$::change}}" /></td>
                             </tr>
+                            <tr>
+                                <td>Hesap</td>
+                                <td><juicy-select style="background-color:yellow" caption-text="HesapSeçin" value="{{model.DlgFlt.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
+                            </tr>
+                            <tr>
+                                <td>Etiket</td>
+                                <td><juicy-select style="background-color:yellow" caption-text="EtiketSeçin" value="{{model.DlgFlt.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select></td>
+                            </tr>
                         </tbody>
                     </table>
 
@@ -97,6 +105,7 @@
                     <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
+                    <div>Gelir/Gider İşlemleri</div>
                     <table id="FFsRprTbl" class="fixTbl">
                         <thead>
                             <tr>
@@ -125,11 +134,11 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[model.TTId]]&bastrhx=[[item.TrhX]]&bittrhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&bastrhx=[[item.TrhX]]&bittrhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
                                     <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAd]]</a></td>
 
                                     <td style="font-size:smaller">[[item.HHAdPrn]]</td>
-                                    <td>[[item.TTAd]]</td>
+                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[item.TTId]]">[[item.TTAd]]</a></td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
                                     <td>[[item.Ad]]</td>
@@ -140,7 +149,8 @@
                     </table>
                 </div>
             </div>
-            <palindrom-redirect is="palindrom-redirect" download url="{{model.MorphUrl$}}"></palindrom-redirect>
+            <palindrom-redirect is="palindrom-redirect" history url="{{model.MorphUrl$}}"></palindrom-redirect>
+            <palindrom-redirect is="palindrom-redirect" download url="{{model.DwnldUrl$}}"></palindrom-redirect>
         </template>
     </dom-bind>
 </template>

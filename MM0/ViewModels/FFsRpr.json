@@ -4,10 +4,12 @@
   "Html": "/MM0/FFsRpr.html",
   "Hdr": "",
   "DwnldTrgr$": 0,
+  "DwnldUrl$": "",
   "MorphUrl$": "",
 
   "PPId": 0,
   "HHId": 0,
+  "TTId": 0,
   "BasTrhX": "",
   "BitTrhX": "",
 
@@ -18,6 +20,8 @@
   "DlgFlt": {
     "BasTrhX$": "",
     "BitTrhX$": "",
+    "HHId$": 0,
+    "TTId$": 0,
     "FltTrgr$": 0,
     "OpnTrgr$": 0,
     "Opened": false
@@ -48,6 +52,7 @@
     {
       "Id": 0,
       "HHId": 0,
+      "TTId": 0,
       "TrhZ": "",
 
       "TrhX": "",

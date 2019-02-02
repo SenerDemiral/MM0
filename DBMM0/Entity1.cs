@@ -473,6 +473,7 @@ namespace DBMM0
             });
             return msj;
         }
+
         public static void ViewZZ(HH hh)
         {
             List<HH> list = new List<HH>();
@@ -487,18 +488,59 @@ namespace DBMM0
                 }
             }
         }
+        
+        public static IEnumerable<FF> View(long ppId, long hhId, long ttId, string basTrhX, string bitTrhX)
+        {
+            bool findHH = false,
+                 findTT = false;
 
-        public static IEnumerable<FF> View(long ppId, long hhId, string basTrhX, string bitTrhX)
+            bool foundHH = false,
+                 foundTT = false;
+
+            if (Db.FromId((ulong)ppId) is PP pp)
+            {
+                List<HH> hhList = new List<HH>();
+                if (Db.FromId((ulong)hhId) is HH hh)
+                {
+                    findHH = true;
+                    Leafs(hh, hhList);
+                }
+                if (Db.FromId((ulong)ttId) is TT tt)
+                {
+                    findTT = true;
+                }
+
+                IEnumerable<FF> ffs;
+                if (!string.IsNullOrEmpty(basTrhX))
+                {
+                    DateTime basTrh = Convert.ToDateTime(basTrhX);
+                    DateTime bitTrh = Convert.ToDateTime(bitTrhX);
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh <= ?", pp, basTrh, bitTrh);
+                }
+                else
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by r.Trh DESC", pp);
+
+                foreach(var ff in ffs)
+                {
+                    foundHH = !findHH || hhList.Contains(ff.HH);
+                    foundTT = !findTT || ff.TT?.GetObjectNo() == (ulong)ttId;
+                    if(foundHH && foundTT)
+                        yield return ff;
+                }
+            }
+        }
+
+        public static IEnumerable<FF> View3(long ppId, long hhId, long ttId, string basTrhX, string bitTrhX)
         {
             if (Db.FromId((ulong)hhId) is HH hh)
             {
                 List<HH> hhList = new List<HH>();
                 int Lvl = hh.Lvl;
 
-                if (hh.Skl == 99)    // Zaten leaf
-                    hhList.Add(hh);
-                else
-                    Leafs(hh, hhList);
+                //if (hh.Skl == 99)    // Zaten leaf
+                //    hhList.Add(hh);
+                //else
+                Leafs(hh, hhList);
 
                 List<FF> ffList = new List<FF>();
                 foreach (var h in hhList)
@@ -511,6 +553,13 @@ namespace DBMM0
 
                 foreach (var f in ffList)
                     yield return f;
+            }
+            else if (Db.FromId((ulong)ttId) is TT tt)
+            {
+                foreach (var f in Db.SQL<FF>("select r from FF r where r.TT = ?", tt))
+                {
+                    yield return f;
+                }
             }
             else if (Db.FromId((ulong)ppId) is PP pp)
             {
@@ -557,13 +606,17 @@ namespace DBMM0
                 yield return f;
 
         }
-        public static void Leafs(HH prn, List<HH> list)
+
+        public static void Leafs(HH node, List<HH> list)
         {
-            var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ?", prn);
+            if (node.Skl == 99)    // Zaten leaf
+                list.Add(node);
+
+            var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ?", node);
             foreach (var hh in HHs)
             {
-                if (hh.Skl == 99)
-                    list.Add(hh);
+                //if (hh.Skl == 99)
+                //    list.Add(hh);
                 Leafs(hh, list);
             }
         }
@@ -759,7 +812,7 @@ namespace DBMM0
 
             HH pHH = hh.Prn;
 
-            while (pHH != null && pHH.Lvl > 0)
+            while (pHH != null && pHH.Lvl > 1)
             {
                 fullAd = $"{pHH.Ad}►{fullAd}";
                 pHH = pHH.Prn;

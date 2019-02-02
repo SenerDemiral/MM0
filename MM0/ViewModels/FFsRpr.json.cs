@@ -17,10 +17,13 @@ namespace MM0.ViewModels
             //var r = Root as MasterPage;
             //DlgFlt.BasTrhX = r.BasTrhX;
             //DlgFlt.BitTrhX = r.BitTrhX;
-
+            /*
             if (Db.FromId((ulong)HHId) is HH hh)
                 Hdr = $"{hh.PP.CC.Ad}►{HH.FullParentAd(hh)}";
-            else if (Db.FromId((ulong)PPId) is PP pp)
+            else if (Db.FromId((ulong)TTId) is TT tt)
+                Hdr = $"{tt.PP.CC.Ad}►{tt.Ad}";
+*/
+            if (Db.FromId((ulong)PPId) is PP pp)
             {
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";
 
@@ -37,8 +40,12 @@ namespace MM0.ViewModels
                         Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy} >=< {bitTrh:dd.MM.yy}";
                 }
             }
+            if (Db.FromId((ulong)HHId) is HH hh)
+                Hdr = $"{Hdr}►{HH.FullParentAd(hh)}";
+            if (Db.FromId((ulong)TTId) is TT tt)
+                Hdr = $"{Hdr}►{tt.Ad}";
 
-            IEnumerable<FF> ffs = FF.View(PPId, HHId, BasTrhX, BitTrhX);
+            IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX);
             
             /*
             if (HHId != 0)
@@ -93,7 +100,7 @@ namespace MM0.ViewModels
 
         public void RefreshToplam()
         {
-            IEnumerable<FF> ffs = FF.View(PPId, HHId, BasTrhX, BitTrhX);
+            IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX);
 
             decimal GlrTop = 0, GdrTop = 0;
             int cnt = 0;
@@ -112,7 +119,7 @@ namespace MM0.ViewModels
         void Handle(Input.DwnldTrgr Action)
         {
             //MorphUrl = $"/mm0/FFsXlsx/{PPId}";
-            MorphUrl = $"/mm0/FFsXlsx?ppid={PPId}&hhid={HHId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}";
+            DwnldUrl = $"/mm0/FFsXlsx?ppid={PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}";
         }
 
     }
@@ -130,16 +137,21 @@ namespace MM0.ViewModels
         void Handle(Input.FltTrgr Action)
         {
             var r = Root as MasterPage;
+            var p = this.Parent as FFsRpr;
+
+            p.MorphUrl = $"/mm0/FFsRpr?ppid={p.PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}";
+            /*
             r.BasTrhX = BasTrhX;
             r.BitTrhX = BitTrhX;
 
             var p = this.Parent as FFsRpr;
             p.BasTrhX = BasTrhX;
             p.BitTrhX = BitTrhX;
-            p.HHId = 0;
+            p.HHId = HHId;
+            p.TTId = TTId;
 
             Opened = false;
-            p.Data = null;
+            p.Data = null;*/
         }
     }
 
