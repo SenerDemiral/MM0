@@ -61,6 +61,7 @@ namespace MM0.Api
                 var page = new FFsPage
                 {
                     PPId = PPId,
+
                     QryTrhX = DateTime.Today.ToString("yyyy-MM-dd")
                 };
 

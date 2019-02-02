@@ -95,9 +95,9 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[model.TTId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
-                                    <td><a href="/mm0/FFsRprHsp/[[model.PPId]]/[[item.HHId]]">[[item.HHAd]]</a></td>
-                                    <td>[[item.TTAd]]</td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
+                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAd]]</a></td>
+                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[item.TTId]]">[[item.TTAd]]</a></td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
                                     <td>[[item.Ad]]</td>
