@@ -631,7 +631,23 @@ namespace DBMM0
         {
             // Fisler toplamini bul. Fis insert/edit yapildiginda bunu yap
             // Fislerde sadece Leaf hesaplar calistigi icin 
-            Tuple<decimal, decimal> res = Db.SQL<Tuple<decimal, decimal>>("SELECT SUM(r.Glr), SUM(r.Gdr) FROM FF r WHERE r.HH = ?", hh).FirstOrDefault();
+            decimal glr = 0, gdr = 0;
+            foreach (var ff in Db.SQL<FF>("select r from FF r where r.HH = ?", hh))
+            {
+                gdr += ff.Gdr;
+                glr += ff.Glr;
+            }
+            Db.Transact(() =>
+            {
+                hh.GrcGlr = glr;
+                hh.GrcGdr = gdr;
+            });
+
+            // Ust Toplamlari guncelle
+            HH.UpdateParentsGrcToplam(hh);
+
+            /*
+                Tuple<decimal, decimal> res = Db.SQL<Tuple<decimal, decimal>>("SELECT SUM(r.Glr), SUM(r.Gdr) FROM FF r WHERE r.HH = ?", hh).FirstOrDefault();
             if (res != null)
             {
                 // Hesabi guncelle
@@ -643,7 +659,7 @@ namespace DBMM0
 
                 // Ust Toplamlari guncelle
                 HH.UpdateParentsGrcToplam(hh);
-            }
+            }*/
         }
         public static void PostMdf(ulong hhId)
         {
