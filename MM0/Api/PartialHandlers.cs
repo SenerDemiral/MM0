@@ -82,6 +82,12 @@ namespace MM0.Api
                 string BasTrhX = queryCollection["bastrhx"];
                 string BitTrhX = queryCollection["bittrhx"];
 
+                if (BasTrhX == "Now")
+                {
+                    BasTrhX = DateTime.Today.ToString("yyyy-MM-dd");
+                    BitTrhX = BasTrhX;
+                }
+
                 var page = new FFsRpr
                 {
                     PPId = PPId == null ? 0 : long.Parse(PPId),

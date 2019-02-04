@@ -22,17 +22,17 @@
 
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">
-                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Ekle</button>
+                            <button class="btn-ins" value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                         </template>
                         <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
-                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Çoğalt</button>
-                            <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Değiştir</button>
-                            <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Sil</button>
+                            <button class="btn-ins" value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                            <button class="btn-upd" value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:refresh"></iron-icon></button>
+                            <button class="btn-del" value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:trash"></iron-icon></button>
                         </template>
                     </div>
 
                     <div class="mdfDlgAction">
-                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
                     </div>
 
                     <div class="mdfDlgAction">
@@ -102,7 +102,7 @@
                                     <td class="txtRight">[[item.ThmGlrX]]</td>
                                     <td class="txtCenter">[[item.BasTrhX]]</td>
                                     <td class="txtCenter">[[item.BitTrhX]]</td>
-                                    <td class="icon"><a href="/mm0/FFsRpr?ppid=[[item.Id]]"><iron-icon icon="vaadin:cash"></iron-icon></a></td>
+                                    <td class="icon"><a href="/mm0/FFsRpr?ppid=[[item.Id]]&bastrhx=Now"><iron-icon icon="vaadin:cash"></iron-icon></a></td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>

@@ -55,7 +55,11 @@ namespace DBMM0
             {
                 if (Db.FromId((ulong)Id) is TT tt)
                 {
-                    tt.Delete();
+                    var ff = Db.SQL<FF>("select r from FF r where r.TT = ?", tt).FirstOrDefault();
+                    if (ff != null)
+                        msj = "Kullanılmış, Silemezsiniz";
+                    else
+                        tt.Delete();
                 }
             });
             return msj;

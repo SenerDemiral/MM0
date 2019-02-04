@@ -332,7 +332,7 @@ namespace MM0.Api
                 ws.Cells[1, 4].Value = "Etiket";
                 ws.Cells[1, 5].Value = "Gider";
                 ws.Cells[1, 6].Value = "Gelir";
-                ws.Cells[1, 7].Value = "Açıklama";
+                ws.Cells[1, 7].Value = "Not";
 
                 ws.Row(1).Style.Font.Bold = true;
 

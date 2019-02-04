@@ -268,3 +268,32 @@ li {
     margin-top: 1rem;
     padding: 0 5px;
 }
+.btn-del{
+    color:red;
+}
+.btn-upd {
+    color: green;
+}
+.btn-ins {
+    color: blue;
+}
+/*
+.btn-del:hover::before {
+    content: 'Sil ';
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+.btn-ins:hover::before {
+    content: 'Ekle ';
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+.btn-upd:hover::before {
+    content: 'Değiştir ';
+    position: relative;
+    top: 0px;
+    left: 0px;
+}
+*/

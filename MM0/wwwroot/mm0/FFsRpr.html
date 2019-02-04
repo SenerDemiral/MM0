@@ -27,8 +27,8 @@
                     </table>
 
                     <div class="mdfDlgAction">
-                        <button value="{{model.DlgFlt.FltTrgr$::click}}" onmousedown="++this.value">Filtre</button>
-                        <button dialog-dismiss value="{{model.DlgFlt.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                        <button value="{{model.DlgFlt.FltTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:search"></iron-icon></button>
+                        <button dialog-dismiss ><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
                     </div>
 
                     <div class="mdfDlgAction">
@@ -74,17 +74,17 @@
 
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">
-                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Ekle</button>
+                            <button class="btn-ins" value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                         </template>
                         <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
-                            <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Çoğalt</button>
-                            <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Değiştir</button>
-                            <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Sil</button>
+                            <button class="btn-ins" value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                            <button class="btn-upd" value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:refresh"></iron-icon></button>
+                            <button class="btn-del" value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:trash"></iron-icon></button>
                         </template>
                     </div>
 
                     <div class="mdfDlgAction">
-                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
                     </div>
 
                     <div class="mdfDlgAction">
@@ -100,7 +100,7 @@
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:cash"></iron-icon>
                     <div>[[model.Hdr]]</div>
-                    <button class="insert" value="{{model.DlgFlt.OpnTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:filter"></iron-icon></button>
+                    <button class="insert" value="{{model.DlgFlt.OpnTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:search"></iron-icon></button>
                     <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                     <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
@@ -115,7 +115,7 @@
                                 <th>Etiket</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
-                                <th>Açıklama</th>
+                                <th>Not</th>
                                 <th></th>
                             </tr>
                         </thead>

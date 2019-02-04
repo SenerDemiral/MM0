@@ -104,6 +104,7 @@ namespace MM0.ViewModels
 
             p.DlgRec.Msj = "";
 
+            p.DlgRec.IsNew = false; // Edit
             p.DlgRec.Opened = true;
 
         }

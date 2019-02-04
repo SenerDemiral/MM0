@@ -25,13 +25,18 @@
                     </table>
 
                     <div class="mdfDlgAction">
-                        <button value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value">Ekle</button>
-                        <button value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value">Değiştir</button>
-                        <button value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value">Sil</button>
+                        <template is="dom-if" if="[[model.DlgRec.IsNew]]">
+                            <button class="btn-ins" value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                        </template>
+                        <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
+                            <button class="btn-ins" value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                            <button class="btn-upd" value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:refresh"></iron-icon></button>
+                            <button class="btn-del" value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:trash"></iron-icon></button>
+                        </template>
                     </div>
 
                     <div class="mdfDlgAction">
-                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value">Vazgeç</button>
+                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
                     </div>
 
                     <div class="mdfDlgAction">
