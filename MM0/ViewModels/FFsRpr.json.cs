@@ -30,9 +30,9 @@ namespace MM0.ViewModels
                 if (!string.IsNullOrEmpty(BasTrhX))
                 {
                     DateTime basTrh = Convert.ToDateTime(BasTrhX);
-                    //string basT = string.Format(Hlp.cultureTR, "{0:dd.MMMM yyyy dddd}", basTrh);
+                    if (string.IsNullOrEmpty(BitTrhX))
+                        BitTrhX = BasTrhX;
                     DateTime bitTrh = Convert.ToDateTime(BitTrhX);
-                    //string bitT = string.Format(Hlp.cultureTR, "{0:dd MMMM yyyy dddd}", bitTrh);
 
                     if(basTrh == bitTrh)
                         Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy}";
@@ -132,6 +132,9 @@ namespace MM0.ViewModels
             var r = Root as MasterPage;
             BasTrhX = r.BasTrhX;
             BitTrhX = r.BitTrhX;
+            var p = this.Parent as FFsRpr;
+            HHId = p.HHId;
+            TTId = p.TTId;
             Opened = true;
         }
         void Handle(Input.FltTrgr Action)
@@ -140,10 +143,10 @@ namespace MM0.ViewModels
             var p = this.Parent as FFsRpr;
 
             p.MorphUrl = $"/mm0/FFsRpr?ppid={p.PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}";
-            /*
+            
             r.BasTrhX = BasTrhX;
             r.BitTrhX = BitTrhX;
-
+            /*
             var p = this.Parent as FFsRpr;
             p.BasTrhX = BasTrhX;
             p.BitTrhX = BitTrhX;
