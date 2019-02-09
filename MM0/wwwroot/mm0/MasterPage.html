@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="/sys/mm0.css">
+<link rel="import" href="/sys/juicy-html/juicy-html.html">
 <link rel="import" href="/sys/palindrom-redirect/palindrom-redirect.html">
-<link rel="import" href="/sys/paper-dialog/paper-dialog.html"/>
+<link rel="import" href="/sys/paper-dialog/paper-dialog.html" />
+<link rel="import" href="/sys/paper-input/paper-input.html" />
+<link rel="import" href="/sys/paper-input/paper-textarea.html" />
 <link rel="import" href="/sys/vaadin-icons/vaadin-icons.html">
 
 <template>
@@ -100,7 +103,7 @@
         });
         */
 
-        
+
         tmpltM.masterPageDomChangeHandler = function (e) {
             // Master'a ilk gelisinde calisir DOM ready
             var observer = new MutationObserver(function (mutations) {
@@ -120,7 +123,7 @@
             // tmpltM.removeEventListener('dom-change', tmpltM.masterPageDomChangeHandler);
         }
         tmpltM.addEventListener('dom-change', tmpltM.masterPageDomChangeHandler);
-        
+
         /*
         tmpltM.AutoSignIn = function () {
             console.log('tmpltM.AutoSignIn', tmpltM.model);
@@ -320,8 +323,8 @@
             //let firstFriend = await db.friends.get(1);
             await db.PPs.each(pp => localpp.push(pp));
         }
-        //localpp = [];
-        //getPP();
+                        //localpp = [];
+                        //getPP();
 
     </script>
 

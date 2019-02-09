@@ -5,30 +5,14 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgFlt.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <table class="mdfDlgTbl">
-                        <tbody>
-                            <tr>
-                                <td>Baş</td>
-                                <td><input placeholder="Tarih" type="date" value="{{model.DlgFlt.BasTrhX$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Bit</td>
-                                <td><input placeholder="Tarih" type="date" value="{{model.DlgFlt.BitTrhX$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Hesap</td>
-                                <td><juicy-select style="background-color:yellow" caption-text="*" value="{{model.DlgFlt.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
-                            </tr>
-                            <tr>
-                                <td>Etiket</td>
-                                <td><juicy-select style="background-color:yellow" caption-text="*" value="{{model.DlgFlt.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <paper-input label="Başlangıç Tarihi" type="date" value="{{model.DlgFlt.BasTrhX$::change}}"></paper-input>
+                    <paper-input label="Bitiş Tarihi" type="date" value="{{model.DlgFlt.BitTrhX$::change}}"></paper-input>
+                    <juicy-select caption-text="Hesap Seçin" value="{{model.DlgFlt.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
+                    <juicy-select caption-text="Etiket Seçin" value="{{model.DlgFlt.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select>
 
                     <div class="mdfDlgAction">
                         <button value="{{model.DlgFlt.FltTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:search"></iron-icon></button>
-                        <button dialog-dismiss ><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
+                        <button dialog-dismiss><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
                     </div>
 
                     <div class="mdfDlgAction">
@@ -43,34 +27,12 @@
 
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <table class="mdfDlgTbl">
-                        <tbody>
-                            <tr>
-                                <td>Tarih</td>
-                                <td><input placeholder="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Hesap</td>
-                                <td><juicy-select style="background-color:yellow" caption-text="HesapSeçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select></td>
-                            </tr>
-                            <tr>
-                                <td>Etiket</td>
-                                <td><juicy-select style="background-color:yellow" caption-text="EtiketSeçin" value="{{model.DlgRec.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select></td>
-                            </tr>
-                            <tr>
-                                <td>Gider</td>
-                                <td><input placeholder="Gider" type="number" value="{{model.DlgRec.Gdr$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Gelir</td>
-                                <td><input placeholder="Gelir" type="number" value="{{model.DlgRec.Glr$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Not</td>
-                                <td><input placeholder="Not" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <paper-input label="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}"></paper-input>
+                    <juicy-select caption-text="Hesap Seçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
+                    <juicy-select caption-text="Etiket Seçin" value="{{model.DlgRec.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select>
+                    <paper-input label="Gider" type="number" value="{{model.DlgRec.Gdr$::change}}"></paper-input>
+                    <paper-input label="Gelir" type="number" value="{{model.DlgRec.Glr$::change}}"></paper-input>
+                    <paper-textarea label="Not" value="{{model.DlgRec.Ad$::input}}" char-counter maxlength="100"></paper-textarea>
 
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">

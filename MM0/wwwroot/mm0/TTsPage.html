@@ -3,26 +3,10 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <table class="mdfDlgTbl">
-                        <tbody>
-                            <tr>
-                                <td>Ad</td>
-                                <td><input placeholder="Ad" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Info</td>
-                                <td><input type="text" value="{{model.DlgRec.Info$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>eMail</td>
-                                <td><input type="email" value="{{model.DlgRec.Email$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Tel</td>
-                                <td><input type="tel" value="{{model.DlgRec.Tel$::change}}" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <paper-input label="Etiket Adý" type="text" value="{{model.DlgRec.Ad$::change}}" maxlength="40"></paper-input>
+                    <paper-input label="eMail" type="email" value="{{model.DlgRec.Email$::change}}" maxlength="40" auto-validate></paper-input>
+                    <paper-input label="Tel" type="tel" value="{{model.DlgRec.Tel$::change}}" maxlength="40" auto-validate></paper-input>
+                    <paper-input label="Not" type="text" value="{{model.DlgRec.Info$::change}}" char-counter maxlength="100"></paper-input>
 
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">
@@ -61,7 +45,7 @@
                         <thead>
                             <tr>
                                 <th>Ad</th>
-                                <th>Info</th>
+                                <th>Not</th>
                                 <th>eMail</th>
                                 <th>Tel</th>
                                 <th></th>

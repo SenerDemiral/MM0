@@ -8,12 +8,22 @@
   "ThmGlrTopX": "",
   "ThmGdrTopX": "",
 
+  "DlgDel": {
+    "Id": 0,
+    "Ad$": "",
+    "Opened": false,
+    "DelTrgr$": 0,
+    "RejTrgr$": 0,
+    "Msj": ""
+  },
+
   "DlgRec": {
     "Id": 0,
     "Ad$": "",
     "BasTrhX$": "",
     "BitTrhX$": "",
 
+    "Msj": "",
     "Opened": false,
     "IsNew": false,
     "NewTrgr$": 0,

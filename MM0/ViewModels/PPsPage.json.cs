@@ -27,6 +27,21 @@ namespace MM0.ViewModels
         }
     }
 
+    [PPsPage_json.DlgDel]
+    partial class PPDlgDelPartial : Json
+    {
+        void Handle(Input.DelTrgr Action)
+        {
+            var p = this.Parent as PPsPage;
+            var aaa = p.DlgRec.Ad;
+            var bbb = Ad;
+            if (aaa != bbb)
+                Msj = "Proje adýný doðru girmediniz.";
+            else
+                Opened = false;
+        }
+    }
+
     [PPsPage_json.DlgRec]
     partial class PPPartil : Json
     {
@@ -79,6 +94,16 @@ namespace MM0.ViewModels
             Opened = false;
 
         }
+
+        void Handle(Input.DelTrgr Action)
+        {
+            var p = this.Parent as PPsPage;
+
+            Opened = false;
+            p.DlgDel.Opened = true;
+            p.DlgDel.Msj = "Projeye ait tüm bilgiler silinecektir.";
+        }
+
     }
 
     [PPsPage_json.PPs]

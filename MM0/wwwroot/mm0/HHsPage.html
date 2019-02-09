@@ -3,29 +3,13 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <table class="mdfDlgTbl">
-                        <tbody>
-                            <tr>
-                                <td>Ad</td>
-                                <td><input placeholder="Ad" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>ThmGider</td>
-                                <td><input placeholder="Gider" type="number" value="{{model.DlgRec.ThmGdr$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>ThmGelir</td>
-                                <td><input placeholder="Gelir" type="number" value="{{model.DlgRec.ThmGlr$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Info</td>
-                                <td><input type="text" value="{{model.DlgRec.Info$::change}}" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <paper-input label="Hesap Adı" type="text" value="{{model.DlgRec.Ad$::change}}" maxlength="40"></paper-input>
+                    <paper-input label="Hedef Gider" type="number" value="{{model.DlgRec.ThmGdr$::change}}"></paper-input>
+                    <paper-input label="Hedef Gelir" type="number" value="{{model.DlgRec.ThmGlr$::change}}"></paper-input>
+                    <paper-input label="Not" type="text" value="{{model.DlgRec.Info$::change}}" char-counter maxlength="100"></paper-input>
 
                     <div class="mdfDlgAction">
-                        <button class="btn-ins" value="{{model.DlgRec.ApdTrgr$::click}}" onmousedown="++this.value">AltınaEkle</button>
+                        <button class="btn-ins" value="{{model.DlgRec.ApdTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                         <button class="btn-upd" value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:refresh"></iron-icon></button>
                         <button class="btn-del" value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:trash"></iron-icon></button>
                     </div>
@@ -59,7 +43,7 @@
                                 <th colspan="2">Hedef</th>
                                 <th rowspan="2"></th>
                                 <th rowspan="2"></th>
-                                <th rowspan="2">Info</th>
+                                <th rowspan="2">Not</th>
                             </tr>
                             <tr>
                                 <th class="txtRight">Gider</th>

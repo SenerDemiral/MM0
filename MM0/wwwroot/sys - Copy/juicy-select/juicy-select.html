@@ -1,0 +1,112 @@
+﻿<!--
+`juicy-select element` - Polymer select element with multiple option support.
+@element juicy-select
+version: 1.1.3
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+
+<dom-module id="juicy-select">
+    <template>
+        <style>
+            :host {
+                display: inline-flex;
+            }
+
+            :host > ::slotted(select) {
+                width: 100%;
+            }
+        </style>
+        <slot></slot>
+    </template>
+    <script>
+        Polymer({
+            is: "juicy-select",
+            properties: {
+                options: { type: Array, value: [], notify: true },
+                multiple: { type: Boolean, value: false },
+                value: { type: String, notify: true, observer: "valueChanged" },
+                selectedProperty: { type: String, observer: "optionsChanged" },
+                textProperty: { type: String, observer: "optionsChanged" },
+                valueProperty: { type: String, observer: "optionsChanged" },
+                captionText: { type: String, observer: "optionsChanged" }
+            },
+            observers: ['optionsChanged(options.*)'],
+            created: function () {
+                this.selectChange = this.selectChange.bind(this);
+            },
+            attached: function () {
+                this.$select = this.querySelector("select");
+                if (!this.$select) {
+                    this.$select = document.createElement("select");
+                    this.appendChild(this.$select);
+                    if (this.multiple) {
+                        this.$select.setAttribute("multiple", "multiple");
+                    }
+                }
+                else {
+                    this.set("multiple", this.$select.hasAttribute("multiple"));
+                }
+                if (this.$select) {
+                    this.generateOptions();
+                }
+                this.addEventListener("change", this.selectChange);
+            },
+            detached: function () {
+                this.$select.removeEventListener('change', this.selectChange);
+            },
+            optionsChanged: function () {
+                if (!this.$select) {
+                    return;
+                }
+                this.generateOptions();
+            },
+            generateOptions: function () {
+                if (!this.multiple && this.captionText) {
+                    this.$select.innerHTML = "<option value=''>" + this.captionText + "</option>";
+                } else {
+                    this.$select.innerHTML = "";
+                }
+
+                if (!this.options || !this.options.length) {
+                    return;
+                }
+
+                for (var i = 0; i < this.options.length; i++) {
+                    var row = this.options[i];
+                    var opt = document.createElement("option");
+
+                    opt.innerHTML = row[this.textProperty];
+                    opt.value = row[this.valueProperty];
+
+                    if (this.multiple) {
+                        opt.selected = row[this.selectedProperty];
+                    } else {
+                        opt.selected = this.value == opt.value;
+                    }
+
+                    this.$select.appendChild(opt);
+                }
+            },
+            selectChange: function () {
+                if (!this.$select) {
+                    return
+                }
+                if (this.multiple) {
+                    var options = this.$select.querySelectorAll("option");
+
+                    for (var i = 0; i < options.length; i++) {
+                        this.set("options." + i + "." + this.selectedProperty, options[i].selected);
+                    }
+                } else {
+                    this.set("value", this.$select.value);
+                }
+            },
+            valueChanged: function (newVal, oldVal) {
+                if (this.$select) {
+                    this.$select.value = newVal;
+                }
+            }
+        });
+    </script>
+</dom-module>

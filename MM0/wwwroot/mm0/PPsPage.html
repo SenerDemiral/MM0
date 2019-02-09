@@ -3,22 +3,9 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <table class="mdfDlgTbl">
-                        <tbody>
-                            <tr>
-                                <td>Ad</td>
-                                <td><input placeholder="Ad" type="text" value="{{model.DlgRec.Ad$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Başlangıç</td>
-                                <td><input placeholder="Başlangıç" type="date" value="{{model.DlgRec.BasTrhX$::change}}" /></td>
-                            </tr>
-                            <tr>
-                                <td>Bitiş</td>
-                                <td><input placeholder="Bitiş" type="date" value="{{model.DlgRec.BitTrhX$::change}}" /></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <paper-input label="Proje Adı" type="text" value="{{model.DlgRec.Ad$::change}}" maxlength="40"></paper-input>
+                    <paper-input label="Başlangıç Tarihi" type="date" value="{{model.DlgRec.BasTrhX$::change}}"></paper-input>
+                    <paper-input label="Bitiş Tarihi" type="date" value="{{model.DlgRec.BitTrhX$::change}}"></paper-input>
 
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">
@@ -39,6 +26,22 @@
                         <template is="dom-if" if="[[model.DlgRec.Msj]]">
                             <div class="dlgMsj">[[model.DlgRec.Msj]]</div>
                         </template>
+                    </div>
+                </div>
+            </paper-dialog>
+
+
+            <paper-dialog opened="[[model.DlgDel.Opened]]" modal="true">
+                <div class="mdfDlg">
+                    <paper-input label="Doğrulamak içim Proje Adını giriniz" type="text" value="{{model.DlgDel.Ad$::change}}"></paper-input>
+
+                    <div class="mdfDlgAction">
+                        <button class="btn-del" value="{{model.DlgDel.DelTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:trash"></iron-icon></button>
+                        <button dialog-dismiss value="{{model.DlgDel.RejTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
+                    </div>
+
+                    <div class="mdfDlgAction">
+                        <div class="dlgMsj">[[model.DlgDel.Msj]]</div>
                     </div>
                 </div>
             </paper-dialog>
