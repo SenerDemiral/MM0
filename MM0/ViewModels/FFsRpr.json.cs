@@ -166,7 +166,12 @@ namespace MM0.ViewModels
             var p = this.Parent as FFsRpr;
             Id = 0;
             HHId = 0;
+            TTId = 0;
             TrhX = DateTime.Today.ToString("yyyy-MM-dd");
+            ZmnX = "";
+            Gdr = 0;
+            Glr = 0;
+            Ad = "";
             Msj = "";
             IsNew = true;
             Opened = true;
@@ -185,7 +190,7 @@ namespace MM0.ViewModels
 
             var p = this.Parent as FFsRpr;
 
-            Msj = FF.InsertRec(p.PPId, HHId, TTId, TrhX, Ad, Gdr, Glr);
+            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -212,7 +217,7 @@ namespace MM0.ViewModels
         {
             if (Id != 0)
             {
-                FF.UpdateRec(Id, HHId, TTId, TrhX, Ad, Gdr, Glr);
+                FF.UpdateRec(Id, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
 
                 var p = this.Parent as FFsRpr;
                 p.RefreshToplam();

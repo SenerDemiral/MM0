@@ -5,7 +5,10 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <paper-input label="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}"></paper-input>
+                    <div style="display:flex">
+                        <paper-input label="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}"></paper-input>
+                        <paper-input label="Zaman" type="time" value="{{model.DlgRec.ZmnX$::change}}"></paper-input>
+                    </div>
                     <juicy-select caption-text="Hesap Seçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
                     <juicy-select caption-text="Etiket Seçin" value="{{model.DlgRec.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select>
                     <paper-input label="Gider" type="number" value="{{model.DlgRec.Gdr$::change}}"></paper-input>
@@ -19,16 +22,14 @@
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">
                             <button class="btn-ins" value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                            <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
                         </template>
                         <template is="dom-if" if="[[!model.DlgRec.IsNew]]">
                             <button class="btn-ins" value="{{model.DlgRec.InsTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                             <button class="btn-upd" value="{{model.DlgRec.UpdTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:refresh"></iron-icon></button>
                             <button class="btn-del" value="{{model.DlgRec.DelTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:trash"></iron-icon></button>
+                            <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
                         </template>
-                    </div>
-
-                    <div class="mdfDlgAction">
-                        <button dialog-dismiss value="{{model.DlgRec.RejTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:close-circle-o"></iron-icon></button>
                     </div>
 
                     <div class="mdfDlgAction">

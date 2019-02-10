@@ -20,7 +20,8 @@ namespace MM0.ViewModels
                 if (!string.IsNullOrEmpty(QryTrhX))
                 {
                     DateTime trh = Convert.ToDateTime(QryTrhX);
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh = ?", pp, trh);
+                    DateTime bitTrh = trh.AddDays(1);
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ?", pp, trh, bitTrh);
                 }
 
                 FFs.Data = ffs;
@@ -81,6 +82,10 @@ namespace MM0.ViewModels
             HHId = 0;
             TTId = 0;
             TrhX = p.QryTrhX; // DateTime.Today.ToString("yyyy-MM-dd");
+            ZmnX = "";
+            Gdr = 0;
+            Glr = 0;
+            Ad = "";
             Msj = "";
             IsNew = true;
             Opened = true;
@@ -99,7 +104,7 @@ namespace MM0.ViewModels
 
             var p = this.Parent as FFsPage;
 
-            Msj = FF.InsertRec(p.PPId, HHId, TTId, TrhX, Ad, Gdr, Glr);
+            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -126,7 +131,7 @@ namespace MM0.ViewModels
         {
             if (Id != 0)
             {
-                FF.UpdateRec(Id, HHId, TTId, TrhX, Ad, Gdr, Glr);
+                FF.UpdateRec(Id, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
 
                 var p = this.Parent as FFsPage;
                 p.RefreshToplam();
@@ -183,9 +188,15 @@ namespace MM0.ViewModels
             p.DlgRec.HHId = HHId;
 
             if (string.IsNullOrEmpty(TrhX))
+            {
                 p.DlgRec.TrhX = "";
+                p.DlgRec.ZmnX = "";
+            }
             else
+            {
                 p.DlgRec.TrhX = Convert.ToDateTime(TrhX).ToString("yyyy-MM-dd");
+                p.DlgRec.ZmnX = Convert.ToDateTime(TrhX).ToString("HH:mm");
+            }
             p.DlgRec.Msj = "";
             p.DlgRec.IsNew = false; // Edit
             p.DlgRec.Opened = true;

@@ -412,17 +412,26 @@ namespace DBMM0
         public string TTAd => TT?.Ad;
 
         public string TrhZ => $"{Trh:O}";
-        public string TrhX => $"{Trh:dd.MM.yy}";
+        public string TrhX => Trh.Hour == 0 && Trh.Minute == 0 ? $"{Trh:dd.MM.yy}" : $"{Trh:dd.MM.yy HH:mm}";
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
         public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
 
         public static string InsertRec(long ppId, long hhId, long ttId, string Trh, string Ad, decimal Gdr, decimal Glr)
         {
             string msj = "";
+            DateTime dt;
             Db.Transact(() =>
             {
                 if (Db.FromId((ulong)ppId) is PP pp)
                 {
+                    try
+                    {
+                        dt = Convert.ToDateTime(Trh);
+                    }
+                    catch (Exception)
+                    {
+                        dt = Convert.ToDateTime(Trh.Substring(0, 10));
+                    }
                     TT tt = Db.FromId((ulong)ttId) as TT;
                     if (Db.FromId((ulong)hhId) is HH hh)
                     {
@@ -430,10 +439,10 @@ namespace DBMM0
                         {
                             PP = pp,
                             HH = hh,
-                            TT = tt, 
+                            TT = tt,
 
                             Ad = Ad,
-                            Trh = Convert.ToDateTime(Trh),
+                            Trh = dt, // Convert.ToDateTime(Trh),
                             Gdr = Gdr,
                             Glr = Glr
                         };
@@ -524,8 +533,8 @@ namespace DBMM0
                 if (!string.IsNullOrEmpty(basTrhX))
                 {
                     DateTime basTrh = Convert.ToDateTime(basTrhX);
-                    DateTime bitTrh = Convert.ToDateTime(bitTrhX);
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh <= ?", pp, basTrh, bitTrh);
+                    DateTime bitTrh = Convert.ToDateTime(bitTrhX).AddDays(1);
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ?", pp, basTrh, bitTrh);
                 }
                 else
                     ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by r.Trh DESC", pp);
