@@ -12,7 +12,7 @@ namespace MM0.ViewModels
             if (Db.FromId((ulong)PPId) is PP pp)
             {
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";
-                TTs.Data = Db.SQL<TT>("select r from TT r where r.PP = ?", pp);
+                TTs.Data = Db.SQL<TT>("select r from TT r where r.PP = ? order by r.Ad", pp);
             }
         }
 

@@ -33,12 +33,14 @@ namespace MM0.ViewModels
         void Handle(Input.DelTrgr Action)
         {
             var p = this.Parent as PPsPage;
-            var aaa = p.DlgRec.Ad;
-            var bbb = Ad;
-            if (aaa != bbb)
+
+            if (p.DlgRec.Ad != Ad)
                 Msj = "Proje adýný doðru girmediniz.";
             else
+            {
+                PP.DeleteAll((ulong)p.DlgRec.Id);
                 Opened = false;
+            }
         }
     }
 

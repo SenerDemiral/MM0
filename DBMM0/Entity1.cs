@@ -7,7 +7,16 @@ using Starcounter;
 namespace DBMM0
 {
     [Database]
-    public class TT // TAGs
+    public class RM // RecordModifications
+    {
+        public DateTime? InsTrh { get; set; }
+        public DateTime? UpdTrh { get; set; }
+        //public UU InsUsr { get; set; }
+        //public UU UpdUsr { get; set; }
+    }
+
+    [Database]
+    public class TT : RM // TAGs
     {
         public ulong Id => this.GetObjectNo();
         public PP PP { get; set; }
@@ -253,9 +262,15 @@ namespace DBMM0
 
             PP ppNew = PP.InsertRec((long)ccNew.GetObjectNo(), "Örnek", null, null);
             Hlp.SablondanEkle(ppNew.GetObjectNo());
+            TT.InsertRec((long)ppNew.Id, "Baba", null, null, null);
+            TT.InsertRec((long)ppNew.Id, "Anne", null, null, null);
+            TT.InsertRec((long)ppNew.Id, "Çocuk1", null, null, null);
+            TT.InsertRec((long)ppNew.Id, "Çocuk2", null, null, null);
+            TT.InsertRec((long)ppNew.Id, "Araç1", null, null, null);
+            TT.InsertRec((long)ppNew.Id, "Araç2", null, null, null);
         }
 
-        public static void Kill(ulong ccId)
+        public static void DeleteAll(ulong ccId)
         {
             if (Db.FromId(ccId) is CC cc)
             {
@@ -263,7 +278,7 @@ namespace DBMM0
                 {
                     foreach(var pp in Db.SQL<PP>("select r from PP r where r.CC = ?", cc))
                     {
-                        PP.Kill(pp.GetObjectNo());
+                        PP.DeleteAll(pp.GetObjectNo());
                     }
                     cc.HHroot.Delete();
                     cc.Delete();
@@ -274,7 +289,7 @@ namespace DBMM0
     }
 
     [Database]
-    public class PP //Projects
+    public class PP : RM //Projects
     {
         public ulong Id => this.GetObjectNo();
 
@@ -339,49 +354,58 @@ namespace DBMM0
                         pp.BitTrh = Convert.ToDateTime(BitTrh);
 
                     pp.HHroot.Ad = Ad;
+                    pp.UpdTrh = DateTime.Now;
                 }
             });
         }
 
         public static PP InsertRec(long ccId, string Ad, string BasTrh, string BitTrh)
         {
-            CC cc = Db.FromId<CC>((ulong)ccId);
-            PP ppNew = null;
-            HH hhNew = null;
-            DateTime? nullDT = null;
-            Db.Transact(() =>
+            if (Db.FromId((ulong)ccId) is CC cc)
             {
-                ppNew = new PP()
+                PP ppNew = null;
+                HH hhNew = null;
+                DateTime? nullDT = null;
+                Db.Transact(() =>
                 {
-                    Ad = Ad,
-                    BasTrh = string.IsNullOrEmpty(BasTrh) ? nullDT : DateTime.Parse(BasTrh),  //Convert.ToDateTime(BasTrh),
-                    BitTrh = string.IsNullOrEmpty(BitTrh) ? nullDT : Convert.ToDateTime(BitTrh),
-                    CC = cc
-                };
-            });
-            Db.Transact(() =>
-            {
-                hhNew = new HH()
+                    ppNew = new PP()
+                    {
+                        Ad = Ad,
+                        BasTrh = string.IsNullOrEmpty(BasTrh) ? nullDT : DateTime.Parse(BasTrh),  //Convert.ToDateTime(BasTrh),
+                        BitTrh = string.IsNullOrEmpty(BitTrh) ? nullDT : Convert.ToDateTime(BitTrh),
+                        CC = cc,
+                        InsTrh = DateTime.Now
+                    };
+                });
+                Db.Transact(() =>
                 {
-                    PP = ppNew,
-                    Prn = cc.HHroot,
-                    Ad = ppNew.Ad,
-                };
-            });
-            Db.Transact(() =>
-            {
-                ppNew.HHroot = hhNew;
-            });
-            return ppNew;
+                    hhNew = new HH()
+                    {
+                        PP = ppNew,
+                        Prn = cc.HHroot,
+                        Ad = ppNew.Ad,
+                        Lvl = 1,
+                        Skl = 1,
+                        InsTrh = DateTime.Now
+                    };
+                });
+                Db.Transact(() =>
+                {
+                    ppNew.HHroot = hhNew;
+                });
+                return ppNew;
+            }
+            return null;
         }
 
-        public static void Kill(ulong ppId)
+        public static void DeleteAll(ulong ppId)
         {
             if (Db.FromId(ppId) is PP pp)
             {
                 Db.Transact(() =>
                 {
                     Db.SQL("delete from FF where PP = ?", pp);
+                    Db.SQL("delete from TT where PP = ?", pp);
                     Db.SQL("delete from HH where PP = ?", pp);
                     pp.Delete();
                 });
@@ -392,12 +416,12 @@ namespace DBMM0
     // HH dolaylı yoldan Hesabın kime ait oldugunu biliyor.
     // Performans acisindan PP alanini eklendi
     [Database]
-    public class FF //Fisler
+    public class FF : RM //Fisler
     {
         public ulong Id => this.GetObjectNo();
 
         public PP PP { get; set; }
-        public HH HH { get; set; }  // Altinda baska hesap olmamali
+        public HH HH { get; set; }  // Calisan hesap (Skl=99)
         public TT TT { get; set; }  // Tag
         public string Ad { get; set; }
         public DateTime Trh { get; set; }
@@ -444,8 +468,11 @@ namespace DBMM0
                             Ad = Ad,
                             Trh = dt, // Convert.ToDateTime(Trh),
                             Gdr = Gdr,
-                            Glr = Glr
+                            Glr = Glr,
+
+                            InsTrh = DateTime.Now
                         };
+                        FF.PostMdf(hh.Id);
                     }
                     else
                         msj = "Tanımsız Hesap";
@@ -469,10 +496,11 @@ namespace DBMM0
                         ff.Trh = Convert.ToDateTime(Trh);
                         ff.Gdr = Gdr;
                         ff.Glr = Glr;
+                        ff.UpdTrh = DateTime.Now;
+                        FF.PostMdf(hh.Id);
                     }
                 }
             });
-
         }
 
         public static string DeleteRec(long Id)
@@ -532,7 +560,7 @@ namespace DBMM0
                 IEnumerable<FF> ffs;
                 if (!string.IsNullOrEmpty(basTrhX))
                 {
-                    DateTime basTrh = Convert.ToDateTime(basTrhX);
+                    DateTime basTrh = Convert.ToDateTime(basTrhX).Date;
                     DateTime bitTrh = Convert.ToDateTime(bitTrhX).AddDays(1);
                     ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ?", pp, basTrh, bitTrh);
                 }
@@ -685,7 +713,7 @@ namespace DBMM0
     // Performans acisindan PP alanini ekle
     // CC ve PP icin kayitlari otomatik acilir (CC&PP.HHroot bunlari tutar). Proje altini kullanici acar.
     [Database]
-    public class HH     // HesapPlani
+    public class HH : RM    // HesapPlani
     {
         public ulong Id => this.GetObjectNo();
 
@@ -968,6 +996,7 @@ namespace DBMM0
                 yield return h;
             }
         }
+
         public static void ChildreenOfNode(HH node, int lvl, List<HH> list)
         {
             var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ? order by r.Ad", node);
@@ -978,6 +1007,7 @@ namespace DBMM0
                 ChildreenOfNode(hh, lvl + 1, list);
             }
         }
+
         public static bool CanCopyTo(PP dpp)
         {
             // dPP nin HH leri olmamali (Sadece PP ye bagli AnaHesap disinda);
@@ -1014,8 +1044,6 @@ namespace DBMM0
             });
         }
 
-
-
         public static void LeafsOfNode(HH node, List<HH> hhList)
         {
             var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ?", node);
@@ -1025,100 +1053,6 @@ namespace DBMM0
                     hhList.Add(hh);
 
                 LeafsOfNode(hh, hhList);
-            }
-        }
-
-
-        public static void Display()
-        {
-            Db.Transact(() =>
-            {
-                if (Db.FromId(14) is HH pork) {
-                    pork.GrcGlr = 1000;
-                    pork.Ad = "          Porks";
-                    UpdateParentsGrcToplam(pork);
-                }
-            });
-
-
-            List<hhTree> list = new List<hhTree>();
-            var cc = Db.FromId<CC>(1);  // Oguz
-            var hh = cc.HHroot;  
-            int lvl = 0;
-            Console.WriteLine($"{hh.GetObjectNo():D8} {hh.Ad}");
-            //DisplayChildreen(hh, lvl, $"{hh.No:D2}", list);
-            DisplayChildreen(hh, lvl, null, list);
-
-            Console.WriteLine("");
-            Console.WriteLine("List---------");
-            foreach (var item in list)
-            {
-                Console.WriteLine($"{item.ONo} {item.Ad} {item.hNo}");
-            }
-
-
-            Console.WriteLine("");
-            Console.WriteLine("Leafs---------");
-            var prjRoot = Db.FromId<HH>(4);
-            List<HH> leafList = new List<HH>();
-            LeafsDeneme(prjRoot, leafList);
-
-            foreach(var itm in sener(2))
-                Console.WriteLine($"-------{itm.GetObjectNo()} {itm.Ad}");
-
-        }
-
-        public static void DisplayChildreen(HH prn, int lvl, string hspNo, List<hhTree> list)
-        {
-            var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ? order by r.No", prn);
-            foreach (var hh in HHs)
-            {
-                string hNo = string.IsNullOrEmpty(hspNo) ? $"{hh.No:D2}" : $"{hspNo}.{hh.No:D2}";
-                //Console.WriteLine($"{hh.GetObjectNo():D8} {lvl} {hNo,-12} {new string(' ', lvl * 4)} {hh.Ad}"); // <- {hh.Prn?.Ad} ==== ");
-                //Console.WriteLine($"{hh.GetObjectNo():D8} {lvl} {hNo} {hh.Ad}");
-                //Console.WriteLine($"{hh.GetObjectNo():D8} {lvl} {hNo,-12} {hh.Ad}");
-                string Ad2 = $"{new string(' ', lvl * 2)}{hh.Ad}";
-                Console.WriteLine($"{hh.GetObjectNo():D8} {lvl} {Ad2, -20} {hh.GrcGlr} {hh.GrcGdr} {hNo}");
-                list.Add(new hhTree
-                {
-                    ONo = hh.GetObjectNo(),
-                    hNo = hNo,
-                    Ad = hh.Ad
-                });
-                DisplayChildreen(hh, lvl + 1, hNo, list);
-            }
-        }
-
-        public static void LeafsDeneme(HH prn, List<HH> hhList)
-        {
-            // Buna gerek kalmadi, HH.PP alani var artik
-            // var leafs = Db.SQL<HH>("select r from HH where r.PP = ? and Skl = ?, PP, 9); // Skl=9 Working nodes
-
-            var HHs = Db.SQL<HH>("select r from HH r where r.Prn = ?", prn);
-            foreach (var hh in HHs)
-            {
-                if (hh.Skl == 99)
-                { 
-                    Console.WriteLine($"{hh.Ad}");
-                    hhList.Add(hh);
-                }
-                LeafsDeneme(hh, hhList);
-            }
-        }
-
-
-        public static IEnumerable<HH> sener(ulong no)
-        {
-            if (Db.FromId(no) is HH hh)
-            {
-                List<HH> leafList = new List<HH>();
-
-                LeafsDeneme(hh, leafList);
-
-                foreach (var h in leafList)
-                {
-                    yield return h;
-                }
             }
         }
 
@@ -1150,175 +1084,6 @@ namespace DBMM0
             });
         }
 
-
-        public static void Populate()
-        {
-            CC oguzC = null;
-            PP oguzP1 = null;
-            HH oguzH = null, oguzP1H = null, food = null, fruit = null, red = null, yellow = null, meat = null;
-
-            Db.Transact(() =>
-            {
-                oguzC = new CC
-                {
-                    Ad = "TEST",
-                    Email = "test",
-                    Pwd = "test",
-                    Token = "test",
-                    IsConfirmed = true
-                };
-            });
-            Db.Transact(() =>
-            {
-                oguzH = new HH
-                {
-                    No = 0,
-                    Prn = null,
-                };
-                oguzC.HHroot = oguzH;
-                oguzH.Ad = oguzC.Ad;
-            });
-            Db.Transact(() =>
-            {
-                oguzP1 = new PP
-                {
-                    CC = oguzC,
-                    Ad = "TestProje1",
-                    BasTrh = DateTime.Today.AddDays(-100),
-                    BitTrh = DateTime.Today.AddDays(100),
-                };
-                oguzP1H = new HH
-                {
-                    PP = oguzP1,
-                    No = 1,
-                    Prn = oguzH,
-                    ThmGlr = 1000000,
-                    ThmGdr = 900000
-                };
-                oguzP1.HHroot = oguzP1H;
-                oguzP1H.Ad = oguzP1.Ad;
-            });
-            Db.Transact(() =>
-            {
-                food = new HH
-                {
-                    PP = oguzP1,
-                    No = 1,
-                    Ad = "Besin",
-                    Prn = oguzP1H
-                };
-            });
-            Db.Transact(() =>
-            {
-                fruit = new HH
-                {
-                    PP = oguzP1,
-                    No = 1,
-                    Ad = "Meyve",
-                    Prn = food
-                };
-            });
-            Db.Transact(() =>
-            {
-                red = new HH
-                {
-                    PP = oguzP1,
-                    No = 1,
-                    Ad = "Kırmızı Renkli",
-                    Prn = fruit
-                };
-            });
-
-            Db.Transact(() =>
-            {
-                var cherry = new HH
-                {
-                    PP = oguzP1,
-                    No = 1,
-                    Ad = "Çilek",
-                    Prn = red,
-                    GrcGlr = 10,
-                    GrcGdr = 20
-                };
-                var apple = new HH
-                {
-                    PP = oguzP1,
-                    No = 2,
-                    Ad = "Elma",
-                    Prn = red,
-                    GrcGlr = 30,
-                    GrcGdr = 40
-                };
-            });
-            Db.Transact(() =>
-            {
-                yellow = new HH
-                {
-                    PP = oguzP1,
-                    No = 2,
-                    Ad = "Sarı Renkli",
-                    Prn = fruit
-                };
-            });
-            Db.Transact(() =>
-            {
-                var banana = new HH
-                {
-                    PP = oguzP1,
-                    No = 1,
-                    Ad = "Muz",
-                    Prn = yellow,
-                    GrcGlr = 50,
-                    GrcGdr = 60
-                };
-
-            });
-            Db.Transact(() =>
-            {
-                meat = new HH
-                {
-                    PP = oguzP1,
-                    No = 2,
-                    Ad = "Et",
-                    Prn = food
-                };
-            });
-            Db.Transact(() =>
-            {
-                var beef = new HH
-                {
-                    PP = oguzP1,
-                    No = 1,
-                    Ad = "Biftek",
-                    Prn = meat,
-                    GrcGlr = 70,
-                    GrcGdr = 80,
-                    ThmGlr = 285000,
-                    ThmGdr = 200000
-                };
-                var pork = new HH
-                {
-                    PP = oguzP1,
-                    No = 2,
-                    Ad = "Tavuk",
-                    Prn = meat,
-                    GrcGlr = 90,
-                    GrcGdr = 95,
-                    ThmGlr = 150000,
-                    ThmGdr = 125000
-                };
-            });
-
-            /*
-            Db.TransactAsync(() => {
-                UpdateParentsGrcToplam(apple);
-                UpdateParentsGrcToplam(cherry);
-                UpdateParentsGrcToplam(banana);
-                UpdateParentsGrcToplam(beef);
-                UpdateParentsGrcToplam(pork);
-
-            });*/
-        }
 
     }
 

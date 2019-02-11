@@ -136,6 +136,7 @@ namespace DBMM0
                                 Prn = dhh[not - 1],
                                 Ad = line.TrimStart('\t'),
                             };
+                            HH.PostIns(dhh[not]);
                         }
                     }
                 });
