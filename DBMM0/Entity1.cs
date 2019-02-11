@@ -747,16 +747,57 @@ namespace DBMM0
 
         public static string InsertRec(long ppId, long prnId, string Ad, decimal ThmGdr, decimal ThmGlr, string Info)
         {
+            // Hareketi/FF olan bir hesabin altina kayit acilack ise
+            // Mevcut Parent'dan Yeni Parent yarat. Eskisi ve AltHesap buna baglanacak
+            // Mevcut Parent'in adina "Eski" ekle, YeniParent'e bagla
+            // AltHesapAc Yeniye bagla
+            // AAA nin FF hareketleri var altina BBB acilacak
+            // Sonunda Boyle olacak:
+            // AAA
+            //  EskiAAA
+            //  BBB
+
             string msj = "";
             Db.Transact(() =>
             {
                 if (Db.FromId((ulong)prnId) is HH phh)
                 {
                     if (phh.HasHrk)
-                        msj = "Hesabin hareketleri var, Bu hesabin altına hesap ekleyemezsiniz.";
+                    {
+                        //msj = "Hesabın hareketleri var, Bu hesabın altına hesap ekleyemezsiniz.";
+                        // Parent kaydi duplicate et, Yeni Parent bu olacak. Eskisi ve AltHesap buna baglanacak
+                        HH newPHH = new HH
+                        {
+                            Prn = phh.Prn,
+                            PP = phh.PP,
+                            Lvl = phh.Lvl,
+                            Skl = phh.Skl,
+                            Ad = phh.Ad,
+                            Info = phh.Info,
+                            ThmGdr = phh.ThmGdr,
+                            ThmGlr = phh.ThmGlr
+                        };
+
+                        // Mevcut prn'in adine Eski ekleyip Parintini newPHH yap
+                        phh.Ad = $"Eski {phh.Ad}";
+                        phh.Prn = newPHH;
+                        HH.PostIns(phh);
+
+                        // AltHesabi Ac
+                        HH newHH = new HH
+                        {
+                            Prn = newPHH,
+                            PP = Db.FromId<PP>((ulong)ppId),
+                            Ad = Ad,
+                            Info = Info,
+                            ThmGdr = ThmGdr,
+                            ThmGlr = ThmGlr
+                        };
+                        HH.PostIns(newHH);
+                    }
                     else
                     {
-                        new HH
+                        HH hh = new HH
                         {
                             Prn = phh,
                             PP = Db.FromId<PP>((ulong)ppId),
@@ -765,6 +806,7 @@ namespace DBMM0
                             ThmGdr = ThmGdr,
                             ThmGlr = ThmGlr
                         };
+                        HH.PostIns(hh);
                     }
                 }
             });
@@ -795,10 +837,16 @@ namespace DBMM0
                 {
                     if (hh.HasHrk)
                         msj = "Hareketleri var silemezsiniz.";
+                    else if (hh.Skl == 1)
+                        msj = "Bu Hesabı silemezsiniz.";    // Proje
                     else if (hh.Skl < 99)
                         msj = "Alt Hesapları var silemezsiniz.";
                     else
+                    {
+                        HH pHH = hh.Prn;
                         hh.Delete();
+                        PostIns(pHH);
+                    }
                 }
             });
             return msj;

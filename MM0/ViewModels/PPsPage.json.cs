@@ -48,7 +48,10 @@ namespace MM0.ViewModels
         void Handle(Input.NewTrgr Action)
         {
             Id = 0;
+            Ad = "";
+            
             BasTrhX = DateTime.Today.ToString("yyyy-MM-dd");
+            BitTrhX = "";
             IsNew = true;
             Opened = true;
         }

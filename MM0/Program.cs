@@ -23,14 +23,13 @@ namespace MM0
             {
                 handler.Register();
             }
-
+            /*
             Hook<HH>.AfterCommitInsert += (sender, id) =>
             {
                 var hh = Db.FromId<HH>(id);
-                var aaa = hh.Ad;
                 HH.PostIns(hh);
             };
-
+            */
             Hook<FF>.AfterCommitInsert += (sender, id) =>
             {
                 var ff = Db.FromId<FF>(id);

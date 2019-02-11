@@ -363,7 +363,9 @@ namespace MM0.Api
                     ws.HeaderFooter.OddHeader.CenteredText = Hdr;
 
                     int cr = 2;
-                    foreach (var ff in FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX))
+                    IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX);
+
+                    foreach (var ff in ffs.OrderByDescending((x) => x.Trh))
                     {
                         ws.Cells[cr, 1].Value = ff.Trh;
                         ws.Cells[cr, 2].Value = ff.HHAdPrn;

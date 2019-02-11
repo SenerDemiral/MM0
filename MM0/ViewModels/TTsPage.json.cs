@@ -28,6 +28,10 @@ namespace MM0.ViewModels
         void Handle(Input.NewTrgr Action)
         {
             Id = 0;
+            Ad = "";
+            Info = "";
+            Email = "";
+            Tel = "";
             IsNew = true;
             Opened = true;
         }
