@@ -7,16 +7,7 @@ using Starcounter;
 namespace DBMM0
 {
     [Database]
-    public class RM // RecordModifications
-    {
-        public DateTime? InsTrh { get; set; }
-        public DateTime? UpdTrh { get; set; }
-        //public UU InsUsr { get; set; }
-        //public UU UpdUsr { get; set; }
-    }
-
-    [Database]
-    public class TT : RM // TAGs
+    public class TT // TAGs
     {
         public ulong Id => this.GetObjectNo();
         public PP PP { get; set; }
@@ -289,7 +280,7 @@ namespace DBMM0
     }
 
     [Database]
-    public class PP : RM //Projects
+    public class PP //Projects
     {
         public ulong Id => this.GetObjectNo();
 
@@ -354,7 +345,6 @@ namespace DBMM0
                         pp.BitTrh = Convert.ToDateTime(BitTrh);
 
                     pp.HHroot.Ad = Ad;
-                    pp.UpdTrh = DateTime.Now;
                 }
             });
         }
@@ -374,7 +364,6 @@ namespace DBMM0
                         BasTrh = string.IsNullOrEmpty(BasTrh) ? nullDT : DateTime.Parse(BasTrh),  //Convert.ToDateTime(BasTrh),
                         BitTrh = string.IsNullOrEmpty(BitTrh) ? nullDT : Convert.ToDateTime(BitTrh),
                         CC = cc,
-                        InsTrh = DateTime.Now
                     };
                 });
                 Db.Transact(() =>
@@ -386,7 +375,6 @@ namespace DBMM0
                         Ad = ppNew.Ad,
                         Lvl = 1,
                         Skl = 1,
-                        InsTrh = DateTime.Now
                     };
                 });
                 Db.Transact(() =>
@@ -416,7 +404,7 @@ namespace DBMM0
     // HH dolaylı yoldan Hesabın kime ait oldugunu biliyor.
     // Performans acisindan PP alanini eklendi
     [Database]
-    public class FF : RM //Fisler
+    public class FF  //Fisler
     {
         public ulong Id => this.GetObjectNo();
 
@@ -428,9 +416,13 @@ namespace DBMM0
         public decimal Glr { get; set; }
         public decimal Gdr { get; set; }
 
+        public DateTime? InsTrh { get; set; }
+        public DateTime? UpdTrh { get; set; }
+
         public string PPAd => PP?.Ad;
         public ulong HHId => HH?.GetObjectNo() ?? 0;
         public string HHAd => HH?.Ad;
+        public string HHAdFull => HH?.AdFull;
         public string HHAdPrn => HH?.AdPrn;
         public ulong TTId => TT?.GetObjectNo() ?? 0;
         public string TTAd => TT?.Ad;
@@ -713,7 +705,7 @@ namespace DBMM0
     // Performans acisindan PP alanini ekle
     // CC ve PP icin kayitlari otomatik acilir (CC&PP.HHroot bunlari tutar). Proje altini kullanici acar.
     [Database]
-    public class HH : RM    // HesapPlani
+    public class HH    // HesapPlani
     {
         public ulong Id => this.GetObjectNo();
 
@@ -751,7 +743,8 @@ namespace DBMM0
                 HH pHH = this.Prn;
                 while (pHH != null && pHH.Lvl > 1)
                 {
-                    full = $"{full}◄{pHH.Ad}";
+                    //full = $"{full}◄{pHH.Ad}";
+                    full = $"{pHH.Ad}.{full}";
                     pHH = pHH.Prn;
                 }
                 return full;

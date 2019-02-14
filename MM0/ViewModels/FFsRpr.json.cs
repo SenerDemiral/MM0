@@ -48,7 +48,7 @@ namespace MM0.ViewModels
             IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX);
             FFs.Data = ffs.OrderByDescending((x) => x.Trh);
 
-            NORX = $"Kayıt Sayısı: {FFs.Count:n0}";
+            NORX = $"{FFs.Count:n0}";
 
             decimal GlrTop = 0, GdrTop = 0;
             foreach (var ff in ffs)

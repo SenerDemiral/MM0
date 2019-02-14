@@ -75,11 +75,9 @@
                             <tr>
                                 <th class="tarih">Tarih</th>
                                 <th>Hesap</th>
-                                <th>ÜstHesap</th>
                                 <th>Etiket</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
-                                <th>Not</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -87,11 +85,9 @@
                             <tr>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td class="txtRight">[[model.NORX]]</td>
+                                <td class="txtCenter">[[model.NORX]]</td>
                                 <td class="txtRight">[[model.GdrTopX]]</td>
                                 <td class="txtRight">[[model.GlrTopX]]</td>
-                                <td></td>
                                 <td></td>
                             </tr>
                         </tfoot>
@@ -99,13 +95,13 @@
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
                                     <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&bastrhx=[[item.TrhX]]&bittrhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
-                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAd]]</a></td>
+                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAdFull]] </a>
+                                        <span style="font-size:.8em;font-style:italic;color:brown">[[item.Ad]]</span>
+                                    </td>
 
-                                    <td style="font-size:smaller">[[item.HHAdPrn]]</td>
                                     <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[item.TTId]]">[[item.TTAd]]</a></td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
-                                    <td>[[item.Ad]]</td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>
