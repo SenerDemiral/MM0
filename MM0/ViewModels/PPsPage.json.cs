@@ -49,13 +49,16 @@ namespace MM0.ViewModels
     {
         void Handle(Input.NewTrgr Action)
         {
-            Id = 0;
-            Ad = "";
-            
-            BasTrhX = DateTime.Today.ToString("yyyy-MM-dd");
-            BitTrhX = "";
-            IsNew = true;
-            Opened = true;
+            if ((Root as MasterPage).CUId == 0)    // Sadece Client/Admn
+            {
+                Id = 0;
+                Ad = "";
+
+                BasTrhX = DateTime.Today.ToString("yyyy-MM-dd");
+                BitTrhX = "";
+                IsNew = true;
+                Opened = true;
+            }
         }
 
         void Handle(Input.InsTrgr Action)
@@ -116,21 +119,24 @@ namespace MM0.ViewModels
     {
         void Handle(Input.EdtTrgr Action)
         {
-            var p = this.Parent.Parent as PPsPage;
+            if ((Root as MasterPage).CUId == 0)    // Sadece Client/Admn
+            {
+                var p = this.Parent.Parent as PPsPage;
 
-            p.DlgRec.Id = Id;
-            p.DlgRec.Ad = Ad;
-            if (string.IsNullOrEmpty(BasTrhX))
-                p.DlgRec.BasTrhX = "";
-            else
-                p.DlgRec.BasTrhX = Convert.ToDateTime(BasTrhX).ToString("yyyy-MM-dd");
-            if (string.IsNullOrEmpty(BitTrhX))
-                p.DlgRec.BitTrhX = "";
-            else
-                p.DlgRec.BitTrhX = Convert.ToDateTime(BitTrhX).ToString("yyyy-MM-dd");
+                p.DlgRec.Id = Id;
+                p.DlgRec.Ad = Ad;
+                if (string.IsNullOrEmpty(BasTrhX))
+                    p.DlgRec.BasTrhX = "";
+                else
+                    p.DlgRec.BasTrhX = Convert.ToDateTime(BasTrhX).ToString("yyyy-MM-dd");
+                if (string.IsNullOrEmpty(BitTrhX))
+                    p.DlgRec.BitTrhX = "";
+                else
+                    p.DlgRec.BitTrhX = Convert.ToDateTime(BitTrhX).ToString("yyyy-MM-dd");
 
-            p.DlgRec.IsNew = false; // Edit
-            p.DlgRec.Opened = true;
+                p.DlgRec.IsNew = false; // Edit
+                p.DlgRec.Opened = true;
+            }
         }
     }
 

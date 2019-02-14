@@ -102,6 +102,16 @@ namespace MM0.ViewModels
             //How to set only time part of a DateTime variable
             //var newDate = oldDate.Date + new TimeSpan(11, 30, 55);
 
+            if ((Root as MasterPage).CUId > 0)    // Client/Usr gecmis tarihli kayit giremez!
+            {
+                DateTime dt = Convert.ToDateTime(TrhX);
+                if (dt.Date < DateTime.Today)
+                {
+                    Msj = "Geçmiş tarihe kayıt giremezsiniz.";
+                    Action.Cancelled = true;
+                    return;
+                }
+            }
             var p = this.Parent as FFsPage;
 
             Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
@@ -131,6 +141,16 @@ namespace MM0.ViewModels
         {
             if (Id != 0)
             {
+                if ((Root as MasterPage).CUId > 0)    // Client/Usr gecmis tarihli kayit giremez!
+                {
+                    DateTime dt = Convert.ToDateTime(TrhX);
+                    if (dt.Date < DateTime.Today)
+                    {
+                        Msj = "Geçmiş tarihe ait kayıt değiştiremezsiniz.";
+                        Action.Cancelled = true;
+                        return;
+                    }
+                }
                 FF.UpdateRec(Id, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
 
                 var p = this.Parent as FFsPage;

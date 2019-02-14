@@ -101,6 +101,12 @@ namespace MM0.Api
                 if (master.Token != "")
                 {
                     var cc = Db.SQL<CC>("select r from CC r where r.Token = ?", master.Token).FirstOrDefault();
+                    if (cc == null)
+                    {
+                        var cu = Db.SQL<CU>("select r from CU r where r.Token = ?", master.Token).FirstOrDefault();
+                        if (cu != null)
+                            cc = cu.CC;
+                    }
                     if (cc != null)
                         return WrapPage<PPsPage>($"/MM0/partials/PPs/{cc.Id}");
                 }

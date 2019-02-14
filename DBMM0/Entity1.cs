@@ -198,6 +198,28 @@ namespace DBMM0
         }
     }
 
+    // CC Admin dir.
+    // CU Admin'in actigi userlar
+    // User Belirli projelere ulasabilir.
+    [Database]
+    public class CU // ClientUsers
+    {
+        public ulong Id => this.GetObjectNo();
+        public CC CC { get; set; }
+        public string Email { get; set; }
+        public string Ad { get; set; }
+        public string Pwd { get; set; }
+        public string Token { get; set; }
+    }
+
+    [Database]
+    public class CUP // ClientUsersProject Available
+    {
+        public ulong Id => this.GetObjectNo();
+        public CC CC { get; set; }
+        public CU CU { get; set; }
+        public PP PP { get; set; }
+    }
 
     [Database]
     public class CC // Clients

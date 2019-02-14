@@ -45,7 +45,21 @@ namespace MM0
             if(Db.SQL<CC>("select r from CC r").FirstOrDefault() == null)   // DB bos ise
                 CC.InsertRec("test", "test", "test", true);
 
+            if (Db.SQL<CU>("select r from CU r").FirstOrDefault() == null)   // CU bos ise
+            {
+                CC cc = Db.FromId<CC>(1);
 
+                Db.Transact(() => {
+                    new CU
+                    {
+                        CC = cc,
+                        Email = $"{cc.Email}/1",
+                        Token = $"{cc.Email}/1",
+                        Ad = "Can",
+                        Pwd = "test/1"
+                    };
+                });
+            }
         }
     }
 }

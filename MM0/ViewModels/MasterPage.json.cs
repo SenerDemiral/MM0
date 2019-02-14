@@ -39,24 +39,47 @@ namespace MM0.ViewModels
             void Handle(Input.AutoSignT Action)
             {
                 CC cc = null;
+                CU cu = null;
                 var p = this.Parent as MasterPage;
+                // Iki sekli var. 
+                // 1.Client/Admin sener.demiral@gmail.com
+                // 2.Client/User sener.demiral@gmail.com/1
 
                 cc = Db.SQL<CC>("select r from CC r where r.Token = ?", Token).FirstOrDefault();
                 if (cc == null)
                 {
-                    Token = "";
-                    p.Token = "";
-                    OpnDlgTxt = "Oturum Aç";
-                    p.CurrentPage = null;
-                    p.MorphUrl = "/mm0/AboutPage";
-                    Msj = "";
-                    Hlp.Write2Log("SignIn");
+                    cu = Db.SQL<CU>("select r from CU r where r.Token = ?", Token).FirstOrDefault();
+                    if (cu != null)
+                    {
+                        cc = cu.CC;
+                        p.Token = Token;
+                        Email = cu.Email;
+                        OpnDlgTxt = "Oturum Kapat";
+                        p.CCId = (long)cc.Id;
+                        p.CUId = (long)cu.Id;
+
+                        p.MorphUrl = $"/mm0/PPs/{cc.Id}";
+                        Msj = "Signed";
+                        Hlp.Write2Log($"SignInA {cu.Email}");
+                    }
+                    else
+                    {
+                        Token = "";
+                        p.Token = "";
+                        OpnDlgTxt = "Oturum Aç";
+                        p.CurrentPage = null;
+                        p.MorphUrl = "/mm0/AboutPage";
+                        Msj = "";
+                        Hlp.Write2Log("SignIn");
+                    }
                 }
                 else
                 {
                     p.Token = Token;
                     Email = cc.Email;
                     OpnDlgTxt = "Oturum Kapat";
+                    p.CCId = (long)cc.Id;
+                    p.CUId = 0;
                     p.MorphUrl = $"/mm0/PPs/{cc.Id}";
                     Msj = "Signed";
                     Hlp.Write2Log($"SignInA {cc.Email}");
@@ -118,6 +141,7 @@ namespace MM0.ViewModels
             void Handle(Input.SignInT Action)
             {
                 CC cc = null;
+                CU cu = null;
                 var p = this.Parent as MasterPage;
 
                 if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Pwd))
@@ -133,6 +157,8 @@ namespace MM0.ViewModels
                             Msj = "";
                             IsOpened = false;
                             OpnDlgTxt = "Oturum Kapat";
+                            p.CCId = (long)cc.Id;
+                            p.CUId = 0;
                             p.MorphUrl = $"/mm0/PPs/{cc.Id}";
 
                             Hlp.Write2Log($"SignIn. {cc.Email}");
@@ -150,12 +176,31 @@ namespace MM0.ViewModels
                     }
                     else
                     {
-                        Hlp.Write2Log($"SignInZ {Email} {Pwd}");
+                        cu = Db.SQL<CU>("select r from CU r where r.Email = ? and r.Pwd = ?", Email, Pwd).FirstOrDefault();
+                        if (cu != null)
+                        {
+                            cc = cu.CC;
+                            Pwd = "";
+                            Token = cu.Token;
+                            p.Token = cu.Token;
+                            Msj = "";
+                            IsOpened = false;
+                            OpnDlgTxt = "Oturum Kapat";
+                            p.CCId = (long)cc.Id;
+                            p.CUId = (long)cu.Id;
+                            p.MorphUrl = $"/mm0/PPs/{cc.Id}";
 
-                        //Pwd = "";
-                        Token = "";
-                        p.Token = "";
-                        Msj = "Hatali eMail";
+                            Hlp.Write2Log($"SignIn. {cu.Email}");
+                        }
+                        else
+                        {
+                            Hlp.Write2Log($"SignInZ {Email} {Pwd}");
+
+                            //Pwd = "";
+                            Token = "";
+                            p.Token = "";
+                            Msj = "Hatali eMail";
+                        }
                     }
                 }
             }

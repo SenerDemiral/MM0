@@ -89,18 +89,20 @@ namespace MM0.ViewModels
     {
         void Handle(Input.EdtTrgr Action)
         {
-            var p = this.Parent.Parent as HHsPage;
+            if ((Root as MasterPage).CUId == 0)    // Sadece Client/Admn
+            {
+                var p = this.Parent.Parent as HHsPage;
 
-            p.DlgRec.Ad = Ad;
-            p.DlgRec.Id = Id;
-            p.DlgRec.Info = Info;
+                p.DlgRec.Ad = Ad;
+                p.DlgRec.Id = Id;
+                p.DlgRec.Info = Info;
 
-            p.DlgRec.ThmGdr = ThmGdr;
-            p.DlgRec.ThmGlr = ThmGlr;
-            p.DlgRec.Msj = "";
+                p.DlgRec.ThmGdr = ThmGdr;
+                p.DlgRec.ThmGlr = ThmGlr;
+                p.DlgRec.Msj = "";
 
-            p.DlgRec.Opened = true;
-
+                p.DlgRec.Opened = true;
+            }
         }
 
     }

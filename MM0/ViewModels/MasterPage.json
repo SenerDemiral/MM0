@@ -17,6 +17,8 @@
     "AutoSignT$": 0
   },
 
+  "CCId": 0,  // ***
+  "CUId": 0,  // ***
   "TrhX": "",
   "BasTrhX": "",
   "BitTrhX": "",
