@@ -21,7 +21,7 @@ namespace MM0.ViewModels
                 {
                     DateTime trh = Convert.ToDateTime(QryTrhX);
                     DateTime bitTrh = trh.AddDays(1);
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ?", pp, trh, bitTrh);
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.InsTrh >= ? and r.InsTrh < ?", pp, trh, bitTrh);
                 }
 
                 FFs.Data = ffs;
@@ -102,19 +102,10 @@ namespace MM0.ViewModels
             //How to set only time part of a DateTime variable
             //var newDate = oldDate.Date + new TimeSpan(11, 30, 55);
 
-            if ((Root as MasterPage).CUId > 0)    // Client/Usr gecmis tarihli kayit giremez!
-            {
-                DateTime dt = Convert.ToDateTime(TrhX);
-                if (dt.Date < DateTime.Today)
-                {
-                    Msj = "Geçmiş tarihe kayıt giremezsiniz.";
-                    Action.Cancelled = true;
-                    return;
-                }
-            }
+            var r = Root as MasterPage;
             var p = this.Parent as FFsPage;
 
-            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
+            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, r.CUId);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -141,17 +132,15 @@ namespace MM0.ViewModels
         {
             if (Id != 0)
             {
-                if ((Root as MasterPage).CUId > 0)    // Client/Usr gecmis tarihli kayit giremez!
+                var r = Root as MasterPage;
+
+                Msj = FF.UpdateRec((ulong)Id, (ulong)HHId, (ulong)TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, (ulong)r.CCId);
+
+                if (!string.IsNullOrEmpty(Msj))
                 {
-                    DateTime dt = Convert.ToDateTime(TrhX);
-                    if (dt.Date < DateTime.Today)
-                    {
-                        Msj = "Geçmiş tarihe ait kayıt değiştiremezsiniz.";
-                        Action.Cancelled = true;
-                        return;
-                    }
+                    Action.Cancelled = true;
+                    return;
                 }
-                FF.UpdateRec(Id, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
 
                 var p = this.Parent as FFsPage;
                 p.RefreshToplam();
@@ -169,7 +158,10 @@ namespace MM0.ViewModels
 
         void Handle(Input.DelTrgr Action)
         {
-            Msj = FF.DeleteRec(Id);
+            var r = Root as MasterPage;
+
+            Msj = FF.DeleteRec((ulong)Id, (ulong)r.CUId);
+
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;

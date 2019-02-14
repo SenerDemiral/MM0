@@ -1,10 +1,18 @@
 <link rel="import" href="/sys/juicy-select/juicy-select.html">
+<link rel="import" href="/sys/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="/sys/paper-radio-button/paper-radio-button.html">
 
 <template>
     <dom-bind id="FFsRpr">
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgFlt.Opened]]" modal="true">
                 <div class="mdfDlg">
+                    <paper-radio-group selected="{{model.DlgFlt.TrhTur$}}">
+                        <paper-radio-button test-value$="K" name="K">Kayıt</paper-radio-button>
+                        <paper-radio-button test-value$="Y" name="Y">Yeni</paper-radio-button>
+                        <paper-radio-button test-value$="E" name="E">Edit</paper-radio-button>
+                    </paper-radio-group>
+
                     <paper-input label="Başlangıç Tarihi" type="date" value="{{model.DlgFlt.BasTrhX$::change}}"></paper-input>
                     <paper-input label="Bitiş Tarihi" type="date" value="{{model.DlgFlt.BitTrhX$::change}}"></paper-input>
                     <juicy-select caption-text="Hesap Seçin" value="{{model.DlgFlt.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
@@ -95,7 +103,8 @@
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
                                     <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&bastrhx=[[item.TrhX]]&bittrhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
-                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAdFull]] </a>
+                                    <td>
+                                        <a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAdFull]] </a>
                                         <span style="font-size:.8em;font-style:italic;color:brown">[[item.Ad]]</span>
                                     </td>
 

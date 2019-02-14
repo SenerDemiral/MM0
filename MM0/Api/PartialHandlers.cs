@@ -81,6 +81,7 @@ namespace MM0.Api
                 string TTId = queryCollection["ttid"];
                 string BasTrhX = queryCollection["bastrhx"];
                 string BitTrhX = queryCollection["bittrhx"];
+                string TrhTur = queryCollection["trhtur"];
 
                 if (BasTrhX == "Now")
                 {
@@ -94,7 +95,8 @@ namespace MM0.Api
                     HHId = HHId == null ? 0 : long.Parse(HHId),
                     TTId = TTId == null ? 0 : long.Parse(TTId),
                     BasTrhX = BasTrhX ?? "",
-                    BitTrhX = BitTrhX ?? ""
+                    BitTrhX = BitTrhX ?? "",
+                    TrhTur = TrhTur ?? "",
                 };
                 return page;
             });

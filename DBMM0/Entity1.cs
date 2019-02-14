@@ -440,6 +440,8 @@ namespace DBMM0
 
         public DateTime? InsTrh { get; set; }
         public DateTime? UpdTrh { get; set; }
+        public CU InsUsr { get; set; }
+        public CU UpdUsr { get; set; }
 
         public string PPAd => PP?.Ad;
         public ulong HHId => HH?.GetObjectNo() ?? 0;
@@ -454,7 +456,7 @@ namespace DBMM0
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
         public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
 
-        public static string InsertRec(long ppId, long hhId, long ttId, string Trh, string Ad, decimal Gdr, decimal Glr)
+        public static string InsertRec(long ppId, long hhId, long ttId, string Trh, string Ad, decimal Gdr, decimal Glr, long cuId)
         {
             string msj = "";
             DateTime dt;
@@ -470,67 +472,84 @@ namespace DBMM0
                     {
                         dt = Convert.ToDateTime(Trh.Substring(0, 10));
                     }
-                    TT tt = Db.FromId((ulong)ttId) as TT;
-                    if (Db.FromId((ulong)hhId) is HH hh)
+                    if (cuId == 0 || dt.Date >= DateTime.Today)
                     {
-                        new FF()
+                        TT tt = Db.FromId((ulong)ttId) as TT;
+                        if (Db.FromId((ulong)hhId) is HH hh)
                         {
-                            PP = pp,
-                            HH = hh,
-                            TT = tt,
+                            new FF()
+                            {
+                                PP = pp,
+                                HH = hh,
+                                TT = tt,
 
-                            Ad = Ad,
-                            Trh = dt, // Convert.ToDateTime(Trh),
-                            Gdr = Gdr,
-                            Glr = Glr,
+                                Ad = Ad,
+                                Trh = dt, // Convert.ToDateTime(Trh),
+                                Gdr = Gdr,
+                                Glr = Glr,
 
-                            InsTrh = DateTime.Now
-                        };
-                        FF.PostMdf(hh.Id);
+                                InsTrh = DateTime.Now,
+                                InsUsr = Db.FromId((ulong)cuId) as CU
+                            };
+                            FF.PostMdf(hh.Id);
+                        }
+                        else
+                            msj = "Tanımsız Hesap";
                     }
                     else
-                        msj = "Tanımsız Hesap";
+                        msj = "Geçmiş tarihe kayıt giremezsiniz.";
                 }
             });
             return msj;
         }
 
-        public static void UpdateRec(long Id, long hhId, long ttId, string Trh, string Ad, decimal Gdr, decimal Glr)
-        {
-            Db.Transact(() =>
-            {
-                if (Db.FromId((ulong)Id) is FF ff)
-                {
-                    TT tt = Db.FromId((ulong)ttId) as TT;
-                    if (Db.FromId((ulong)hhId) is HH hh)
-                    {
-                        ff.HH = hh;
-                        ff.TT = tt;
-                        ff.Ad = Ad;
-                        ff.Trh = Convert.ToDateTime(Trh);
-                        ff.Gdr = Gdr;
-                        ff.Glr = Glr;
-                        ff.UpdTrh = DateTime.Now;
-                        FF.PostMdf(hh.Id);
-                    }
-                }
-            });
-        }
-
-        public static string DeleteRec(long Id)
+        public static string UpdateRec(ulong Id, ulong hhId, ulong ttId, string Trh, string Ad, decimal Gdr, decimal Glr, ulong cuId)
         {
             string msj = "";
             Db.Transact(() =>
             {
                 if (Db.FromId((ulong)Id) is FF ff)
                 {
-                    var hhId = ff.HHId;
-                    ff.Delete();
-                    FF.PostMdf(hhId);
+                    if (cuId == 0 || ((ulong)cuId == ff.GetObjectNo() && ff.Trh.Date >= DateTime.Today))
+                    {
+                        TT tt = Db.FromId(ttId) as TT;
+                        if (Db.FromId(hhId) is HH hh)
+                        {
+                            ff.HH = hh;
+                            ff.TT = tt;
+                            ff.Ad = Ad;
+                            ff.Trh = Convert.ToDateTime(Trh);
+                            ff.Gdr = Gdr;
+                            ff.Glr = Glr;
+                            ff.UpdTrh = DateTime.Now;
+                            ff.UpdUsr = Db.FromId(cuId) as CU;
+                            FF.PostMdf(hh.Id);
+                        }
+                    }
+                    else
+                        msj = "Değiştiremezsiniz. Kayıt sizin değil / geçmiş tarihli";
+                }
+            });
+            return msj;
+        }
 
+        public static string DeleteRec(ulong Id, ulong cuId)
+        {
+            string msj = "";
+            Db.Transact(() =>
+            {
+                if (Db.FromId(Id) is FF ff)
+                {
+                    if (cuId == 0 || (cuId == ff.GetObjectNo() && ff.Trh.Date >= DateTime.Today))
+                    {
+                        var hhId = ff.HHId;
+                        ff.Delete();
+                        FF.PostMdf(hhId);
+                    }
+                    msj = "Silemezsiniz. Kayıt sizin değil / geçmiş tarihli";
                 }
                 else
-                    msj = "Silinemedi";
+                    msj = "Kayıt bulunamadı";
             });
             return msj;
         }
@@ -550,7 +569,7 @@ namespace DBMM0
             }
         }
         
-        public static IEnumerable<FF> View(long ppId, long hhId, long ttId, string basTrhX, string bitTrhX)
+        public static IEnumerable<FF> View(long ppId, long hhId, long ttId, string basTrhX, string bitTrhX, string trhTur = "F")
         {
             bool findHH = false,
                  findTT = false;
@@ -572,14 +591,23 @@ namespace DBMM0
                 }
 
                 IEnumerable<FF> ffs;
-                if (!string.IsNullOrEmpty(basTrhX))
-                {
-                    DateTime basTrh = Convert.ToDateTime(basTrhX).Date;
-                    DateTime bitTrh = Convert.ToDateTime(bitTrhX).AddDays(1);
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ?", pp, basTrh, bitTrh);
-                }
+
+                DateTime basTrh, bitTrh;
+                if (string.IsNullOrEmpty(basTrhX))
+                    basTrh = DateTime.MinValue;
                 else
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by r.Trh DESC", pp);
+                    basTrh = Convert.ToDateTime(basTrhX);
+                if (string.IsNullOrEmpty(bitTrhX))
+                    bitTrh = DateTime.MaxValue;
+                else
+                    bitTrh = Convert.ToDateTime(bitTrhX).AddDays(1);
+
+                if (trhTur == "Y")
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.InsTrh >= ? and r.InsTrh < ? order by r.InsTrh DESC", pp, basTrh, bitTrh);
+                else if (trhTur == "E")
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.UpdTrh >= ? and r.UpdTrh < ? order by r.UpdTrh DESC", pp, basTrh, bitTrh);
+                else
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ? order by r.Trh DESC", pp, basTrh, bitTrh);
 
                 foreach(var ff in ffs)
                 {

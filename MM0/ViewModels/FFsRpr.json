@@ -12,12 +12,14 @@
   "TTId": 0,
   "BasTrhX": "",
   "BitTrhX": "",
+  "TrhTur": "K",
 
   "NORX": "",
   "GlrTopX": "",
   "GdrTopX": "",
 
   "DlgFlt": {
+    "TrhTur$": "F",
     "BasTrhX$": "",
     "BitTrhX$": "",
     "HHId$": 0,

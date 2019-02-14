@@ -23,30 +23,33 @@ namespace MM0.ViewModels
             else if (Db.FromId((ulong)TTId) is TT tt)
                 Hdr = $"{tt.PP.CC.Ad}►{tt.Ad}";
 */
+            DateTime basTrh, bitTrh;
             if (Db.FromId((ulong)PPId) is PP pp)
             {
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";
 
-                if (!string.IsNullOrEmpty(BasTrhX))
-                {
-                    DateTime basTrh = Convert.ToDateTime(BasTrhX);
-                    if (string.IsNullOrEmpty(BitTrhX))
-                        BitTrhX = BasTrhX;
-                    DateTime bitTrh = Convert.ToDateTime(BitTrhX);
+                if (string.IsNullOrEmpty(BasTrhX))
+                    basTrh = DateTime.MinValue;
+                else
+                    basTrh = Convert.ToDateTime(BasTrhX);
+                if (string.IsNullOrEmpty(BitTrhX))
+                    bitTrh = DateTime.MaxValue;
+                else
+                    bitTrh = Convert.ToDateTime(BitTrhX);
 
-                    if(basTrh == bitTrh)
-                        Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy}";
-                    else
-                        Hdr = $"{pp.CC.Ad}►{pp.Ad}►{basTrh:dd.MM.yy} >=< {bitTrh:dd.MM.yy}";
-                }
+                if (basTrh == bitTrh)
+                   Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTur}►{basTrh:dd.MM.yy}";
+                else
+                    Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTur}►{basTrh:dd.MM.yy} >=< {bitTrh:dd.MM.yy}";
             }
+
             if (Db.FromId((ulong)HHId) is HH hh)
                 Hdr = $"{Hdr}►{HH.FullParentAd(hh)}";
             if (Db.FromId((ulong)TTId) is TT tt)
                 Hdr = $"{Hdr}►{tt.Ad}";
 
-            IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX);
-            FFs.Data = ffs.OrderByDescending((x) => x.Trh);
+            IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX, TrhTur);
+            FFs.Data = ffs; //.OrderByDescending((x) => x.Trh);
 
             NORX = $"{FFs.Count:n0}";
 
@@ -68,7 +71,7 @@ namespace MM0.ViewModels
 
         public void RefreshToplam()
         {
-            IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX);
+            IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX, TrhTur);
 
             decimal GlrTop = 0, GdrTop = 0;
             int cnt = 0;
@@ -87,7 +90,7 @@ namespace MM0.ViewModels
         void Handle(Input.DwnldTrgr Action)
         {
             //MorphUrl = $"/mm0/FFsXlsx/{PPId}";
-            DwnldUrl = $"/mm0/FFsXlsx?ppid={PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}";
+            DwnldUrl = $"/mm0/FFsXlsx?ppid={PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}&trhtur={TrhTur}";
         }
 
     }
@@ -103,6 +106,7 @@ namespace MM0.ViewModels
             var p = this.Parent as FFsRpr;
             HHId = p.HHId;
             TTId = p.TTId;
+            TrhTur = "K";
             Opened = true;
         }
         void Handle(Input.FltTrgr Action)
@@ -110,7 +114,7 @@ namespace MM0.ViewModels
             var r = Root as MasterPage;
             var p = this.Parent as FFsRpr;
 
-            p.MorphUrl = $"/mm0/FFsRpr?ppid={p.PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}";
+            p.MorphUrl = $"/mm0/FFsRpr?ppid={p.PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}&trhtur={TrhTur}";
             
             r.BasTrhX = BasTrhX;
             r.BitTrhX = BitTrhX;
@@ -156,20 +160,10 @@ namespace MM0.ViewModels
             //How to set only time part of a DateTime variable
             //var newDate = oldDate.Date + new TimeSpan(11, 30, 55);
 
-            if ((Root as MasterPage).CUId > 0)    // Client/Usr gecmis tarihli kayit giremez!
-            {
-                DateTime dt = Convert.ToDateTime(TrhX);
-                if (dt.Date < DateTime.Today)
-                {
-                    Msj = "Geçmiş tarihe kayıt giremezsiniz.";
-                    Action.Cancelled = true;
-                    return;
-                }
-            }
-
+            var r = Root as MasterPage;
             var p = this.Parent as FFsRpr;
 
-            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
+            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, r.CUId);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -196,17 +190,14 @@ namespace MM0.ViewModels
         {
             if (Id != 0)
             {
-                if ((Root as MasterPage).CUId > 0)    // Client/Usr gecmis tarihli kayit giremez!
+                var r = Root as MasterPage;
+
+                Msj = FF.UpdateRec((ulong)Id, (ulong)HHId, (ulong)TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, (ulong)r.CUId);
+                if (!string.IsNullOrEmpty(Msj))
                 {
-                    DateTime dt = Convert.ToDateTime(TrhX);
-                    if (dt.Date < DateTime.Today)
-                    {
-                        Msj = "Geçmiş tarihe ait kayıt değiştiremezsiniz.";
-                        Action.Cancelled = true;
-                        return;
-                    }
+                    Action.Cancelled = true;
+                    return;
                 }
-                FF.UpdateRec(Id, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr);
 
                 var p = this.Parent as FFsRpr;
                 p.RefreshToplam();
@@ -224,18 +215,10 @@ namespace MM0.ViewModels
 
         void Handle(Input.DelTrgr Action)
         {
-            if ((Root as MasterPage).CUId > 0)    // Client/Usr gecmis tarihli kayit silemez!
-            {
-                DateTime dt = Convert.ToDateTime(TrhX);
-                if (dt.Date < DateTime.Today)
-                {
-                    Msj = "Geçmiş tarihli kayıt silemezsiniz.";
-                    Action.Cancelled = true;
-                    return;
-                }
-            }
+            var r = Root as MasterPage;
 
-            Msj = FF.DeleteRec(Id);
+            Msj = FF.DeleteRec((ulong)Id, (ulong)r.CUId);
+
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -263,6 +246,7 @@ namespace MM0.ViewModels
     {
         void Handle(Input.EdtTrgr Action)
         {
+            var r = Root as MasterPage;
             var p = this.Parent.Parent as FFsRpr;
 
             if (Db.FromId((ulong)Id) is FF ff)
