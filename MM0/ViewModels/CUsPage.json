@@ -1,0 +1,43 @@
+{
+  "Html": "/MM0/CUsPage.html",
+  "Hdr": "",
+  "CCId": 0,
+
+  "DlgRec": {
+    "Id": 0,
+
+    "Ad$": "",
+    "Pwd$": "",
+    "PPIds$": 0,
+
+    "Msj": "",
+
+    "Opened": false,
+    "IsNew": false,
+    "NewTrgr$": 0,
+    "InsTrgr$": 0,
+    "UpdTrgr$": 0,
+    "DelTrgr$": 0,
+    "RejTrgr$": 0
+  },
+
+  "CUs": [
+    {
+      "Id": 0,
+
+      "Ad": "",
+      "Pwd": "",
+      "Email": "",
+
+      "EdtTrgr$": 0
+    }
+  ],
+
+  "PPs": [ // Lookup
+    {
+      "Id": 0,
+      "Ad": "",
+      "Selected$": false
+    }
+  ],
+}

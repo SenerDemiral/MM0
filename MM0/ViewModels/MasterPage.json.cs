@@ -54,7 +54,7 @@ namespace MM0.ViewModels
                         cc = cu.CC;
                         p.Token = Token;
                         Email = cu.Email;
-                        OpnDlgTxt = "Oturum Kapat";
+                        OpnDlgTxt = cu.Ad; // "Oturum Kapat";
                         p.CCId = (long)cc.Id;
                         p.CUId = (long)cu.Id;
 
@@ -185,7 +185,7 @@ namespace MM0.ViewModels
                             p.Token = cu.Token;
                             Msj = "";
                             IsOpened = false;
-                            OpnDlgTxt = "Oturum Kapat";
+                            OpnDlgTxt = cu.Ad; // "Oturum Kapat";
                             p.CCId = (long)cc.Id;
                             p.CUId = (long)cu.Id;
                             p.MorphUrl = $"/mm0/PPs/{cc.Id}";

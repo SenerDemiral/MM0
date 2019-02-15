@@ -210,6 +210,44 @@ namespace DBMM0
         public string Ad { get; set; }
         public string Pwd { get; set; }
         public string Token { get; set; }
+        public string PPs { get; set; }
+
+        public static CU InsertRec(ulong ccId, string Ad, string Pwd, string PPs)
+        {
+            CU cuNew = null;
+            if (Db.FromId(ccId) is CC cc)
+            {
+                var NOR = Db.SQL<CU>("select r from CU r where r.CC = ?", cc).Count();
+                NOR++;
+                Db.Transact(() =>
+                {
+                    cuNew = new CU()
+                    {
+                        CC = cc,
+                        Ad = Ad,
+                        Pwd = Pwd,
+                        Email = $"{cc.Email}/{NOR}",
+                        PPs = PPs
+                    };
+                    cuNew.Token = cuNew.Email;
+                });
+                return cuNew;
+            }
+            return null;
+        }
+        public static void UpdateRec(ulong cuId, string Ad, string Pwd, string PPs)
+        {
+            Db.Transact(() =>
+            {
+                if (Db.FromId(cuId) is CU cu)
+                {
+                    cu.Ad = Ad;
+                    cu.Pwd = Pwd;
+                    cu.PPs = PPs;
+                }
+            });
+        }
+
     }
 
     [Database]

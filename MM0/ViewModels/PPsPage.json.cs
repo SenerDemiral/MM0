@@ -1,6 +1,8 @@
 using DBMM0;
 using Starcounter;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MM0.ViewModels
 {
@@ -21,7 +23,21 @@ namespace MM0.ViewModels
                 ThmGdrTopX = hh.ThmGdrX;
 
                 var recs = Db.SQL<PP>("select r from PP r where r.CC = ?", cc);
-                PPs.Data = recs;
+
+                var r = this.Root as MasterPage;
+                if(r.CUId > 0)
+                {
+                    if (Db.FromId((ulong)r.CUId) is CU cu)
+                    {
+                        List<string> lPPs = new List<string>(cu.PPs.Split(','));
+                        PPs.Data = recs.Where((pp) => lPPs.Contains(pp.Id.ToString()));
+                    }
+
+                }
+                else
+                {
+                    PPs.Data = recs;
+                }
 
             }
         }

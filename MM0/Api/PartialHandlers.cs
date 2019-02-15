@@ -20,6 +20,15 @@ namespace MM0.Api
                 return page;
             });
 
+            Handle.GET("/MM0/partials/CUs/{?}", (long CCId) =>
+            {
+                var page = new CUsPage
+                {
+                    CCId = CCId
+                };
+                return page;
+            });
+
             Handle.GET("/MM0/partials/PPs/{?}", (long CCId) =>
             {
                 var page = new PPsPage

@@ -124,6 +124,14 @@ namespace MM0.Api
                 return WrapPage<PPsPage>($"/MM0/partials/PPs/{CCId}");
             });
 
+            Handle.GET("/MM0/CUs/{?}", (string CCId) =>
+            {
+                MasterPage master = GetMasterPageFromSession();
+                if (master.CUId == 0)
+                    return WrapPage<CUsPage>($"/MM0/partials/CUs/{CCId}");
+                return null;
+            });
+
             Handle.GET("/MM0/TTs/{?}", (long PPId) => WrapPage<TTsPage>($"/MM0/partials/TTs/{PPId}"));
 
             Handle.GET("/MM0/HHs/{?}", (long PPId) => WrapPage<HHsPage>($"/MM0/partials/HHs/{PPId}"));
