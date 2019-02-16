@@ -82,11 +82,13 @@ namespace MM0.Api
             {
                 return Self.GET("/MM0");
             });
+
             Handle.GET("/MM0", () =>
             {
                 MasterPage master = GetMasterPageFromSession();
                 return master;
             });
+
             Handle.GET("/MM0/AboutPage", () => 
             {
                 MasterPage master = GetMasterPageFromSession();
@@ -113,7 +115,6 @@ namespace MM0.Api
                 return master;
             });
 
-
             // Client Login yapmis olmali.
             Handle.GET("/MM0/PPs/{?}", (string CCId) =>
             {
@@ -139,7 +140,6 @@ namespace MM0.Api
             Handle.GET("/MM0/HHsCumBky/{?}", (long HHId) => WrapPage<HHsPage>($"/MM0/partials/HHsCumBky/{HHId}"));
 
             Handle.GET("/MM0/FFs/{?}", (long PPId) => WrapPage<FFsPage>($"/MM0/partials/FFs/{PPId}"));
-
 
             Handle.GET("/MM0/FFsRpr?{?}", (string queryString) =>
             {
@@ -268,11 +268,13 @@ namespace MM0.Api
                 // Header (first row)
                 ws.Cells[1, 1].Value = "Hesap";
                 ws.Cells["A1:A2"].Merge = true;
+                ws.Cells[1, 6].Value = "Not";
+                ws.Cells["F1:F2"].Merge = true;
 
                 ws.Cells[1, 2].Value = "Gercek";
                 ws.Cells["B1:C1"].Merge = true;
 
-                ws.Cells[1, 4].Value = "Tahmini";
+                ws.Cells[1, 4].Value = "Hedef";
                 ws.Cells["D1:E1"].Merge = true;
 
                 ws.Cells[2, 2].Value = "Gider";
@@ -294,16 +296,23 @@ namespace MM0.Api
                     int cr = 3;
                     foreach (var hh in HH.View(pp))
                     {
-                        ws.Cells[cr, 1].Value = hh.Ad;
-                        ws.Cells[cr, 1].Style.Indent = hh.Lvl - 1;
+                        ws.Cells[cr, 1].Value = hh.AdFull;
+                        //ws.Cells[cr, 1].Value = hh.Ad;
+                        //ws.Cells[cr, 1].Style.Indent = hh.Lvl - 1;
 
                         ws.Cells[cr, 2].Value = hh.GrcGdr;
                         ws.Cells[cr, 3].Value = hh.GrcGlr;
                         ws.Cells[cr, 4].Value = hh.ThmGdr;
                         ws.Cells[cr, 5].Value = hh.ThmGlr;
+                        ws.Cells[cr, 6].Value = hh.Info;
 
                         cr++;
                     }
+                    using (var range = ws.Cells["A2:F2"])
+                    {
+                        range.AutoFilter = true;
+                    }
+
 
                     //ws.Row(1).Height = 20;
                     ws.Row(1).Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
@@ -316,6 +325,8 @@ namespace MM0.Api
                     ws.Column(3).AutoFit();
                     ws.Column(4).AutoFit();
                     ws.Column(5).AutoFit();
+                    ws.Column(6).AutoFit();
+
                 }
 
 
