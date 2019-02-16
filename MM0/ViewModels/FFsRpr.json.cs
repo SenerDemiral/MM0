@@ -136,6 +136,7 @@ namespace MM0.ViewModels
         void Handle(Input.NewTrgr Action)
         {
             var p = this.Parent as FFsRpr;
+            /*
             Id = 0;
             HHId = 0;
             TTId = 0;
@@ -143,7 +144,12 @@ namespace MM0.ViewModels
             ZmnX = "";
             Gdr = 0;
             Glr = 0;
-            Ad = "";
+            Ad = "";*/
+            if (string.IsNullOrEmpty(TrhX))
+            {
+                TrhX = DateTime.Today.ToString("yyyy-MM-dd");
+                ZmnX = "00:00";
+            }
             Msj = "";
             IsNew = true;
             Opened = true;
@@ -216,6 +222,14 @@ namespace MM0.ViewModels
         void Handle(Input.DelTrgr Action)
         {
             var r = Root as MasterPage;
+            var p = this.Parent as FFsRpr;
+
+            if (p.DlgRec.Ad != "Sil")
+            {
+                Msj = "Silmek için Not alanına Sil yazın.";
+                Action.Cancelled = true;
+                return;
+            }
 
             Msj = FF.DeleteRec((ulong)Id, (ulong)r.CUId);
 
@@ -225,7 +239,6 @@ namespace MM0.ViewModels
                 return;
             }
 
-            var p = this.Parent as FFsRpr;
             p.Data = null;
 
             Session.RunTaskForAll((s, sId) => {

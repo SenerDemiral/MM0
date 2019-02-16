@@ -251,15 +251,6 @@ namespace DBMM0
     }
 
     [Database]
-    public class CUP // ClientUsersProject Available
-    {
-        public ulong Id => this.GetObjectNo();
-        public CC CC { get; set; }
-        public CU CU { get; set; }
-        public PP PP { get; set; }
-    }
-
-    [Database]
     public class CC // Clients
     {
         public ulong Id => this.GetObjectNo();
@@ -475,6 +466,8 @@ namespace DBMM0
         public DateTime Trh { get; set; }
         public decimal Glr { get; set; }
         public decimal Gdr { get; set; }
+        public decimal BklGlr { get; set; } // Beklenen
+        public decimal BklGdr { get; set; }
 
         public DateTime? InsTrh { get; set; }
         public DateTime? UpdTrh { get; set; }
@@ -493,6 +486,8 @@ namespace DBMM0
         public string TrhX => Trh.Hour == 0 && Trh.Minute == 0 ? $"{Trh:dd.MM.yy}" : $"{Trh:dd.MM.yy HH:mm}";
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
         public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
+        public string BklGlrX => $"{BklGlr:#,#.##;-#,#.##;#}";
+        public string BklGdrX => $"{BklGdr:#,#.##;-#,#.##;#}";
 
         public static string InsertRec(long ppId, long hhId, long ttId, string Trh, string Ad, decimal Gdr, decimal Glr, long cuId)
         {
@@ -532,10 +527,59 @@ namespace DBMM0
                             FF.PostMdf(hh.Id);
                         }
                         else
-                            msj = "Tanımsız Hesap";
+                            msj = "Tanımsız Hesap!";
                     }
                     else
-                        msj = "Geçmiş tarihe kayıt giremezsiniz.";
+                        msj = "Geçmiş tarihe kayıt giremezsiniz!";
+                }
+            });
+            return msj;
+        }
+
+        public static string UpdateRec(ulong Id, ulong hhId, ulong ttId, string Trh, string Ad, string TutTur, decimal Tut, ulong cuId)
+        {
+            string msj = "";
+            Db.Transact(() =>
+            {
+                if (Db.FromId((ulong)Id) is FF ff)
+                {
+                    if (cuId == 0 || ((ulong)cuId == ff.GetObjectNo() && ff.Trh.Date >= DateTime.Today))
+                    {
+                        TT tt = Db.FromId(ttId) as TT;
+                        if (Db.FromId(hhId) is HH hh)
+                        {
+                            ff.HH = hh;
+                            ff.TT = tt;
+                            ff.Ad = Ad;
+                            ff.Trh = Convert.ToDateTime(Trh);
+                            ff.Gdr = 0;
+                            ff.Glr = 0;
+                            ff.BklGdr = 0;
+                            ff.BklGlr = 0;
+                            switch (TutTur)
+                            {
+                                case "GX":
+                                    ff.Gdr = Tut;
+                                    break;
+                                case "GI":
+                                    ff.Glr = Tut;
+                                    break;
+                                case "BX":
+                                    ff.BklGdr = Tut;
+                                    break;
+                                case "BI":
+                                    ff.BklGlr = Tut;
+                                    break;
+                                default:
+                                    break;
+                            }
+                            ff.UpdTrh = DateTime.Now;
+                            ff.UpdUsr = Db.FromId(cuId) as CU;
+                            FF.PostMdf(hh.Id);
+                        }
+                    }
+                    else
+                        msj = "Değiştiremezsiniz! Kayıt sizin değil / Geçmiş tarihli.";
                 }
             });
             return msj;
@@ -565,7 +609,7 @@ namespace DBMM0
                         }
                     }
                     else
-                        msj = "Değiştiremezsiniz. Kayıt sizin değil / geçmiş tarihli";
+                        msj = "Değiştiremezsiniz! Kayıt sizin değil / Geçmiş tarihli.";
                 }
             });
             return msj;
@@ -578,13 +622,14 @@ namespace DBMM0
             {
                 if (Db.FromId(Id) is FF ff)
                 {
-                    if (cuId == 0 || (cuId == ff.GetObjectNo() && ff.Trh.Date >= DateTime.Today))
+                    if (cuId == 0 || (cuId == ff.InsUsr.GetObjectNo() && ff.Trh.Date >= DateTime.Today))
                     {
                         var hhId = ff.HHId;
                         ff.Delete();
                         FF.PostMdf(hhId);
                     }
-                    msj = "Silemezsiniz. Kayıt sizin değil / geçmiş tarihli";
+                    else
+                        msj = "Silemezsiniz! Kayıt sizin değil / Geçmiş tarihli.";
                 }
                 else
                     msj = "Kayıt bulunamadı";
@@ -813,7 +858,7 @@ namespace DBMM0
         public decimal ThmGdr { get; set; }
 
 
-        //public bool IsLeaf => Db.SQL<HH>("select r from DBMM0.HH r where r.Prn = ?", this).FirstOrDefault() == null ? true : false;
+        public bool IsLeaf => Db.SQL<HH>("select r from DBMM0.HH r where r.Prn = ?", this).FirstOrDefault() == null ? true : false;
         // FFde kaydi varsa Altina hesap acilamaz
         public bool HasHrk => Db.SQL<FF>("select r from DBMM0.FF r where r.HH = ?", this).FirstOrDefault() == null ? false : true;
 
@@ -954,11 +999,17 @@ namespace DBMM0
                     {
                         HH pHH = hh.Prn;
                         hh.Delete();
-                        PostIns(pHH);
+                        PostDel(pHH);
                     }
                 }
             });
             return msj;
+        }
+
+        public static void PostDel(HH phh)
+        {
+            if (phh.IsLeaf)
+                PostIns(phh);
         }
 
         public static void PostIns(HH hh)

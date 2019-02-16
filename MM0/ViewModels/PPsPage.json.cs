@@ -29,7 +29,10 @@ namespace MM0.ViewModels
                 {
                     if (Db.FromId((ulong)r.CUId) is CU cu)
                     {
-                        List<string> lPPs = new List<string>(cu.PPs.Split(','));
+                        string cuPPs = "";
+                        if (!string.IsNullOrEmpty(cu.PPs))
+                            cuPPs = cu.PPs;
+                        List<string> lPPs = new List<string>(cuPPs.Split(','));
                         PPs.Data = recs.Where((pp) => lPPs.Contains(pp.Id.ToString()));
                     }
 

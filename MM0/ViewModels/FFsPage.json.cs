@@ -26,19 +26,24 @@ namespace MM0.ViewModels
 
                 FFs.Data = ffs;
 
-                HHs.Data = Db.SQL<HH>("select r from HH r where r.PP = ? and r.Skl = ? order by r.AdPrn, r.Ad", pp, 99); // Sadece Leafs
+                HHs.Data = Db.SQL<HH>("select r from HH r where r.PP = ? and r.Skl = ? order by r.AdFull", pp, 99); // Sadece Leafs
                 TTs.Data = Db.SQL<TT>("select r from TT r where r.PP = ? order by r.Ad", pp);
 
-                NORX = $"Kayıt Sayısı: {FFs.Count:n0}";
+                NORX = $"{FFs.Count:n0} Kayıt";
 
                 decimal GlrTop = 0, GdrTop = 0;
+                decimal BklGlrTop = 0, BklGdrTop = 0;
                 foreach (var ff in ffs)
                 {
                     GlrTop += ff.Glr;
                     GdrTop += ff.Gdr;
+                    BklGlrTop += ff.BklGlr;
+                    BklGdrTop += ff.BklGdr;
                 }
                 GlrTopX = $"{GlrTop:#,#.##;-#,#.##;#}";
                 GdrTopX = $"{GdrTop:#,#.##;-#,#.##;#}";
+                BklGlrTopX = $"{BklGlrTop:#,#.##;-#,#.##;#}";
+                BklGdrTopX = $"{BklGdrTop:#,#.##;-#,#.##;#}";
             }
         }
 
@@ -134,7 +139,8 @@ namespace MM0.ViewModels
             {
                 var r = Root as MasterPage;
 
-                Msj = FF.UpdateRec((ulong)Id, (ulong)HHId, (ulong)TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, (ulong)r.CCId);
+                //Msj = FF.UpdateRec((ulong)Id, (ulong)HHId, (ulong)TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, (ulong)r.CUId);
+                Msj = FF.UpdateRec((ulong)Id, (ulong)HHId, (ulong)TTId, $"{TrhX} {ZmnX}", Ad, TutTur, Tut, (ulong)r.CUId);
 
                 if (!string.IsNullOrEmpty(Msj))
                 {
@@ -159,6 +165,14 @@ namespace MM0.ViewModels
         void Handle(Input.DelTrgr Action)
         {
             var r = Root as MasterPage;
+            var p = this.Parent as FFsPage;
+
+            if (p.DlgRec.Ad != "Sil")
+            {
+                Msj = "Silmek için Not alanına Sil yazın.";
+                Action.Cancelled = true;
+                return;
+            }
 
             Msj = FF.DeleteRec((ulong)Id, (ulong)r.CUId);
 
@@ -168,7 +182,6 @@ namespace MM0.ViewModels
                 return;
             }
 
-            var p = this.Parent as FFsPage;
             p.Data = null;
 
             Session.RunTaskForAll((s, sId) => {
@@ -191,6 +204,41 @@ namespace MM0.ViewModels
         {
             var p = this.Parent.Parent as FFsPage;
 
+            if (Db.FromId((ulong)Id) is FF ff)
+            {
+                p.DlgRec.Id = (long)ff.Id;
+                p.DlgRec.Ad = ff.Ad;
+
+                p.DlgRec.TutTur = "GX";
+                if (ff.Gdr != 0)
+                {
+                    p.DlgRec.TutTur = "GX";
+                    p.DlgRec.Tut = ff.Gdr;
+                }
+                else if (ff.Glr != 0)
+                {
+                    p.DlgRec.TutTur = "GI";
+                    p.DlgRec.Tut = ff.Glr;
+                }
+                else if (ff.BklGdr != 0)
+                {
+                    p.DlgRec.TutTur = "BX";
+                    p.DlgRec.Tut = ff.BklGdr;
+                }
+                else if (ff.BklGlr != 0) { 
+                    p.DlgRec.TutTur = "BI";
+                    p.DlgRec.Tut = ff.BklGlr;
+                }
+
+                p.DlgRec.HHId = (long)ff.HH.Id;
+                p.DlgRec.TTId = (long)ff.TT?.Id;
+
+                p.DlgRec.TrhX = ff.Trh.ToString("yyyy-MM-dd");
+                p.DlgRec.ZmnX = ff.Trh.ToString("HH:mm");
+
+            }
+
+            /*
             p.DlgRec.Id = Id;
             p.DlgRec.Ad = Ad;
 
@@ -209,6 +257,7 @@ namespace MM0.ViewModels
                 p.DlgRec.TrhX = Convert.ToDateTime(TrhX).ToString("yyyy-MM-dd");
                 p.DlgRec.ZmnX = Convert.ToDateTime(TrhX).ToString("HH:mm");
             }
+            */
             p.DlgRec.Msj = "";
             p.DlgRec.IsNew = false; // Edit
             p.DlgRec.Opened = true;
