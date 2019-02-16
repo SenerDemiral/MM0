@@ -40,26 +40,28 @@
                                 <th colspan="2">Hedef</th>
                                 <th rowspan="2"></th>
                                 <th rowspan="2"></th>
-                                <th rowspan="2">Not</th>
                             </tr>
                             <tr>
-                                <th class="txtRight">Gider</th>
                                 <th class="txtRight">Gelir</th>
                                 <th class="txtRight">Gider</th>
                                 <th class="txtRight">Gelir</th>
+                                <th class="txtRight">Gider</th>
                             </tr>
                         </thead>
                         <tbody>
                             <template is="dom-repeat" items="{{model.HHs}}">
                                 <tr>
-                                    <td data-lvl$="[[item.Lvl]]"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.Id]]">[[item.Ad]]</a></td>
-                                    <td class="txtRight">[[item.GrcGdrX]]</td>
+                                    <td data-lvl$="[[item.Lvl]]">
+                                        <a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.Id]]">[[item.Ad]] </a>
+                                        <span style="font-size:.8em;font-style:italic;color:brown">[[item.Info]]</span>
+                                    </td>
+
                                     <td class="txtRight">[[item.GrcGlrX]]</td>
-                                    <td class="txtRight">[[item.ThmGdrX]]</td>
+                                    <td class="txtRight">[[item.GrcGdrX]]</td>
                                     <td class="txtRight">[[item.ThmGlrX]]</td>
+                                    <td class="txtRight">[[item.ThmGdrX]]</td>
                                     <td class="icon"><a href="/mm0/HHsCumBky/[[item.Id]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
-                                    <td>[[item.Info]]</td>
                                 </tr>
                             </template>
                         </tbody>

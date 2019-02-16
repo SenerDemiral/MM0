@@ -148,7 +148,7 @@ button{
         background-color: rgba(234, 234, 206, .5);
      }
 
-    .fixTbl tr:nth-child(even) {
+    .fixTbl tbody tr:nth-child(even) {
         background-color: rgba(246, 246, 154, .5); /*#f2f2f280; sonuna Hex80 koyarak %50 opacitiy*/
     }
 

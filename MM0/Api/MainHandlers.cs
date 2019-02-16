@@ -212,7 +212,7 @@ namespace MM0.Api
 
                 // Header (first row)
                 ws.Cells[1, 1].Value = "Ad";
-                ws.Cells[1, 2].Value = "Info";
+                ws.Cells[1, 2].Value = "Not";
                 ws.Cells[1, 3].Value = "eMail";
                 ws.Cells[1, 4].Value = "Tel";
 
@@ -341,17 +341,33 @@ namespace MM0.Api
 
                 // Header (first row)
                 ws.Cells[1, 1].Value = "Tarih";
+                ws.Cells["A1:A2"].Merge = true;
                 ws.Cells[1, 2].Value = "Hesap";
+                ws.Cells["B1:B2"].Merge = true;
                 ws.Cells[1, 3].Value = "Etiket";
-                ws.Cells[1, 4].Value = "Gider";
-                ws.Cells[1, 5].Value = "Gelir";
-                ws.Cells[1, 6].Value = "Not";
+                ws.Cells["C1:C2"].Merge = true;
+
+                ws.Cells[1, 8].Value = "Not";
+                ws.Cells["H1:H2"].Merge = true;
+
+                ws.Cells[1, 4].Value = "Gercek";
+                ws.Cells["D1:E1"].Merge = true;
+
+                ws.Cells[1, 6].Value = "Beklenen";
+                ws.Cells["F1:G1"].Merge = true;
+
+                ws.Cells[2, 4].Value = "Gelir";
+                ws.Cells[2, 5].Value = "Gider";
+                ws.Cells[2, 6].Value = "Gelir";
+                ws.Cells[2, 7].Value = "Gider";
 
                 ws.Row(1).Style.Font.Bold = true;
 
                 ws.Column(1).Style.Numberformat.Format = "dd.mm.yy";
                 ws.Column(4).Style.Numberformat.Format = "#,###";
                 ws.Column(5).Style.Numberformat.Format = "#,###";
+                ws.Column(6).Style.Numberformat.Format = "#,###";
+                ws.Column(7).Style.Numberformat.Format = "#,###";
 
                 if (Db.FromId((ulong)PPId) is PP pp)
                 {
@@ -375,7 +391,7 @@ namespace MM0.Api
 
                     ws.HeaderFooter.OddHeader.CenteredText = Hdr;
 
-                    int cr = 2;
+                    int cr = 3;
                     IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX);
 
                     foreach (var ff in ffs.OrderByDescending((x) => x.Trh))
@@ -383,16 +399,18 @@ namespace MM0.Api
                         ws.Cells[cr, 1].Value = ff.Trh;
                         ws.Cells[cr, 2].Value = ff.HHAdFull;
                         ws.Cells[cr, 3].Value = ff.TTAd;
-                        ws.Cells[cr, 4].Value = ff.Gdr;
-                        ws.Cells[cr, 5].Value = ff.Glr;
-                        ws.Cells[cr, 6].Value = ff.Ad;
+                        ws.Cells[cr, 4].Value = ff.Glr;
+                        ws.Cells[cr, 5].Value = ff.Gdr;
+                        ws.Cells[cr, 6].Value = ff.BklGlr;
+                        ws.Cells[cr, 7].Value = ff.BklGdr;
+                        ws.Cells[cr, 8].Value = ff.Ad;
 
                         cr++;
                     }
-                    using (var range = ws.Cells["A1:F1"]) {
+                    using (var range = ws.Cells["A2:H2"]) {
                         range.AutoFilter = true;
-                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
-                        range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
+                        //range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        //range.Style.Fill.BackgroundColor.SetColor(Color.LightGray);
                     }
 
                     ws.Row(1).Height = 20;
@@ -405,12 +423,16 @@ namespace MM0.Api
                     ws.Column(3).AutoFit();
                     ws.Column(4).Width = 12;
                     ws.Column(5).Width = 12;
-                    ws.Column(6).AutoFit();
+                    ws.Column(6).Width = 12;
+                    ws.Column(7).Width = 12;
+                    ws.Column(8).AutoFit();
 
                     ws.Cells[cr, 4].Formula = $"SUM(D2:D{cr-1})";
                     ws.Cells[cr, 5].Formula = $"SUM(E2:E{cr-1})";
+                    ws.Cells[cr, 6].Formula = $"SUM(F2:F{cr-1})";
+                    ws.Cells[cr, 7].Formula = $"SUM(G2:G{cr-1})";
 
-                    using (var range = ws.Cells[$"D{cr}:E{cr}"])
+                    using (var range = ws.Cells[$"D{cr}:G{cr}"])
                     {
                         range.Style.Font.Bold = true;
                         range.Style.Fill.PatternType = ExcelFillStyle.Solid;

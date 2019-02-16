@@ -12,12 +12,19 @@
                     <table id="HHsCumBkyTbl" class="fixTbl">
                         <thead>
                             <tr>
-                                <th>Yıl</th>
-                                <th>Ay</th>
-                                <th>Gider</th>
+                                <th rowspan="2">Yıl</th>
+                                <th rowspan="2">Ay</th>
+                                <th colspan="3">Gerçek</th>
+                                <th colspan="3">Beklenen</th>
+                                <th rowspan="2">Adet</th>
+                            </tr>
+                            <tr>
                                 <th>Gelir</th>
+                                <th>Gider</th>
                                 <th>Kalan</th>
-                                <th>Adet</th>
+                                <th>Gelir</th>
+                                <th>Gider</th>
+                                <th>Kalan</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -25,9 +32,12 @@
                                 <tr>
                                     <td class="txtCenter">[[item.Yil]]</td>
                                     <td class="txtCenter">[[item.Ay]]</td>
-                                    <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
+                                    <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.CumBkyX]]</td>
+                                    <td class="txtRight">[[item.BklGlrX]]</td>
+                                    <td class="txtRight">[[item.BklGdrX]]</td>
+                                    <td class="txtRight">[[item.BklCumBkyX]]</td>
                                     <td class="txtRight">[[item.Adt]]</td>
                                 </tr>
                             </template>
@@ -39,6 +49,7 @@
         </template>
     </dom-bind>
     <script>
+        // Kullanılmıyor ORNEK
         console.log("MasterPage");
         var tmplt = (document._currentScript || document.currentScript).previousElementSibling;  // Global
 

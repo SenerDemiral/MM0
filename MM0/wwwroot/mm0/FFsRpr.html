@@ -35,14 +35,24 @@
 
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <div style="display:flex">
+                    <div style="display:grid;grid-template-columns:1fr auto;grid-column-gap:1rem">
                         <paper-input label="Tarih" type="date" value="{{model.DlgRec.TrhX$::change}}"></paper-input>
                         <paper-input label="Zaman" type="time" value="{{model.DlgRec.ZmnX$::change}}"></paper-input>
                     </div>
                     <juicy-select caption-text="Hesap Seçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
                     <juicy-select caption-text="Etiket Seçin" value="{{model.DlgRec.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select>
-                    <paper-input label="Gider" type="number" value="{{model.DlgRec.Gdr$::change}}"></paper-input>
-                    <paper-input label="Gelir" type="number" value="{{model.DlgRec.Glr$::change}}"></paper-input>
+
+
+                    <paper-radio-group style="display:grid;grid-template-columns:auto 1fr 1fr;background-color:azure" selected="{{model.DlgRec.TutTur$}}">
+                        <div>Gerçek</div>
+                        <paper-radio-button test-value$="GI" name="GI">Gelir</paper-radio-button>
+                        <paper-radio-button test-value$="GX" name="GX">Gider</paper-radio-button>
+                        <div>Beklenen</div>
+                        <paper-radio-button test-value$="BI" name="BI">Gelir</paper-radio-button>
+                        <paper-radio-button test-value$="BX" name="BX">Gider</paper-radio-button>
+                    </paper-radio-group>
+                    <paper-input label="Tutar" type="number" value="{{model.DlgRec.Tut$::change}}"></paper-input>
+
                     <paper-textarea label="Not" value="{{model.DlgRec.Ad$::input}}" char-counter maxlength="100"></paper-textarea>
 
                     <div class="mdfDlgAction">
@@ -58,14 +68,12 @@
                         </template>
                     </div>
 
-
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.Msj]]">
                             <div class="dlgMsj">[[model.DlgRec.Msj]]</div>
                         </template>
                     </div>
                 </div>
-
             </paper-dialog>
 
             <div class="gridTbl">
@@ -78,15 +86,22 @@
                 </div>
                 <div class="gridTbl_main">
                     <div>Gelir/Gider İşlemleri</div>
-                    <table id="FFsRprTbl" class="fixTbl">
+                    <table id="FFsPageTbl" class="fixTbl">
                         <thead>
                             <tr>
-                                <th class="tarih">Tarih</th>
-                                <th>Hesap</th>
-                                <th>Etiket</th>
+                                <th rowspan="2" class="tarih">Tarih</th>
+                                <th rowspan="2">Hesap</th>
+                                <th rowspan="2">Etiket</th>
+                                <th colspan="2">Gerçek</th>
+                                <th colspan="2">Beklenen</th>
+                                <th rowspan="2"></th>
+                                <th rowspan="2"></th>
+                            </tr>
+                            <tr>
+                                <th>Gelir</th>
                                 <th>Gider</th>
                                 <th>Gelir</th>
-                                <th></th>
+                                <th>Gider</th>
                             </tr>
                         </thead>
                         <tfoot>
@@ -94,23 +109,29 @@
                                 <td></td>
                                 <td></td>
                                 <td class="txtCenter">[[model.NORX]]</td>
-                                <td class="txtRight">[[model.GdrTopX]]</td>
                                 <td class="txtRight">[[model.GlrTopX]]</td>
+                                <td class="txtRight">[[model.GdrTopX]]</td>
+                                <td class="txtRight">[[model.BklGlrTopX]]</td>
+                                <td class="txtRight">[[model.BklGdrTopX]]</td>
+                                <td></td>
                                 <td></td>
                             </tr>
                         </tfoot>
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&bastrhx=[[item.TrhX]]&bittrhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
                                     <td>
                                         <a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAdFull]] </a>
                                         <span style="font-size:.8em;font-style:italic;color:brown">[[item.Ad]]</span>
                                     </td>
 
                                     <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[item.TTId]]">[[item.TTAd]]</a></td>
-                                    <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.GlrX]]</td>
+                                    <td class="txtRight">[[item.GdrX]]</td>
+                                    <td class="txtRight">[[item.BklGlrX]]</td>
+                                    <td class="txtRight">[[item.BklGdrX]]</td>
+                                    <td class="icon"><a href="/mm0/HHsCumBky/[[item.HHId]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>

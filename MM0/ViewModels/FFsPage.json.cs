@@ -88,8 +88,6 @@ namespace MM0.ViewModels
             TTId = 0;
             TrhX = p.QryTrhX; // DateTime.Today.ToString("yyyy-MM-dd");
             ZmnX = "";
-            Gdr = 0;
-            Glr = 0;
             Ad = "";
             Msj = "";
             IsNew = true;
@@ -110,7 +108,7 @@ namespace MM0.ViewModels
             var r = Root as MasterPage;
             var p = this.Parent as FFsPage;
 
-            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, r.CUId);
+            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, TutTur, Tut, r.CUId);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;

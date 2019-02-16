@@ -489,7 +489,7 @@ namespace DBMM0
         public string BklGlrX => $"{BklGlr:#,#.##;-#,#.##;#}";
         public string BklGdrX => $"{BklGdr:#,#.##;-#,#.##;#}";
 
-        public static string InsertRec(long ppId, long hhId, long ttId, string Trh, string Ad, decimal Gdr, decimal Glr, long cuId)
+        public static string InsertRec(long ppId, long hhId, long ttId, string Trh, string Ad, string TutTur, decimal Tut, long cuId)
         {
             string msj = "";
             DateTime dt;
@@ -508,6 +508,28 @@ namespace DBMM0
                     if (cuId == 0 || dt.Date >= DateTime.Today)
                     {
                         TT tt = Db.FromId((ulong)ttId) as TT;
+                        decimal Gdr = 0;
+                        decimal Glr = 0;
+                        decimal BklGdr = 0;
+                        decimal BklGlr = 0;
+                        switch (TutTur)
+                        {
+                            case "GI":
+                                Glr = Tut;
+                                break;
+                            case "GX":
+                                Gdr = Tut;
+                                break;
+                            case "BI":
+                                BklGlr = Tut;
+                                break;
+                            case "BX":
+                                BklGdr = Tut;
+                                break;
+                            default:
+                                break;
+                        }
+
                         if (Db.FromId((ulong)hhId) is HH hh)
                         {
                             new FF()
@@ -518,8 +540,10 @@ namespace DBMM0
 
                                 Ad = Ad,
                                 Trh = dt, // Convert.ToDateTime(Trh),
-                                Gdr = Gdr,
                                 Glr = Glr,
+                                Gdr = Gdr,
+                                BklGlr = BklGlr,
+                                BklGdr = BklGdr,
 
                                 InsTrh = DateTime.Now,
                                 InsUsr = Db.FromId((ulong)cuId) as CU
@@ -573,36 +597,6 @@ namespace DBMM0
                                 default:
                                     break;
                             }
-                            ff.UpdTrh = DateTime.Now;
-                            ff.UpdUsr = Db.FromId(cuId) as CU;
-                            FF.PostMdf(hh.Id);
-                        }
-                    }
-                    else
-                        msj = "Değiştiremezsiniz! Kayıt sizin değil / Geçmiş tarihli.";
-                }
-            });
-            return msj;
-        }
-
-        public static string UpdateRec(ulong Id, ulong hhId, ulong ttId, string Trh, string Ad, decimal Gdr, decimal Glr, ulong cuId)
-        {
-            string msj = "";
-            Db.Transact(() =>
-            {
-                if (Db.FromId((ulong)Id) is FF ff)
-                {
-                    if (cuId == 0 || ((ulong)cuId == ff.GetObjectNo() && ff.Trh.Date >= DateTime.Today))
-                    {
-                        TT tt = Db.FromId(ttId) as TT;
-                        if (Db.FromId(hhId) is HH hh)
-                        {
-                            ff.HH = hh;
-                            ff.TT = tt;
-                            ff.Ad = Ad;
-                            ff.Trh = Convert.ToDateTime(Trh);
-                            ff.Gdr = Gdr;
-                            ff.Glr = Glr;
                             ff.UpdTrh = DateTime.Now;
                             ff.UpdUsr = Db.FromId(cuId) as CU;
                             FF.PostMdf(hh.Id);
@@ -1087,25 +1081,31 @@ namespace DBMM0
                {
                    Yil = g.Key.Year,
                    Ay = g.Key.Month,
-                   Gdr = g.Sum(x => x.Gdr),
                    Glr = g.Sum(x => x.Glr),
+                   Gdr = g.Sum(x => x.Gdr),
+                   BklGlr = g.Sum(x => x.BklGlr),
+                   BklGdr = g.Sum(x => x.BklGdr),
                    Adt = g.Count()
                });
 
             List<CumBkyFF> cbList = new List<CumBkyFF>();
 
-            decimal CumBky = 0;
+            decimal CumBky = 0, BklCumBky = 0;
             foreach (var f in ffGrp.OrderBy((x) => x.Yil).ThenBy((x) => x.Ay))
             {
                 CumBky += f.Glr - f.Gdr;
+                BklCumBky += f.BklGlr - f.BklGdr;
                 cbList.Add(new CumBkyFF
                 {
                     Yil = f.Yil,
                     Ay = f.Ay,
-                    Gdr = f.Gdr,
                     Glr = f.Glr,
+                    Gdr = f.Gdr,
+                    BklGlr = f.BklGlr,
+                    BklGdr = f.BklGdr,
                     Adt = f.Adt,
-                    CumBky = CumBky
+                    CumBky = CumBky,
+                    BklCumBky = BklCumBky,
                 });
             }
 
@@ -1230,13 +1230,19 @@ namespace DBMM0
     {
         public int Yil;
         public int Ay;
-        public decimal Gdr;
         public decimal Glr;
+        public decimal Gdr;
         public decimal CumBky;
+        public decimal BklGlr;
+        public decimal BklGdr;
+        public decimal BklCumBky;
         public int Adt;
 
-        public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
+        public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
         public string CumBkyX => $"{CumBky:#,#.##;-#,#.##;#}";
+        public string BklGlrX => $"{BklGlr:#,#.##;-#,#.##;#}";
+        public string BklGdrX => $"{BklGdr:#,#.##;-#,#.##;#}";
+        public string BklCumBkyX => $"{BklCumBky:#,#.##;-#,#.##;#}";
     }
 }

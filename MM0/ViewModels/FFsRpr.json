@@ -17,6 +17,8 @@
   "NORX": "",
   "GlrTopX": "",
   "GdrTopX": "",
+  "BklGlrTopX": "",
+  "BklGdrTopX": "",
 
   "DlgFlt": {
     "TrhTur$": "F",
@@ -35,10 +37,11 @@
     "TrhX$": "",
     "ZmnX$": "",
     "Ad$": "",
-    "Glr$": 0.0,
-    "Gdr$": 0.0,
     "HHId$": 0,
     "TTId$": 0,
+    "TutTur$": "GI", // GR:GercekGlr/Income, GX:GercekGdr/eXpense, BI, BX
+    "Tut$": 0.0,
+
 
     "Msj": "",
 
@@ -56,15 +59,15 @@
       "Id": 0,
       "HHId": 0,
       "TTId": 0,
-      "TrhZ": "",
 
       "TrhX": "",
       "HHAd": "",
       "HHAdFull": "",
-      "HHAdPrn": "",
       "TTAd": "",
       "GlrX": "",
       "GdrX": "",
+      "BklGlrX": "",
+      "BklGdrX": "",
       "Ad": "",
 
       "EdtTrgr$": 0

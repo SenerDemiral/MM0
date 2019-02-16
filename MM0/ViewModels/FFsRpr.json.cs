@@ -51,16 +51,20 @@ namespace MM0.ViewModels
             IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX, TrhTur);
             FFs.Data = ffs; //.OrderByDescending((x) => x.Trh);
 
-            NORX = $"{FFs.Count:n0}";
-
+            NORX = $"{FFs.Count:n0} Kayıt";
             decimal GlrTop = 0, GdrTop = 0;
+            decimal BklGlrTop = 0, BklGdrTop = 0;
             foreach (var ff in ffs)
             {
                 GlrTop += ff.Glr;
                 GdrTop += ff.Gdr;
+                BklGlrTop += ff.BklGlr;
+                BklGdrTop += ff.BklGdr;
             }
             GlrTopX = $"{GlrTop:#,#.##;-#,#.##;#}";
             GdrTopX = $"{GdrTop:#,#.##;-#,#.##;#}";
+            BklGlrTopX = $"{BklGlrTop:#,#.##;-#,#.##;#}";
+            BklGdrTopX = $"{BklGdrTop:#,#.##;-#,#.##;#}";
 
             if (Db.FromId((ulong)PPId) is PP pp2)
             {
@@ -74,16 +78,21 @@ namespace MM0.ViewModels
             IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX, TrhTur);
 
             decimal GlrTop = 0, GdrTop = 0;
+            decimal BklGlrTop = 0, BklGdrTop = 0;
             int cnt = 0;
             foreach (var ff in ffs)
             {
                 GlrTop += ff.Glr;
                 GdrTop += ff.Gdr;
+                BklGlrTop += ff.BklGlr;
+                BklGdrTop += ff.BklGdr;
                 cnt++;
             }
             NORX = $"Kayıt Sayısı: {cnt:n0}";
             GlrTopX = $"{GlrTop:#,#.##;-#,#.##;#}";
             GdrTopX = $"{GdrTop:#,#.##;-#,#.##;#}";
+            BklGlrTopX = $"{BklGlrTop:#,#.##;-#,#.##;#}";
+            BklGdrTopX = $"{BklGdrTop:#,#.##;-#,#.##;#}";
         }
 
 
@@ -169,7 +178,7 @@ namespace MM0.ViewModels
             var r = Root as MasterPage;
             var p = this.Parent as FFsRpr;
 
-            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, r.CUId);
+            Msj = FF.InsertRec(p.PPId, HHId, TTId, $"{TrhX} {ZmnX}", Ad, TutTur, Tut, r.CUId);
             if (!string.IsNullOrEmpty(Msj))
             {
                 Action.Cancelled = true;
@@ -198,7 +207,7 @@ namespace MM0.ViewModels
             {
                 var r = Root as MasterPage;
 
-                Msj = FF.UpdateRec((ulong)Id, (ulong)HHId, (ulong)TTId, $"{TrhX} {ZmnX}", Ad, Gdr, Glr, (ulong)r.CUId);
+                Msj = FF.UpdateRec((ulong)Id, (ulong)HHId, (ulong)TTId, $"{TrhX} {ZmnX}", Ad, TutTur, Tut, (ulong)r.CUId);
                 if (!string.IsNullOrEmpty(Msj))
                 {
                     Action.Cancelled = true;
@@ -266,24 +275,34 @@ namespace MM0.ViewModels
             {
                 p.DlgRec.Id = Id;
                 p.DlgRec.Ad = ff.Ad;
-                p.DlgRec.Gdr = ff.Gdr;
-                p.DlgRec.Glr = ff.Glr;
+
+                p.DlgRec.TutTur = "GX";
+                if (ff.Gdr != 0)
+                {
+                    p.DlgRec.TutTur = "GX";
+                    p.DlgRec.Tut = ff.Gdr;
+                }
+                else if (ff.Glr != 0)
+                {
+                    p.DlgRec.TutTur = "GI";
+                    p.DlgRec.Tut = ff.Glr;
+                }
+                else if (ff.BklGdr != 0)
+                {
+                    p.DlgRec.TutTur = "BX";
+                    p.DlgRec.Tut = ff.BklGdr;
+                }
+                else if (ff.BklGlr != 0)
+                {
+                    p.DlgRec.TutTur = "BI";
+                    p.DlgRec.Tut = ff.BklGlr;
+                }
 
                 p.DlgRec.HHId = (long)ff.HHId;
                 p.DlgRec.TTId = (long)ff.TTId;
 
-                //p.DlgRec.TrhX = ff.Trh.ToString("yyyy-MM-dd");
-                if (string.IsNullOrEmpty(TrhX))
-                {
-                    p.DlgRec.TrhX = "";
-                    p.DlgRec.ZmnX = "";
-                }
-                else
-                {
-                    p.DlgRec.TrhX = Convert.ToDateTime(TrhX).ToString("yyyy-MM-dd");
-                    p.DlgRec.ZmnX = Convert.ToDateTime(TrhX).ToString("HH:mm");
-                }
-
+                p.DlgRec.TrhX = ff.Trh.ToString("yyyy-MM-dd");
+                p.DlgRec.ZmnX = ff.Trh.ToString("HH:mm");
 
                 p.DlgRec.Msj = "";
                 p.DlgRec.IsNew = false; // Edit
