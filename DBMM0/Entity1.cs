@@ -304,6 +304,7 @@ namespace DBMM0
 
             PP ppNew = PP.InsertRec((long)ccNew.GetObjectNo(), "Örnek", null, null);
             Hlp.SablondanEkle(ppNew.GetObjectNo());
+            TT.InsertRec((long)ppNew.Id, "Aile", null, null, null);
             TT.InsertRec((long)ppNew.Id, "Baba", null, null, null);
             TT.InsertRec((long)ppNew.Id, "Anne", null, null, null);
             TT.InsertRec((long)ppNew.Id, "Çocuk1", null, null, null);

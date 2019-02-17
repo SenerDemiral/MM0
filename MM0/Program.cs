@@ -23,42 +23,27 @@ namespace MM0
             {
                 handler.Register();
             }
-            /*
-            Hook<HH>.AfterCommitInsert += (sender, id) =>
-            {
-                var hh = Db.FromId<HH>(id);
-                HH.PostIns(hh);
-            };
-            
-            Hook<FF>.AfterCommitInsert += (sender, id) =>
-            {
-                var ff = Db.FromId<FF>(id);
-                FF.PostMdf(ff.HH);
-            };
-            Hook<FF>.AfterCommitUpdate += (sender, id) =>
-            {
-                var ff = Db.FromId<FF>(id);
-                FF.PostMdf(ff.HH);
-            };
-            */
 
-            if(Db.SQL<CC>("select r from CC r").FirstOrDefault() == null)   // DB bos ise
+            if (Db.SQL<CC>("select r from CC r").FirstOrDefault() == null)   // DB bos ise
+            {
                 CC.InsertRec("test", "test", "test", true);
 
-            if (Db.SQL<CU>("select r from CU r").FirstOrDefault() == null)   // CU bos ise
-            {
-                CC cc = Db.FromId<CC>(1);
+                if (Db.SQL<CU>("select r from CU r").FirstOrDefault() == null)   // CU bos ise
+                {
+                    CC cc = Db.FromId<CC>(1);
 
-                Db.Transact(() => {
-                    new CU
+                    Db.Transact(() =>
                     {
-                        CC = cc,
-                        Email = $"{cc.Email}/1",
-                        Token = $"{cc.Email}/1",
-                        Ad = "Can",
-                        Pwd = "test/1"
-                    };
-                });
+                        new CU
+                        {
+                            CC = cc,
+                            Email = $"{cc.Email}/1",
+                            Token = $"{cc.Email}/1",
+                            Ad = "Test1",
+                            Pwd = "test/1"
+                        };
+                    });
+                }
             }
         }
     }

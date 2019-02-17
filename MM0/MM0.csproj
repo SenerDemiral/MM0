@@ -63,9 +63,6 @@
     <Compile Include="Api\IHandler.cs" />
     <Compile Include="Api\MainHandlers.cs" />
     <Compile Include="Api\PartialHandlers.cs" />
-    <Compile Include="HHspage.json.cs">
-      <DependentUpon>HHspage.json</DependentUpon>
-    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AboutPage.json.cs">
@@ -101,11 +98,6 @@
       <Project>{5566f5a4-ba5a-433a-9921-e8ed6fe3801f}</Project>
       <Name>DBMM0</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <TypedJSON Include="HHspage.json">
-      <Generator>MsBuild:Compile</Generator>
-    </TypedJSON>
   </ItemGroup>
   <ItemGroup>
     <TypedJSON Include="ViewModels\PPsPage.json">
