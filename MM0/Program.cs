@@ -45,6 +45,15 @@ namespace MM0
                     });
                 }
             }
+
+            string email = "aydin-dogan@live.com";
+            if (Db.SQL<CC>("select r from CC r where r.Email = ?", email).FirstOrDefault() == null)
+            {
+                string pwd = "adlc";
+                string token = Hlp.EncodeQueryString($"{email}/{pwd}");
+                CC.InsertRec(email, pwd, token, true);
+            }
+
         }
     }
 }

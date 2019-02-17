@@ -229,7 +229,7 @@ namespace DBMM0
                         Email = $"{cc.Email}/{NOR}",
                         PPs = PPs
                     };
-                    cuNew.Token = cuNew.Email;
+                    cuNew.Token = Hlp.EncodeQueryString(cuNew.Email);
                 });
                 return cuNew;
             }
@@ -672,7 +672,10 @@ namespace DBMM0
 
                 DateTime basTrh, bitTrh;
                 if (string.IsNullOrEmpty(basTrhX))
-                    basTrh = DateTime.MinValue;
+                {
+                    //basTrh = DateTime.MinValue;
+                    basTrh = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+                }
                 else
                     basTrh = Convert.ToDateTime(basTrhX);
                 if (string.IsNullOrEmpty(bitTrhX))

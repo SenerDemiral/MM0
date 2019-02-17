@@ -118,6 +118,9 @@
             var target = document.querySelector('#trackModelTokenChange');
             observer.observe(target, { childList: true, attributes: true, characterData: true, subtree: true });
 
+            if (tmpltM.model.Token != "")   // Ilk seferde Sadece confirmeemail dogrusunu gonderir. Daha sonrakilerde observer'a takilir.
+                localStorage.setItem('mm0', tmpltM.model.Token);
+
             tmpltM.model.Sgn.Token$ = localStorage.getItem('mm0');
             tmpltM.model.Sgn.AutoSignT$++; //SignT$ = -1;   // Triger to AutoSignIn
 

@@ -29,7 +29,7 @@ namespace MM0.ViewModels
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";
 
                 if (string.IsNullOrEmpty(BasTrhX))
-                    basTrh = DateTime.MinValue;
+                    basTrh = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
                 else
                     basTrh = Convert.ToDateTime(BasTrhX);
                 if (string.IsNullOrEmpty(BitTrhX))

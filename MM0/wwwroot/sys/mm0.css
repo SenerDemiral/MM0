@@ -152,9 +152,9 @@ button{
         background-color: rgba(246, 246, 154, .5); /*#f2f2f280; sonuna Hex80 koyarak %50 opacitiy*/
     }
 
-    .fixTbl tr:hover {
+    .fixTbl tbody tr:hover {
         /*background-color: #ddd;*/
-        background-color:darkkhaki;
+        background-color:darkkhaki !important;
     }
 
 .grid {

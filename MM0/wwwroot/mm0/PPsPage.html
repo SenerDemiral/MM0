@@ -56,14 +56,13 @@
                     <table id="PPsPageTbl" class="fixTbl">
                         <thead>
                             <tr>
-                                <th rowspan="2">Hızlı İşlem</th>
+                                <th rowspan="2">İşlem</th>
                                 <th rowspan="2">Ad</th>
                                 <th rowspan="2">Hesap</th>
                                 <th rowspan="2">Etiket</th>
                                 <th colspan="2">Gerçek</th>
                                 <th colspan="2">Hedef</th>
                                 <th colspan="2">Tarih</th>
-                                <th rowspan="2">İşlem</th>
                                 <th rowspan="2">Edit</th>
                             </tr>
                             <tr>
@@ -87,13 +86,12 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
                             </tr>
                         </tfoot>
                         <tbody>
                             <template is="dom-repeat" items="{{model.PPs}}">
                                 <tr>
-                                    <td class="icon"><a href="/mm0/FFs/[[item.Id]]"><iron-icon icon="vaadin:money-exchange"></iron-icon></a></td>
+                                    <td class="icon"><a href="/mm0/FFsRpr?ppid=[[item.Id]]&bastrhx=Now"><iron-icon icon="vaadin:money-exchange"></iron-icon></a></td>
                                     <td>[[item.Ad]]</td>
                                     <td class="icon"><a href="/mm0/HHs/[[item.Id]]"><iron-icon icon="vaadin:file-tree"></iron-icon></a></td>
                                     <td class="icon"><a href="/mm0/TTs/[[item.Id]]"><iron-icon icon="vaadin:tags"></iron-icon></a></td>
@@ -103,7 +101,6 @@
                                     <td class="txtRight">[[item.ThmGdrX]]</td>
                                     <td class="txtCenter">[[item.BasTrhX]]</td>
                                     <td class="txtCenter">[[item.BitTrhX]]</td>
-                                    <td class="icon"><a href="/mm0/FFsRpr?ppid=[[item.Id]]&bastrhx=Now"><iron-icon icon="vaadin:cash"></iron-icon></a></td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>

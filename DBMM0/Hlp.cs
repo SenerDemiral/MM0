@@ -79,7 +79,7 @@ namespace DBMM0
             MailMessage mail = new MailMessage();
             //mail.To.Add("sener.demiral@gmail.com");
             mail.To.Add(to);
-            mail.Subject = "hsbm kayıt";
+            mail.Subject = "hsbm.online Üyeliği";
 
             mail.From = new MailAddress("hsbm.online@gmail.com", "HeSaBıM");  // gMail
             mail.IsBodyHtml = true;

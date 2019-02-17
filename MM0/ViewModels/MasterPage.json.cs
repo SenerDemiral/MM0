@@ -98,37 +98,62 @@ namespace MM0.ViewModels
 
                 if (!string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Pwd))
                 {
-                    // Zaten kayitli mi?
-                    var cc = Db.SQL<CC>("select r from CC r where r.Email = ?", Email).FirstOrDefault();
-                    if (cc != null && cc.Pwd == Pwd)    // Kayitli ve dogru
+                    // Email sonu /# ile bitiyor ise SignUp yapma
+                    if (Email.Contains("/"))
                     {
-                        if (cc.IsConfirmed)
-                        {
-                            p.Token = cc.Token;
-                            Pwd = "";
-                            IsOpened = false;
-                            OpnDlgTxt = "Oturum Kapat";
-                            p.MorphUrl = $"/mm0/PPs/{cc.Id}";
-                            Hlp.Write2Log($"SignIn. {cc.Email}");
-                        }
-                        else
-                        {
-                            Msj = "Mailinize gelen linki tıklayarak doğrulama işlemini tamamlayın!";
-                            Hlp.Write2Log($"SignInW {cc.Email}");
-                        }
+                        Msj = "Hatalı seçenek.";
                     }
-                    else   // SignUp  // Tekrar Confirm Maili gondermek gerekebilir!
+                    else
                     {
-                        var newToken = Hlp.EncodeQueryString(Email); // CreateToken
+                        // Zaten kayitli mi?
+                        var cc = Db.SQL<CC>("select r from CC r where r.Email = ?", Email).FirstOrDefault();
+                        if (cc != null)    // Kayitli
+                        {
+                            if (cc.Pwd == Pwd)  // Dogru
+                            {
+                                if (cc.IsConfirmed) // SignIn
+                                {
+                                    p.Token = cc.Token;
+                                    Pwd = "";
+                                    IsOpened = false;
+                                    OpnDlgTxt = "Oturum Kapat";
+                                    p.MorphUrl = $"/mm0/PPs/{cc.Id}";
+                                    Hlp.Write2Log($"SignIn. {cc.Email}");
+                                }
+                                else
+                                {
+                                    Msj = "Mailinize gelen linki tıklayarak doğrulama işlemini tamamlayın!";
+                                    Hlp.Write2Log($"SignInW {cc.Email}");
+                                }
+                            }
+                            else  // Kayitli Pwd degisikligi yapiyor
+                            {
+                                Db.Transact(() =>
+                                {
+                                    cc.IsConfirmed = false;
+                                    cc.Pwd = Pwd;
+                                    cc.Token = Hlp.EncodeQueryString($"{Email}/{Pwd}");
+                                });
+                                Hlp.SendMail(Email, cc.Token);
+                                Email = "";
+                                Pwd = "";
+                                Token = "";
+                                Msj = "Şifreniz değiştirildi. Mailinize gelen linki tıklayarak doğrulama işlemini tamamlayın.";
+                            }
+                        }
+                        else   // SignUp  // Tekrar Confirm Maili gondermek gerekebilir!
+                        {
+                            var newToken = Hlp.EncodeQueryString($"{Email}/{Pwd}"); // CreateToken
 
-                        CC.InsertRec(Email, Pwd, newToken);
-                        Hlp.Write2Log($"SignUp. {Email}");
+                            CC.InsertRec(Email, Pwd, newToken);
+                            Hlp.Write2Log($"SignUp. {Email}");
 
-                        Hlp.SendMail(Email, newToken);
-                        Email = "";
-                        Pwd = "";
-                        Token = "";
-                        Msj = "Mailinize gelen linki tıklayarak doğrulama işlemini tamamlayın.";
+                            Hlp.SendMail(Email, newToken);
+                            Email = "";
+                            Pwd = "";
+                            Token = "";
+                            Msj = "Mailinize gelen linki tıklayarak doğrulama işlemini tamamlayın.";
+                        }
                     }
                 }
                 else
@@ -149,7 +174,14 @@ namespace MM0.ViewModels
                     cc = Db.SQL<CC>("select r from CC r where r.Email = ?", Email).FirstOrDefault();
                     if (cc != null)  // SignIn
                     {
-                        if (cc.Pwd == Pwd)
+                        if (!cc.IsConfirmed)
+                        {
+                            Pwd = "";
+                            Token = "";
+                            p.Token = "";
+                            Msj = "Mailinize gelen linki tıklayarak doğrulama işlemini tamamlayın!";
+                        }
+                        else if (cc.Pwd == Pwd)
                         {
                             Pwd = "";
                             Token = cc.Token;

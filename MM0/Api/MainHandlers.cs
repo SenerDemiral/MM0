@@ -65,7 +65,7 @@ namespace MM0.Api
                     BasTrhX = TrhStr,
                     BitTrhX = TrhStr
                 };
-            Session.Current.Store[nameof(MasterPage)] = master;
+                Session.Current.Store[nameof(MasterPage)] = master;
             }
 
             return master;
@@ -146,14 +146,17 @@ namespace MM0.Api
                 return WrapPage<FFsRpr>($"/MM0/partials/FFsRpr?{queryString}");
             });
 
-            Handle.GET("/MM0/confirmemail/{?}", (string deMail) =>
+            Handle.GET("/MM0/confirmemail/{?}", (string token) =>
             {
                 MasterPage master = GetMasterPageFromSession();
-                var eMail = Hlp.DecodeQueryString(deMail);
+                var eMailPwd = Hlp.DecodeQueryString(token);
 
+                int iof = eMailPwd.IndexOf("/");
+                string eMail = eMailPwd.Substring(0, iof);
+                string pwd = eMailPwd.Substring(iof+1);
                 master.Token = "";
 
-                CC cc = Db.SQL<CC>("select r from CC r where r.Email = ?", eMail).FirstOrDefault();
+                CC cc = Db.SQL<CC>("select r from CC r where r.Email = ? and r.Pwd = ?", eMail, pwd).FirstOrDefault();
                 if (cc != null)
                 {
                     Db.Transact(() =>
@@ -161,9 +164,8 @@ namespace MM0.Api
                         cc.IsConfirmed = true;
                         cc.CnfTS = DateTime.Now;
                     });
-                    master.Token = cc.Token;
-                    master.Sgn.Token = cc.Token;
-                    //master.MorphUrl = $"/MM0/PPs/{cc.Id}";
+
+                    master.Token = cc.Token;    // MasterPage.html de dolu geldigi icin AutoSignIn i bu token ile yapar
                 }
                 return master;
             });
