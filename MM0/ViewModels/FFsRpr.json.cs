@@ -37,10 +37,21 @@ namespace MM0.ViewModels
                 else
                     bitTrh = Convert.ToDateTime(BitTrhX);
 
+                string TrhTurX = "İşlem";
+                switch (TrhTur)
+                {
+                    case "I":
+                        TrhTurX = "Giriş";
+                        break;
+                    case "U":
+                        TrhTurX = "Edit";
+                        break;
+                }
+
                 if (basTrh == bitTrh)
-                   Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTur}►{basTrh:dd.MM.yy}";
+                   Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTurX}►{basTrh:dd.MM.yy}";
                 else
-                    Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTur}►{basTrh:dd.MM.yy} >=< {bitTrh:dd.MM.yy}";
+                    Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTurX}►{basTrh:dd.MM.yy} >=< {bitTrh:dd.MM.yy}";
             }
 
             if (Db.FromId((ulong)HHId) is HH hh)
@@ -115,7 +126,7 @@ namespace MM0.ViewModels
             var p = this.Parent as FFsRpr;
             HHId = p.HHId;
             TTId = p.TTId;
-            TrhTur = "K";
+            TrhTur = "R";
             Opened = true;
         }
         void Handle(Input.FltTrgr Action)
@@ -145,8 +156,9 @@ namespace MM0.ViewModels
         void Handle(Input.NewTrgr Action)
         {
             var p = this.Parent as FFsRpr;
-            /*
+            DateTime now = DateTime.Now;
             Id = 0;
+            /*
             HHId = 0;
             TTId = 0;
             TrhX = DateTime.Today.ToString("yyyy-MM-dd");
@@ -154,10 +166,10 @@ namespace MM0.ViewModels
             Gdr = 0;
             Glr = 0;
             Ad = "";*/
-            if (string.IsNullOrEmpty(TrhX))
+            //if (string.IsNullOrEmpty(TrhX))
             {
-                TrhX = DateTime.Today.ToString("yyyy-MM-dd");
-                ZmnX = "00:00";
+                TrhX = now.ToString("yyyy-MM-dd");
+                ZmnX = now.ToString("HH:mm");
             }
             Msj = "";
             IsNew = true;

@@ -74,10 +74,12 @@ namespace MM0.Api
                     QryTrhX = DateTime.Today.ToString("yyyy-MM-dd")
                 };
 
+                page.DlgRec.NewTrgr++;
+                /*
                 page.DlgRec.TrhX = page.QryTrhX;
                 page.DlgRec.Opened = true;
                 page.DlgRec.IsNew = true;
-
+                */
                 return page;
             });
 

@@ -8,9 +8,9 @@
             <paper-dialog opened="[[model.DlgFlt.Opened]]" modal="true">
                 <div class="mdfDlg">
                     <paper-radio-group selected="{{model.DlgFlt.TrhTur$}}">
-                        <paper-radio-button test-value$="K" name="K">Kayıt</paper-radio-button>
-                        <paper-radio-button test-value$="Y" name="Y">Yeni</paper-radio-button>
-                        <paper-radio-button test-value$="E" name="E">Edit</paper-radio-button>
+                        <paper-radio-button test-value$="R" name="R">İşlem</paper-radio-button>
+                        <paper-radio-button test-value$="I" name="I">Giriş</paper-radio-button>
+                        <paper-radio-button test-value$="U" name="U">Edit</paper-radio-button>
                     </paper-radio-group>
 
                     <paper-input label="Başlangıç Tarihi" type="date" value="{{model.DlgFlt.BasTrhX$::change}}"></paper-input>
@@ -42,7 +42,7 @@
                     <juicy-select caption-text="Hesap Seçin" value="{{model.DlgRec.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
                     <juicy-select caption-text="Etiket Seçin" value="{{model.DlgRec.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select>
 
-
+                    <paper-input label="Tutar" type="number" value="{{model.DlgRec.Tut$::change}}"></paper-input>
                     <paper-radio-group style="display:grid;grid-template-columns:auto 1fr 1fr;background-color:azure" selected="{{model.DlgRec.TutTur$}}">
                         <div>Gerçek</div>
                         <paper-radio-button test-value$="GI" name="GI">Gelir</paper-radio-button>
@@ -51,7 +51,6 @@
                         <paper-radio-button test-value$="BI" name="BI">Gelir</paper-radio-button>
                         <paper-radio-button test-value$="BX" name="BX">Gider</paper-radio-button>
                     </paper-radio-group>
-                    <paper-input label="Tutar" type="number" value="{{model.DlgRec.Tut$::change}}"></paper-input>
 
                     <paper-textarea label="Not" value="{{model.DlgRec.Ad$::input}}" char-counter maxlength="100"></paper-textarea>
 

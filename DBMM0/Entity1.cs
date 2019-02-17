@@ -680,9 +680,9 @@ namespace DBMM0
                 else
                     bitTrh = Convert.ToDateTime(bitTrhX).AddDays(1);
 
-                if (trhTur == "Y")
+                if (trhTur == "I")
                     ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.InsTrh >= ? and r.InsTrh < ? order by r.InsTrh DESC", pp, basTrh, bitTrh);
-                else if (trhTur == "E")
+                else if (trhTur == "U")
                     ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.UpdTrh >= ? and r.UpdTrh < ? order by r.UpdTrh DESC", pp, basTrh, bitTrh);
                 else
                     ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ? order by r.Trh DESC", pp, basTrh, bitTrh);

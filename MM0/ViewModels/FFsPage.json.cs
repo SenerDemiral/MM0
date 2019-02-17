@@ -87,7 +87,7 @@ namespace MM0.ViewModels
             HHId = 0;
             TTId = 0;
             TrhX = p.QryTrhX; // DateTime.Today.ToString("yyyy-MM-dd");
-            ZmnX = "";
+            ZmnX = DateTime.Now.ToString("HH:mm"); //"";
             Ad = "";
             Msj = "";
             IsNew = true;
