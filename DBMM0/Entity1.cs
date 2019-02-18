@@ -351,6 +351,8 @@ namespace DBMM0
 
         public decimal GrcGlr => HHroot.GrcGlr;
         public decimal GrcGdr => HHroot.GrcGdr;
+        public decimal BklGlr => HHroot.BklGlr;
+        public decimal BklGdr => HHroot.BklGdr;
         public decimal ThmGlr => HHroot.ThmGlr;
         public decimal ThmGdr => HHroot.ThmGdr;
 
@@ -362,6 +364,8 @@ namespace DBMM0
 
         public string GrcGlrX => $"{HHroot?.GrcGlr:#,#.##;-#,#.##;#}";
         public string GrcGdrX => $"{HHroot?.GrcGdr:#,#.##;-#,#.##;#}";
+        public string BklGlrX => $"{HHroot?.BklGlr:#,#.##;-#,#.##;#}";
+        public string BklGdrX => $"{HHroot?.BklGdr:#,#.##;-#,#.##;#}";
         public string ThmGlrX => $"{HHroot?.ThmGlr:#,#.##}";
         public string ThmGdrX => $"{HHroot?.ThmGdr:#,#.##}";
         //public string GrcGlrX => HHroot?.GrcGlr == 0 ? "" : $"{HHroot?.GrcGlr:n2}";
@@ -842,15 +846,20 @@ namespace DBMM0
             // Fisler toplamini bul. Fis insert/edit yapildiginda bunu yap
             // Fislerde sadece Leaf hesaplar calistigi icin 
             decimal glr = 0, gdr = 0;
+            decimal bklglr = 0, bklgdr = 0;
             foreach (var ff in Db.SQL<FF>("select r from FF r where r.HH = ?", hh))
             {
                 gdr += ff.Gdr;
                 glr += ff.Glr;
+                bklgdr += ff.BklGdr;
+                bklglr += ff.BklGlr;
             }
             Db.Transact(() =>
             {
                 hh.GrcGlr = glr;
                 hh.GrcGdr = gdr;
+                hh.BklGlr = bklglr;
+                hh.BklGdr = bklgdr;
             });
 
             // Ust Toplamlari guncelle
@@ -898,6 +907,8 @@ namespace DBMM0
 
         public decimal GrcGlr { get; set; }
         public decimal GrcGdr { get; set; }
+        public decimal BklGlr { get; set; }
+        public decimal BklGdr { get; set; }
         public decimal ThmGlr { get; set; }
         public decimal ThmGdr { get; set; }
 
@@ -909,6 +920,8 @@ namespace DBMM0
         public string PPAd => PP?.Ad;
         public string GrcGlrX => $"{GrcGlr:#,#.##;-#,#.##;#}";
         public string GrcGdrX => $"{GrcGdr:#,#.##;-#,#.##;#}";
+        public string BklGlrX => $"{BklGlr:#,#.##;-#,#.##;#}";
+        public string BklGdrX => $"{BklGdr:#,#.##;-#,#.##;#}";
         public string ThmGlrX => $"{ThmGlr:#,#.##;-#,#.##;#}";
         public string ThmGdrX => $"{ThmGdr:#,#.##;-#,#.##;#}";
 
@@ -1247,17 +1260,24 @@ namespace DBMM0
                 {
                     HH pHH = leaf.Prn;
                     decimal GrcGlr = 0, GrcGdr = 0;
+                    decimal BklGlr = 0, BklGdr = 0;
                     do
                     {
                         GrcGlr = 0;
                         GrcGdr = 0;
+                        BklGlr = 0;
+                        BklGdr = 0;
                         foreach (var hh in Db.SQL<HH>("select r from HH r where r.Prn = ?", pHH))
                         {
                             GrcGlr += hh.GrcGlr;
                             GrcGdr += hh.GrcGdr;
+                            BklGlr += hh.BklGlr;
+                            BklGdr += hh.BklGdr;
                         }
                         pHH.GrcGlr = GrcGlr;
                         pHH.GrcGdr = GrcGdr;
+                        pHH.BklGlr = BklGlr;
+                        pHH.BklGdr = BklGdr;
 
                         pHH = pHH.Prn;
                     }
@@ -1265,7 +1285,6 @@ namespace DBMM0
                 }
             });
         }
-
 
     }
 

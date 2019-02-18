@@ -17,24 +17,19 @@ namespace MM0.ViewModels
             //var r = Root as MasterPage;
             //DlgFlt.BasTrhX = r.BasTrhX;
             //DlgFlt.BitTrhX = r.BitTrhX;
-            /*
-            if (Db.FromId((ulong)HHId) is HH hh)
-                Hdr = $"{hh.PP.CC.Ad}►{HH.FullParentAd(hh)}";
-            else if (Db.FromId((ulong)TTId) is TT tt)
-                Hdr = $"{tt.PP.CC.Ad}►{tt.Ad}";
-*/
+
             DateTime basTrh = new DateTime(), bitTrh = new DateTime();
             if (Db.FromId((ulong)PPId) is PP pp)
             {
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";
 
-                if (Org == "PP")
+                if (Org == "PP")    // Proje
                 {
                     TrhTur = "I";
                     basTrh = DateTime.Today;
                     bitTrh = basTrh.AddDays(1);
                 }
-                else if (Org == "HH")
+                else if (Org == "HH")   // Hesap
                 {
                     TrhTur = "I";
                     basTrh = DateTime.Today;
@@ -68,16 +63,6 @@ namespace MM0.ViewModels
                 BasTrhX = $"{basTrh:yyyy-MM-dd}";
                 BitTrhX = $"{bitTrh:yyyy-MM-dd}";
 
-                /*
-                if (string.IsNullOrEmpty(BasTrhX))
-                    basTrh = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
-                else
-                    basTrh = Convert.ToDateTime(BasTrhX);
-                if (string.IsNullOrEmpty(BitTrhX))
-                    bitTrh = DateTime.MaxValue;
-                else
-                    bitTrh = Convert.ToDateTime(BitTrhX);
-                */
                 string TrhTurX = "İşlem";
                 switch (TrhTur)
                 {

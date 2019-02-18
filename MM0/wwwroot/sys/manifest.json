@@ -1,0 +1,7 @@
+{
+  "name": "Hesabım",
+  "short_name": "hsbm",
+  "lang": "tr-TR",
+  "start_url": "/",
+  "display": "standalone"
+}

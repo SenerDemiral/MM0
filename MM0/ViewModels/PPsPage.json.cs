@@ -19,6 +19,8 @@ namespace MM0.ViewModels
                 var hh = cc.HHroot;
                 GrcGlrTopX = hh.GrcGlrX;
                 GrcGdrTopX = hh.GrcGdrX;
+                BklGlrTopX = hh.BklGlrX;
+                BklGdrTopX = hh.BklGdrX;
                 ThmGlrTopX = hh.ThmGlrX;
                 ThmGdrTopX = hh.ThmGdrX;
 
