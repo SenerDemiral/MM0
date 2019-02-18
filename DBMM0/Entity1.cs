@@ -273,7 +273,7 @@ namespace DBMM0
         public DateTime TstBasTrh { get; set; } // DenemeSuresi baslangici
         public DateTime TstBitTrh { get; set; }
 
-        public static void InsertRec(string Email, string Pwd, string newToken, bool isConfirmed = false)
+        public static CC InsertRec(string Email, string Pwd, string newToken, bool isConfirmed = false)
         {
             CC ccNew = null;
             Db.Transact(() =>
@@ -303,7 +303,7 @@ namespace DBMM0
             });
 
             PP ppNew = PP.InsertRec((long)ccNew.GetObjectNo(), "Örnek", null, null);
-            Hlp.SablondanEkle(ppNew.GetObjectNo());
+            Hlp.SablondanEkle(ppNew.GetObjectNo(), "HHSablon1");
             TT.InsertRec((long)ppNew.Id, "Aile", null, null, null);
             TT.InsertRec((long)ppNew.Id, "Baba", null, null, null);
             TT.InsertRec((long)ppNew.Id, "Anne", null, null, null);
@@ -311,6 +311,8 @@ namespace DBMM0
             TT.InsertRec((long)ppNew.Id, "Çocuk2", null, null, null);
             TT.InsertRec((long)ppNew.Id, "Araç1", null, null, null);
             TT.InsertRec((long)ppNew.Id, "Araç2", null, null, null);
+
+            return ccNew;
         }
 
         public static void DeleteAll(ulong ccId)

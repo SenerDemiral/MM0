@@ -105,13 +105,13 @@ namespace DBMM0
             }
         }
 
-        public static void SablondanEkle(ulong ppId)
+        public static void SablondanEkle(ulong ppId, string sablon)
         {
             PP dpp = Db.FromId((ulong)ppId) as PP;
             if (dpp == null)
                 return;
 
-            using (StreamReader sr = new StreamReader($@"C:\Starcounter\MM0Data\HHSablon1.txt", System.Text.Encoding.UTF8))
+            using (StreamReader sr = new StreamReader($@"C:\Starcounter\MM0Data\{sablon}.txt", System.Text.Encoding.UTF8))
             {
                 string line;
                 HH[] dhh = new HH[9];

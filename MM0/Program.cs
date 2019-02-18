@@ -24,26 +24,21 @@ namespace MM0
                 handler.Register();
             }
 
-            if (Db.SQL<CC>("select r from CC r").FirstOrDefault() == null)   // DB bos ise
+            if (Db.SQL<CC>("select r from CC r where r.Email = ?", "test").FirstOrDefault() == null) 
             {
-                CC.InsertRec("test", "test", "test", true);
+                var ccNew = CC.InsertRec("test", "test", "test", true);
 
-                if (Db.SQL<CU>("select r from CU r").FirstOrDefault() == null)   // CU bos ise
+                Db.Transact(() =>
                 {
-                    CC cc = Db.FromId<CC>(1);
-
-                    Db.Transact(() =>
+                    new CU
                     {
-                        new CU
-                        {
-                            CC = cc,
-                            Email = $"{cc.Email}/1",
-                            Token = $"{cc.Email}/1",
-                            Ad = "Test1",
-                            Pwd = "test/1"
-                        };
-                    });
-                }
+                        CC = ccNew,
+                        Email = $"{ccNew.Email}/1",
+                        Token = $"{ccNew.Email}/1",
+                        Ad = "Test1",
+                        Pwd = "test/1"
+                    };
+                });
             }
 
             string email = "aydin-dogan@live.com";
@@ -51,7 +46,9 @@ namespace MM0
             {
                 string pwd = "adlc";
                 string token = Hlp.EncodeQueryString($"{email}/{pwd}");
-                CC.InsertRec(email, pwd, token, true);
+                CC ccNew = CC.InsertRec(email, pwd, token, true);
+                PP ppNew = PP.InsertRec((long)ccNew.GetObjectNo(), "TurgutreisMarina", null, null);
+                Hlp.SablondanEkle(ppNew.GetObjectNo(), "HHSablonTenis");
             }
 
         }
