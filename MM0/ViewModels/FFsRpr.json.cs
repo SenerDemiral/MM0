@@ -23,11 +23,52 @@ namespace MM0.ViewModels
             else if (Db.FromId((ulong)TTId) is TT tt)
                 Hdr = $"{tt.PP.CC.Ad}►{tt.Ad}";
 */
-            DateTime basTrh, bitTrh;
+            DateTime basTrh = new DateTime(), bitTrh = new DateTime();
             if (Db.FromId((ulong)PPId) is PP pp)
             {
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";
 
+                if (Org == "PP")
+                {
+                    TrhTur = "I";
+                    basTrh = DateTime.Today;
+                    bitTrh = basTrh.AddDays(1);
+                }
+                else if (Org == "HH")
+                {
+                    TrhTur = "I";
+                    basTrh = DateTime.Today;
+                    bitTrh = basTrh.AddDays(1);
+                }
+                else if (Org == "FS")   // FF Search/Filter
+                {
+                    //TrhTur = "I";
+                    basTrh = string.IsNullOrEmpty(BasTrhX) ? DateTime.MinValue : Convert.ToDateTime(BasTrhX);
+                    bitTrh = string.IsNullOrEmpty(BitTrhX) ? DateTime.MaxValue : Convert.ToDateTime(BitTrhX).AddDays(1);
+                }
+                else if (Org == "FT")   // FF Tarih
+                {
+                    TrhTur = "R";
+                    DateTime d = Convert.ToDateTime(BasTrhX);
+                    basTrh = d.Date;
+                    bitTrh = basTrh.AddDays(1);
+                }
+                else if (Org == "FH")   // FF Hesap
+                {
+                    TrhTur = "I";
+                    basTrh = DateTime.Today;
+                    bitTrh = basTrh.AddDays(1);
+                }
+                else
+                {
+                    TrhTur = "R";
+                    basTrh = Convert.ToDateTime(BasTrhX);
+                    bitTrh = Convert.ToDateTime(BitTrhX);
+                }
+                BasTrhX = $"{basTrh:yyyy-MM-dd}";
+                BitTrhX = $"{bitTrh:yyyy-MM-dd}";
+
+                /*
                 if (string.IsNullOrEmpty(BasTrhX))
                     basTrh = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
                 else
@@ -36,7 +77,7 @@ namespace MM0.ViewModels
                     bitTrh = DateTime.MaxValue;
                 else
                     bitTrh = Convert.ToDateTime(BitTrhX);
-
+                */
                 string TrhTurX = "İşlem";
                 switch (TrhTur)
                 {
@@ -48,18 +89,22 @@ namespace MM0.ViewModels
                         break;
                 }
 
-                if (basTrh == bitTrh)
+                if (basTrh.AddDays(1) == bitTrh)
                    Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTurX}►{basTrh:dd.MM.yy}";
+                else if (basTrh == DateTime.MinValue && bitTrh == DateTime.MaxValue)
+                   Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTurX}";
                 else
                     Hdr = $"{pp.CC.Ad}►{pp.Ad}►{TrhTurX}►{basTrh:dd.MM.yy} >=< {bitTrh:dd.MM.yy}";
             }
 
             if (Db.FromId((ulong)HHId) is HH hh)
-                Hdr = $"{Hdr}►{HH.FullParentAd(hh)}";
+                Hdr = $"{Hdr}►{hh.AdFull}";
+                //Hdr = $"{Hdr}►{HH.FullParentAd(hh)}";
             if (Db.FromId((ulong)TTId) is TT tt)
                 Hdr = $"{Hdr}►{tt.Ad}";
 
             IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, BasTrhX, BitTrhX, TrhTur);
+            //IEnumerable<FF> ffs = FF.View(PPId, HHId, TTId, basTrh, bitTrh, TrhTur);
             FFs.Data = ffs; //.OrderByDescending((x) => x.Trh);
 
             NORX = $"{FFs.Count:n0} Kayıt";
@@ -80,6 +125,7 @@ namespace MM0.ViewModels
             if (Db.FromId((ulong)PPId) is PP pp2)
             {
                 HHs.Data = Db.SQL<HH>("select r from HH r where r.PP = ? and r.Skl = ? order by r.AdFull", pp2, 99); // Sadece Leafs
+                HFs.Data = Db.SQL<HH>("select r from HH r where r.PP = ? order by r.AdFull", pp2); // Hepsi
                 TTs.Data = Db.SQL<TT>("select r from TT r where r.PP = ? order by r.Ad", pp2);
             }
         }
@@ -134,7 +180,7 @@ namespace MM0.ViewModels
             var r = Root as MasterPage;
             var p = this.Parent as FFsRpr;
 
-            p.MorphUrl = $"/mm0/FFsRpr?ppid={p.PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}&trhtur={TrhTur}";
+            p.MorphUrl = $"/mm0/FFsRpr?ppid={p.PPId}&hhid={HHId}&ttid={TTId}&bastrhx={BasTrhX}&bittrhx={BitTrhX}&trhtur={TrhTur}&org=FS";
             
             r.BasTrhX = BasTrhX;
             r.BitTrhX = BitTrhX;

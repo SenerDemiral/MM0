@@ -92,7 +92,7 @@ namespace MM0.Api
                 string TTId = queryCollection["ttid"];
                 string BasTrhX = queryCollection["bastrhx"];
                 string BitTrhX = queryCollection["bittrhx"];
-                string TrhTur = queryCollection["trhtur"];
+                string Org = queryCollection["org"];
 
                 if (BasTrhX == "Now")
                 {
@@ -107,7 +107,7 @@ namespace MM0.Api
                     TTId = TTId == null ? 0 : long.Parse(TTId),
                     BasTrhX = BasTrhX ?? "",
                     BitTrhX = BitTrhX ?? "",
-                    TrhTur = TrhTur ?? "",
+                    Org = Org ?? "PP",
                 };
                 return page;
             });

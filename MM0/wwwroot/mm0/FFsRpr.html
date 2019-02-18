@@ -15,7 +15,7 @@
 
                     <paper-input label="Başlangıç Tarihi" type="date" value="{{model.DlgFlt.BasTrhX$::change}}"></paper-input>
                     <paper-input label="Bitiş Tarihi" type="date" value="{{model.DlgFlt.BitTrhX$::change}}"></paper-input>
-                    <juicy-select caption-text="Hesap Seçin" value="{{model.DlgFlt.HHId$}}" options="{{model.HHs}}" text-property="AdFull" value-property="Id"></juicy-select>
+                    <juicy-select caption-text="Hesap Seçin" value="{{model.DlgFlt.HHId$}}" options="{{model.HFs}}" text-property="AdFull" value-property="Id"></juicy-select>
                     <juicy-select caption-text="Etiket Seçin" value="{{model.DlgFlt.TTId$}}" options="{{model.TTs}}" text-property="Ad" value-property="Id"></juicy-select>
 
                     <div class="mdfDlgAction">
@@ -119,9 +119,9 @@
                         <tbody>
                             <template is="dom-repeat" items="{{model.FFs}}">
                                 <tr>
-                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&trhx=[[item.TrhX]]">[[item.TrhX]]</a></td>
+                                    <td class="txtCenter"><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&bastrhx=[[item.TrhX]]&org=FT">[[item.TrhX]]</a></td>
                                     <td>
-                                        <a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]">[[item.HHAdFull]] </a>
+                                        <a href="/mm0/FFsRpr?ppid=[[model.PPId]]&hhid=[[item.HHId]]&org=FH">[[item.HHAdFull]] </a>
                                         <span style="font-size:.8em;font-style:italic;color:brown">[[item.Ad]]</span>
                                     </td>
 

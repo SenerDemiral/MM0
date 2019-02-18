@@ -648,8 +648,8 @@ namespace DBMM0
                 }
             }
         }
-        
-        public static IEnumerable<FF> View(long ppId, long hhId, long ttId, string basTrhX, string bitTrhX, string trhTur = "F")
+
+        public static IEnumerable<FF> View(long ppId, long hhId, long ttId, DateTime basTrh, DateTime bitTrh, string trhTur = "R")
         {
             bool findHH = false,
                  findTT = false;
@@ -672,6 +672,46 @@ namespace DBMM0
 
                 IEnumerable<FF> ffs;
 
+                if (trhTur == "I")
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.InsTrh >= ? and r.InsTrh < ? order by r.InsTrh DESC", pp, basTrh, bitTrh);
+                else if (trhTur == "U")
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.UpdTrh >= ? and r.UpdTrh < ? order by r.UpdTrh DESC", pp, basTrh, bitTrh);
+                else
+                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ? order by r.Trh DESC", pp, basTrh, bitTrh);
+
+                foreach (var ff in ffs)
+                {
+                    foundHH = !findHH || hhList.Contains(ff.HH);
+                    foundTT = !findTT || ff.TT?.GetObjectNo() == (ulong)ttId;
+                    if (foundHH && foundTT)
+                        yield return ff;
+                }
+            }
+        }
+
+        public static IEnumerable<FF> View(long ppId, long hhId, long ttId, string basTrhX, string bitTrhX, string trhTur = "R")
+        {
+            bool findHH = false,
+                 findTT = false;
+
+            bool foundHH = false,
+                 foundTT = false;
+
+            if (Db.FromId((ulong)ppId) is PP pp)
+            {
+                List<HH> hhList = new List<HH>();
+                if (Db.FromId((ulong)hhId) is HH hh)
+                {
+                    findHH = true;
+                    Leafs(hh, hhList);
+                }
+                if (Db.FromId((ulong)ttId) is TT tt)
+                {
+                    findTT = true;
+                }
+
+                IEnumerable<FF> ffs;
+                /*
                 DateTime basTrh, bitTrh;
                 if (string.IsNullOrEmpty(basTrhX))
                 {
@@ -684,6 +724,10 @@ namespace DBMM0
                     bitTrh = DateTime.MaxValue;
                 else
                     bitTrh = Convert.ToDateTime(bitTrhX).AddDays(1);
+                    */
+                DateTime basTrh = Convert.ToDateTime(basTrhX);
+                DateTime bitTrh = Convert.ToDateTime(bitTrhX);
+
 
                 if (trhTur == "I")
                     ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.InsTrh >= ? and r.InsTrh < ? order by r.InsTrh DESC", pp, basTrh, bitTrh);
