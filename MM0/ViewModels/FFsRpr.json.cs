@@ -25,19 +25,25 @@ namespace MM0.ViewModels
 
                 if (Org == "PP")    // Proje
                 {
-                    TrhTur = "I";
+                    TrhTur = "R";
                     basTrh = DateTime.Today;
                     bitTrh = basTrh.AddDays(1);
                 }
                 else if (Org == "HH")   // Hesap
                 {
-                    TrhTur = "I";
+                    TrhTur = "R";
                     basTrh = DateTime.Today;
                     bitTrh = basTrh.AddDays(1);
                 }
+                else if (Org == "TT")   // Tag
+                {
+                    TrhTur = "R";
+                    basTrh = DateTime.MinValue;
+                    bitTrh = DateTime.MaxValue;
+                }
                 else if (Org == "FS")   // FF Search/Filter
                 {
-                    //TrhTur = "I";
+                    //TrhTur = "?";
                     basTrh = string.IsNullOrEmpty(BasTrhX) ? DateTime.MinValue : Convert.ToDateTime(BasTrhX);
                     bitTrh = string.IsNullOrEmpty(BitTrhX) ? DateTime.MaxValue : Convert.ToDateTime(BitTrhX).AddDays(1);
                 }
@@ -50,7 +56,7 @@ namespace MM0.ViewModels
                 }
                 else if (Org == "FH")   // FF Hesap
                 {
-                    TrhTur = "I";
+                    TrhTur = "R";
                     basTrh = DateTime.Today;
                     bitTrh = basTrh.AddDays(1);
                 }

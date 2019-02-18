@@ -491,6 +491,8 @@ namespace DBMM0
 
         public string TrhZ => $"{Trh:O}";
         public string TrhX => Trh.Hour == 0 && Trh.Minute == 0 ? $"{Trh:dd.MM.yy}" : $"{Trh:dd.MM.yy HH:mm}";
+        public string InsTrhX => $"{InsTrh:dd.MM.yy HH:mm:ss}";
+        public string UpdTrhX => $"{UpdTrh:dd.MM.yy HH:mm:ss}";
         public string GlrX => $"{Glr:#,#.##;-#,#.##;#}";
         public string GdrX => $"{Gdr:#,#.##;-#,#.##;#}";
         public string BklGlrX => $"{BklGlr:#,#.##;-#,#.##;#}";

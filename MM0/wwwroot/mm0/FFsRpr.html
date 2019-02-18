@@ -88,13 +88,15 @@
                     <table id="FFsPageTbl" class="fixTbl">
                         <thead>
                             <tr>
-                                <th rowspan="2" class="tarih">Tarih</th>
+                                <th rowspan="2">Tarih</th>
                                 <th rowspan="2">Hesap</th>
                                 <th rowspan="2">Etiket</th>
                                 <th colspan="2">Gerçek</th>
                                 <th colspan="2">Beklenen</th>
                                 <th rowspan="2"></th>
                                 <th rowspan="2"></th>
+                                <th rowspan="2">Giriş</th>
+                                <th rowspan="2">Edit</th>
                             </tr>
                             <tr>
                                 <th>Gelir</th>
@@ -114,6 +116,8 @@
                                 <td class="txtRight">[[model.BklGdrTopX]]</td>
                                 <td></td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -125,13 +129,15 @@
                                         <span style="font-size:.8em;font-style:italic;color:brown">[[item.Ad]]</span>
                                     </td>
 
-                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[item.TTId]]">[[item.TTAd]]</a></td>
+                                    <td><a href="/mm0/FFsRpr?ppid=[[model.PPId]]&ttid=[[item.TTId]]&org=TT">[[item.TTAd]]</a></td>
                                     <td class="txtRight">[[item.GlrX]]</td>
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.BklGlrX]]</td>
                                     <td class="txtRight">[[item.BklGdrX]]</td>
                                     <td class="icon"><a href="/mm0/HHsCumBky/[[item.HHId]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
+                                    <td style="font-size:.8em">[[item.InsTrhX]]</td>
+                                    <td style="font-size:.8em">[[item.UpdTrhX]]</td>
                                 </tr>
                             </template>
                         </tbody>
