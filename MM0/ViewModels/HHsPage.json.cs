@@ -10,6 +10,9 @@ namespace MM0.ViewModels
         {
             base.OnData();
 
+            var r = this.Root as MasterPage;
+            CUId = r.CUId;
+
             if (Db.FromId((ulong)PPId) is PP pp)
             {
                 Hdr = $"{pp.CC.Ad}►{pp.Ad}";

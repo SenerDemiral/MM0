@@ -37,7 +37,9 @@ button{
 .token{
     display: none;
 }
-
+[data-usr]:not([data-usr="0"]) {
+    display: none;
+}
 [data-txt=""] {
     display: none;
 }

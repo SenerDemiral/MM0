@@ -49,7 +49,7 @@
                 <div class="gridTbl_header">
                     <iron-icon icon="vaadin:factory"></iron-icon>
                     <div>[[model.Hdr]]</div>
-                    <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
+                    <button data-usr$="[[model.CUId]]" class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
                     <div>Projeler</div>
@@ -60,21 +60,21 @@
                                 <th rowspan="2">Ad</th>
                                 <th rowspan="2">Hesap</th>
                                 <th rowspan="2">Etiket</th>
-                                <th colspan="2">Gerçek</th>
-                                <th colspan="2">Beklenen</th>
+                                <th colspan="2" data-usr$="[[model.CUId]]">Gerçek</th>
+                                <th colspan="2" data-usr$="[[model.CUId]]">Beklenen</th>
                                 <th colspan="2">Tarih</th>
                                 <th rowspan="2">Edit</th>
                             </tr>
                             <tr>
-                                <th>Gelir</th>
-                                <th>Gider</th>
-                                <th>Gelir</th>
-                                <th>Gider</th>
+                                <th data-usr$="[[model.CUId]]">Gelir</th>
+                                <th data-usr$="[[model.CUId]]">Gider</th>
+                                <th data-usr$="[[model.CUId]]">Gelir</th>
+                                <th data-usr$="[[model.CUId]]">Gider</th>
                                 <th class="tarih">Başlangıç</th>
                                 <th class="tarih">Bitiş</th>
                             </tr>
                         </thead>
-                        <tfoot>
+                        <tfoot data-usr$="[[model.CUId]]">
                             <tr>
                                 <td></td>
                                 <td></td>
@@ -95,10 +95,10 @@
                                     <td>[[item.Ad]]</td>
                                     <td class="icon"><a href="/mm0/HHs/[[item.Id]]"><iron-icon icon="vaadin:file-tree"></iron-icon></a></td>
                                     <td class="icon"><a href="/mm0/TTs/[[item.Id]]"><iron-icon icon="vaadin:tags"></iron-icon></a></td>
-                                    <td class="txtRight">[[item.GrcGlrX]]</td>
-                                    <td class="txtRight">[[item.GrcGdrX]]</td>
-                                    <td class="txtRight">[[item.BklGlrX]]</td>
-                                    <td class="txtRight">[[item.BklGdrX]]</td>
+                                    <td class="txtRight" data-usr$="[[model.CUId]]">[[item.GrcGlrX]]</td>
+                                    <td class="txtRight" data-usr$="[[model.CUId]]">[[item.GrcGdrX]]</td>
+                                    <td class="txtRight" data-usr$="[[model.CUId]]">[[item.BklGlrX]]</td>
+                                    <td class="txtRight" data-usr$="[[model.CUId]]">[[item.BklGdrX]]</td>
                                     <td class="txtCenter">[[item.BasTrhX]]</td>
                                     <td class="txtCenter">[[item.BitTrhX]]</td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>

@@ -27,6 +27,7 @@ namespace MM0.ViewModels
                 var recs = Db.SQL<PP>("select r from PP r where r.CC = ?", cc);
 
                 var r = this.Root as MasterPage;
+                CUId = r.CUId;
                 if(r.CUId > 0)
                 {
                     if (Db.FromId((ulong)r.CUId) is CU cu)

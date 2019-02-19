@@ -36,16 +36,16 @@
                         <thead>
                             <tr>
                                 <th rowspan="2">Hesap</th>
-                                <th colspan="2">Gerçek</th>
-                                <th colspan="2">Beklenen</th>
-                                <th rowspan="2"></th>
-                                <th rowspan="2"></th>
+                                <th colspan="2" data-usr$="[[model.CUId]]">Gerçek</th>
+                                <th colspan="2" data-usr$="[[model.CUId]]">Beklenen</th>
+                                <th rowspan="2" data-usr$="[[model.CUId]]"></th>
+                                <th rowspan="2" data-usr$="[[model.CUId]]"></th>
                             </tr>
                             <tr>
-                                <th class="txtRight">Gelir</th>
-                                <th class="txtRight">Gider</th>
-                                <th class="txtRight">Gelir</th>
-                                <th class="txtRight">Gider</th>
+                                <th class="txtRight" data-usr$="[[model.CUId]]">Gelir</th>
+                                <th class="txtRight" data-usr$="[[model.CUId]]">Gider</th>
+                                <th class="txtRight" data-usr$="[[model.CUId]]">Gelir</th>
+                                <th class="txtRight" data-usr$="[[model.CUId]]">Gider</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,12 +56,12 @@
                                         <span style="font-size:.8em;font-style:italic;color:brown">[[item.Info]]</span>
                                     </td>
 
-                                    <td class="txtRight">[[item.GrcGlrX]]</td>
-                                    <td class="txtRight">[[item.GrcGdrX]]</td>
-                                    <td class="txtRight">[[item.BklGlrX]]</td>
-                                    <td class="txtRight">[[item.BklGdrX]]</td>
-                                    <td class="icon"><a href="/mm0/HHsCumBky/[[item.Id]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
-                                    <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
+                                    <td data-usr$="[[model.CUId]]" class="txtRight">[[item.GrcGlrX]]</td>
+                                    <td data-usr$="[[model.CUId]]" class="txtRight">[[item.GrcGdrX]]</td>
+                                    <td data-usr$="[[model.CUId]]" class="txtRight">[[item.BklGlrX]]</td>
+                                    <td data-usr$="[[model.CUId]]" class="txtRight">[[item.BklGdrX]]</td>
+                                    <td data-usr$="[[model.CUId]]" class="icon"><a href="/mm0/HHsCumBky/[[item.Id]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
+                                    <td data-usr$="[[model.CUId]]" class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>
                         </tbody>

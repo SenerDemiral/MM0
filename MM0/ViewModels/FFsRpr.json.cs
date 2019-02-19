@@ -14,7 +14,9 @@ namespace MM0.ViewModels
         {
             base.OnData();
 
-            //var r = Root as MasterPage;
+            var r = this.Root as MasterPage;
+            CUId = r.CUId;
+
             //DlgFlt.BasTrhX = r.BasTrhX;
             //DlgFlt.BitTrhX = r.BitTrhX;
 

@@ -3,6 +3,9 @@
   // Search PPId + Hsp/Trh(Belirtilmemis ise Projenin Tum Fisleri)
   "Html": "/MM0/FFsRpr.html",
   "Hdr": "",
+  "CCId": 0,
+  "CUId": 0,
+
   "DwnldTrgr$": 0,
   "DwnldUrl$": "",
   "MorphUrl$": "",

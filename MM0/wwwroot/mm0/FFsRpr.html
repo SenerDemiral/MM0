@@ -81,7 +81,7 @@
                     <div>[[model.Hdr]]</div>
                     <button class="insert" value="{{model.DlgFlt.OpnTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:search"></iron-icon></button>
                     <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
-                    <button class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
+                    <button data-usr$="[[model.CUId]]" class="download" value="{{model.DwnldTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:download"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
                     <div>Gelir/Gider İşlemleri</div>
@@ -93,10 +93,10 @@
                                 <th rowspan="2">Etiket</th>
                                 <th colspan="2">Gerçek</th>
                                 <th colspan="2">Beklenen</th>
+                                <th rowspan="2" data-usr$="[[model.CUId]]"></th>
                                 <th rowspan="2"></th>
-                                <th rowspan="2"></th>
-                                <th rowspan="2">Giriş</th>
-                                <th rowspan="2">Edit</th>
+                                <th rowspan="2" data-usr$="[[model.CUId]]">Giriş</th>
+                                <th rowspan="2" data-usr$="[[model.CUId]]">Edit</th>
                             </tr>
                             <tr>
                                 <th>Gelir</th>
@@ -105,7 +105,7 @@
                                 <th>Gider</th>
                             </tr>
                         </thead>
-                        <tfoot>
+                        <tfoot data-usr$="[[model.CUId]]">
                             <tr>
                                 <td></td>
                                 <td></td>
@@ -114,10 +114,10 @@
                                 <td class="txtRight">[[model.GdrTopX]]</td>
                                 <td class="txtRight">[[model.BklGlrTopX]]</td>
                                 <td class="txtRight">[[model.BklGdrTopX]]</td>
+                                <td data-usr$="[[model.CUId]]"></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td data-usr$="[[model.CUId]]"></td>
+                                <td data-usr$="[[model.CUId]]"></td>
                             </tr>
                         </tfoot>
                         <tbody>
@@ -134,10 +134,10 @@
                                     <td class="txtRight">[[item.GdrX]]</td>
                                     <td class="txtRight">[[item.BklGlrX]]</td>
                                     <td class="txtRight">[[item.BklGdrX]]</td>
-                                    <td class="icon"><a href="/mm0/HHsCumBky/[[item.HHId]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
+                                    <td data-usr$="[[model.CUId]]" class="icon"><a href="/mm0/HHsCumBky/[[item.HHId]]"><iron-icon icon="vaadin:abacus"></iron-icon></a></td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
-                                    <td style="font-size:.8em">[[item.InsTrhX]]</td>
-                                    <td style="font-size:.8em">[[item.UpdTrhX]]</td>
+                                    <td data-usr$="[[model.CUId]]" style="font-size:.8em">[[item.InsTrhX]]</td>
+                                    <td data-usr$="[[model.CUId]]" style="font-size:.8em">[[item.UpdTrhX]]</td>
                                 </tr>
                             </template>
                         </tbody>
