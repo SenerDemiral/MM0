@@ -63,7 +63,7 @@
                                 <th colspan="2" data-usr$="[[model.CUId]]">Gerçek</th>
                                 <th colspan="2" data-usr$="[[model.CUId]]">Beklenen</th>
                                 <th colspan="2">Tarih</th>
-                                <th rowspan="2">Edit</th>
+                                <th rowspan="2" data-usr$="[[model.CUId]]">Edit</th>
                             </tr>
                             <tr>
                                 <th data-usr$="[[model.CUId]]">Gelir</th>
@@ -95,13 +95,13 @@
                                     <td>[[item.Ad]]</td>
                                     <td class="icon"><a href="/mm0/HHs/[[item.Id]]"><iron-icon icon="vaadin:file-tree"></iron-icon></a></td>
                                     <td class="icon"><a href="/mm0/TTs/[[item.Id]]"><iron-icon icon="vaadin:tags"></iron-icon></a></td>
-                                    <td class="txtRight" data-usr$="[[model.CUId]]">[[item.GrcGlrX]]</td>
-                                    <td class="txtRight" data-usr$="[[model.CUId]]">[[item.GrcGdrX]]</td>
-                                    <td class="txtRight" data-usr$="[[model.CUId]]">[[item.BklGlrX]]</td>
-                                    <td class="txtRight" data-usr$="[[model.CUId]]">[[item.BklGdrX]]</td>
+                                    <td data-usr$="[[model.CUId]]" class="txtRight">[[item.GrcGlrX]]</td>
+                                    <td data-usr$="[[model.CUId]]" class="txtRight">[[item.GrcGdrX]]</td>
+                                    <td data-usr$="[[model.CUId]]" class="txtRight">[[item.BklGlrX]]</td>
+                                    <td data-usr$="[[model.CUId]]" class="txtRight">[[item.BklGdrX]]</td>
                                     <td class="txtCenter">[[item.BasTrhX]]</td>
                                     <td class="txtCenter">[[item.BitTrhX]]</td>
-                                    <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
+                                    <td data-usr$="[[model.CUId]]" class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>
                         </tbody>

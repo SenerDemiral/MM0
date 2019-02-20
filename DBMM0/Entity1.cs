@@ -576,6 +576,7 @@ namespace DBMM0
             {
                 if (Db.FromId((ulong)Id) is FF ff)
                 {
+                    var oldHH = ff.HH;
                     if (cuId == 0 || ((ulong)cuId == ff.GetObjectNo() && ff.Trh.Date >= DateTime.Today))
                     {
                         TT tt = Db.FromId(ttId) as TT;
@@ -609,6 +610,8 @@ namespace DBMM0
                             ff.UpdTrh = DateTime.Now;
                             ff.UpdUsr = Db.FromId(cuId) as CU;
                             FF.PostMdf(hh.Id);
+                            if (hh.Id != oldHH.Id)
+                               FF.PostMdf(oldHH.Id);
                         }
                     }
                     else
@@ -638,61 +641,6 @@ namespace DBMM0
                     msj = "Kayıt bulunamadı";
             });
             return msj;
-        }
-
-        public static void ViewZZ(HH hh)
-        {
-            List<HH> list = new List<HH>();
-            Leafs(hh, list);
-            var aaa = list.Count;
-            DateTime bbb;
-            foreach (var h in list)
-            {
-                foreach(var f in Db.SQL<FF>("select r from FF r where r.HH = ?", h))
-                {
-                    bbb = f.Trh;
-                }
-            }
-        }
-
-        public static IEnumerable<FF> View(long ppId, long hhId, long ttId, DateTime basTrh, DateTime bitTrh, string trhTur = "R")
-        {
-            bool findHH = false,
-                 findTT = false;
-
-            bool foundHH = false,
-                 foundTT = false;
-
-            if (Db.FromId((ulong)ppId) is PP pp)
-            {
-                List<HH> hhList = new List<HH>();
-                if (Db.FromId((ulong)hhId) is HH hh)
-                {
-                    findHH = true;
-                    Leafs(hh, hhList);
-                }
-                if (Db.FromId((ulong)ttId) is TT tt)
-                {
-                    findTT = true;
-                }
-
-                IEnumerable<FF> ffs;
-
-                if (trhTur == "I")
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.InsTrh >= ? and r.InsTrh < ? order by r.InsTrh DESC", pp, basTrh, bitTrh);
-                else if (trhTur == "U")
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.UpdTrh >= ? and r.UpdTrh < ? order by r.UpdTrh DESC", pp, basTrh, bitTrh);
-                else
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh < ? order by r.Trh DESC", pp, basTrh, bitTrh);
-
-                foreach (var ff in ffs)
-                {
-                    foundHH = !findHH || hhList.Contains(ff.HH);
-                    foundTT = !findTT || ff.TT?.GetObjectNo() == (ulong)ttId;
-                    if (foundHH && foundTT)
-                        yield return ff;
-                }
-            }
         }
 
         public static IEnumerable<FF> View(long ppId, long hhId, long ttId, string basTrhX, string bitTrhX, string trhTur = "R")
@@ -751,55 +699,6 @@ namespace DBMM0
                 }
             }
         }
-
-        public static IEnumerable<FF> View3(long ppId, long hhId, long ttId, string basTrhX, string bitTrhX)
-        {
-            if (Db.FromId((ulong)hhId) is HH hh)
-            {
-                List<HH> hhList = new List<HH>();
-                int Lvl = hh.Lvl;
-
-                //if (hh.Skl == 99)    // Zaten leaf
-                //    hhList.Add(hh);
-                //else
-                Leafs(hh, hhList);
-
-                List<FF> ffList = new List<FF>();
-                foreach (var h in hhList)
-                {
-                    foreach (var f in Db.SQL<FF>("select r from FF r where r.HH = ?", h))
-                    {
-                        ffList.Add(f);
-                    }
-                }
-
-                foreach (var f in ffList)
-                    yield return f;
-            }
-            else if (Db.FromId((ulong)ttId) is TT tt)
-            {
-                foreach (var f in Db.SQL<FF>("select r from FF r where r.TT = ?", tt))
-                {
-                    yield return f;
-                }
-            }
-            else if (Db.FromId((ulong)ppId) is PP pp)
-            {
-                IEnumerable<FF> ffs;
-                if (!string.IsNullOrEmpty(basTrhX))
-                {
-                    DateTime basTrh = Convert.ToDateTime(basTrhX);
-                    DateTime bitTrh = Convert.ToDateTime(bitTrhX);
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? and r.Trh >= ? and r.Trh <= ?", pp, basTrh, bitTrh);
-                }
-                else
-                    ffs = Db.SQL<FF>("select r from FF r where r.PP = ? order by r.Trh DESC", pp);
-
-                foreach (var f in ffs)
-                    yield return f;
-            }
-        }
-
 
         public static IEnumerable<FF> View(HH hh)
         {
@@ -970,6 +869,7 @@ namespace DBMM0
             //  EskiAAA
             //  BBB
 
+            Ad = Ad.Trim();
             string msj = "";
             Db.Transact(() =>
             {
@@ -1032,7 +932,7 @@ namespace DBMM0
             {
                 if (Db.FromId((ulong)Id) is HH hh)
                 {
-                    hh.Ad = Ad;
+                    hh.Ad = Ad.Trim();
                     hh.Info = Info;
                     hh.ThmGdr = ThmGdr;
                     hh.ThmGlr = ThmGlr;
