@@ -1,0 +1,60 @@
+{
+  "Html": "/MM0/CUPsPage.html",
+  "Hdr": "",
+  "CCId": 0,
+  "CUId": 0,
+
+  "DlgRec": {
+    "Id": 0,
+
+    "Mode$": 0,
+    "PPId$": 0,
+
+    "Msj": "",
+
+    "Opened": false,
+    "IsNew": false,
+    "NewTrgr$": 0,
+    "InsTrgr$": 0,
+    "UpdTrgr$": 0,
+    "DelTrgr$": 0,
+    "RejTrgr$": 0
+  },
+
+  "CUPs": [
+    {
+      "Id": 0,
+      "PPId": 0,
+
+      "PPAd": "",
+      "Mode": 0,
+      "ModeAd": "",
+      "EdtTrgr$": 0
+    }
+  ],
+
+  "PPs": [ // Lookup
+    {
+      "Id": 0,
+      "Ad": ""
+    }
+  ],
+
+  "Modes": [
+    {
+      "Id": 0,
+      "Ad": "All"
+    },
+    {
+      "Id": 1,
+      "Ad": "RW"
+    },
+    {
+      "Id": 2,
+      "Ad": "RO"
+    }
+
+  ]
+
+
+}

@@ -198,6 +198,59 @@ namespace DBMM0
         }
     }
 
+    [Database]
+    public class CUP // ClientUserProjects, Sadece Admin(CUId=0) ulasabilir.
+    {
+        public ulong Id => this.GetObjectNo();
+        public CC CC { get; set; }
+        public CU CU { get; set; }
+        public PP PP { get; set; }
+        public int Mode { get; set; }   // 0:Admn'in yaabildigi hersey, 1:RW, 2:RO
+
+        public ulong PPId => PP?.GetObjectNo() ?? 0;
+        public string PPAd => PP?.Ad;
+
+        public static CUP InsertRec(ulong ccId, ulong cuId, ulong ppId, int Mode)
+        {
+            CUP cupNew = null;
+            if (Db.FromId(ccId) is CC cc)
+            {
+                if (Db.FromId(cuId) is CU cu)
+                {
+                    if (Db.FromId(ppId) is PP pp)
+                    {
+                        Db.Transact(() =>
+                        {
+                            cupNew = new CUP()
+                            {
+                                CC = cc,
+                                CU = cu,
+                                PP = pp,
+                                Mode = Mode,
+                            };
+                        });
+                    }
+                }
+                return cupNew;
+            }
+            return null;
+        }
+        public static void UpdateRec(ulong cupId, ulong ppId, int Mode)
+        {
+            Db.Transact(() =>
+            {
+                if (Db.FromId(cupId) is CUP cup)
+                {
+                    if (Db.FromId(ppId) is PP pp)
+                    {
+                        cup.PP = pp;
+                        cup.Mode = Mode;
+                    }
+                }
+            });
+        }
+    }
+
     // CC Admin dir.
     // CU Admin'in actigi userlar
     // User Belirli projelere ulasabilir.
@@ -210,7 +263,7 @@ namespace DBMM0
         public string Ad { get; set; }
         public string Pwd { get; set; }
         public string Token { get; set; }
-        public string PPs { get; set; }
+        public string PPs { get; set; } // Iptal CUP Kullan
 
         public static CU InsertRec(ulong ccId, string Ad, string Pwd, string PPs)
         {

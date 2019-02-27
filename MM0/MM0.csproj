@@ -68,6 +68,9 @@
     <Compile Include="ViewModels\AboutPage.json.cs">
       <DependentUpon>AboutPage.json</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\CUPsPage.json.cs">
+      <DependentUpon>CUPsPage.json</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\CUsPage.json.cs">
       <DependentUpon>CUsPage.json</DependentUpon>
     </Compile>
@@ -140,6 +143,9 @@
     <TypedJSON Include="ViewModels\CUsPage.json">
       <Generator>MsBuild:Compile</Generator>
     </TypedJSON>
+    <TypedJSON Include="ViewModels\CUPsPage.json">
+      <Generator>MsBuild:Compile</Generator>
+    </TypedJSON>
     <None Include="wwwroot\mm0\MasterPage.html" />
   </ItemGroup>
   <ItemGroup />
@@ -154,6 +160,7 @@
     <None Include="wwwroot\mm0\HHsCumBky.html" />
     <None Include="wwwroot\mm0\TTsPage.html" />
     <None Include="wwwroot\mm0\CUsPage.html" />
+    <None Include="wwwroot\mm0\CUPsPage.html" />
     <Content Include="wwwroot\sys\app-shell\app-shell.html" />
     <Content Include="wwwroot\sys\mm0.css" />
   </ItemGroup>

@@ -55,7 +55,7 @@ namespace MM0.ViewModels
 
             Session.RunTaskForAll((s, sId) => {
                 var cp = (s.Store[nameof(MasterPage)] as MasterPage).CurrentPage;
-                if (cp is PPsPage)
+                if (cp is CUsPage)
                 {
                     (s.Store[nameof(MasterPage)] as MasterPage).CurrentPage.Data = null;
                     s.CalculatePatchAndPushOnWebSocket();

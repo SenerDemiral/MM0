@@ -5,9 +5,8 @@
         <template is="dom-bind">
             <paper-dialog opened="[[model.DlgRec.Opened]]" modal="true">
                 <div class="mdfDlg">
-                    <paper-input label="Adı" type="text" value="{{model.DlgRec.Ad$::change}}" maxlength="40"></paper-input>
-                    <paper-input label="Password" type="text" value="{{model.DlgRec.Pwd$::change}}" maxlength="40"></paper-input>
-                    <juicy-select multiple="true" caption-text="Proje Seçin" selected-property="Selected$" options="{{model.PPs}}" text-property="Ad" value-property="Id"></juicy-select>
+                    <juicy-select caption-text="Proje Seçin" value="{{model.DlgRec.PPId$}}" options="{{model.PPs}}" text-property="Ad" value-property="Id"></juicy-select>
+                    <juicy-select caption-text="Mode Seçin" value="{{model.DlgRec.ModeId$}}" options="{{model.Modes}}" text-property="Ad" value-property="Id"></juicy-select>
 
                     <div class="mdfDlgAction">
                         <template is="dom-if" if="[[model.DlgRec.IsNew]]">
@@ -38,22 +37,20 @@
                     <button class="insert" value="{{model.DlgRec.NewTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:insert"></iron-icon></button>
                 </div>
                 <div class="gridTbl_main">
-                    <div>Kullanıcılar</div>
-                    <table id="CUsPageTbl" class="fixTbl">
+                    <div>Kullanıcı Projeleri</div>
+                    <table id="CUPsPageTbl" class="fixTbl">
                         <thead>
                             <tr>
-                                <th>Ad</th>
-                                <th>Password</th>
-                                <th>eMail</th>
+                                <th>Proje</th>
+                                <th>Mode</th>
                                 <th>Edit</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <template is="dom-repeat" items="{{model.CUs}}">
+                            <template is="dom-repeat" items="{{model.CUPs}}">
                                 <tr>
-                                    <td class="icon"><a href="/mm0/CUPs/[[item.Id]]">[[item.Ad]]</a></td>
-                                    <td>[[item.Pwd]]</td>
-                                    <td>[[item.Email]]</td>
+                                    <td>[[item.PPAd]]</td>
+                                    <td>[[item.Mode]]</td>
                                     <td class="icon"><button class="edit" value="{{item.EdtTrgr$::click}}" onmousedown="++this.value"><iron-icon icon="vaadin:edit"></iron-icon></button></td>
                                 </tr>
                             </template>

@@ -59,8 +59,10 @@ namespace MM0.ViewModels
                 else if (Org == "FH")   // FF Hesap
                 {
                     TrhTur = "R";
-                    basTrh = DateTime.Today;
-                    bitTrh = basTrh.AddDays(1);
+                    //basTrh = DateTime.Today;
+                    //bitTrh = basTrh.AddDays(1);
+                    basTrh = DateTime.MinValue;
+                    bitTrh = DateTime.MaxValue;
                 }
                 else
                 {

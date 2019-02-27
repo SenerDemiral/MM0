@@ -132,6 +132,13 @@ namespace MM0.Api
                     return WrapPage<CUsPage>($"/MM0/partials/CUs/{CCId}");
                 return null;
             });
+            Handle.GET("/MM0/CUPs/{?}", (string CUId) =>
+            {
+                MasterPage master = GetMasterPageFromSession();
+                if (master.CUId == 0)
+                    return WrapPage<CUPsPage>($"/MM0/partials/CUPs/{CUId}");
+                return null;
+            });
 
             Handle.GET("/MM0/TTs/{?}", (long PPId) => WrapPage<TTsPage>($"/MM0/partials/TTs/{PPId}"));
 
